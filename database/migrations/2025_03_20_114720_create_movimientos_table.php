@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('conceptos_empleado', function (Blueprint $table) {
+        Schema::create('movimientos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('empleado_id')->references('id')->on('empleados');
             $table->foreignId('concepto_id')->references('id')->on('conceptos');
-            $table->decimal('valor');
-            $table->timestamp('fecha_inicio');
-            $table->timestamp('fecha_fin');
-            $table->boolean('estado')->default(true);
-            $table->timestamps();
+            $table->integer('monto');
+            $table->timestamp('validez_inicio');
+            $table->timestamp('validez_fin')->nullable();
+            $table->timestamp('generacion_fecha');
+            $table->timestamp('eliminacion_fecha')->nullable();
+            // $table->timestamps();
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('conceptos_empleado');
+        Schema::dropIfExists('movimientos');
     }
 };
