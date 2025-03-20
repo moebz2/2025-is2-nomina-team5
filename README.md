@@ -93,7 +93,7 @@ Si es necesario llenar la base de datos con datos de prueba, entonces debe de ej
 php artisan db:seed
 ```
 
-####Iniciar el servidor de desarrollo:
+### Iniciar el servidor de desarrollo:
 
 Ejecute el siguiente comando para iniciar el servidor de desarrollo de Laravel:
 
