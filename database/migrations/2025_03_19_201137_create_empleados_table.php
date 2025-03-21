@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('empleados', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('usuario_id')->references('id')->on('usuarios');
+            $table->foreignId('usuario_id')->references('id')->on('users');
             $table->foreignId('departamento_id')->references('id')->on('departamentos');
             $table->string('estado');
             $table->timestamp('fecha_ingreso');

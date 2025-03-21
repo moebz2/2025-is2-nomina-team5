@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('liquidacion_empleado_detalles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('liquidacion_empleado_cabecera')->references('id')->on('liquidaciones_empleado_cabecera');
+            $table->foreignId('cabecera_id')->references('id')->on('liquidaciones_empleado_cabecera');
             $table->foreignId('movimiento_id')->references('id')->on('movimientos');
 
             // $table->timestamps();
