@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('estado');
             $table->timestamp('aprobacion_fecha')->nullable();
             // TODO: Como es el formato de fecha?. VERIFICAR
-            $table->timestamp('periodo');
+            $table->date('periodo');
 
             // $table->timestamps();
         });

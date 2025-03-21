@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('empleado_id')->references('id')->on('empleados');
-            //TODO: En el DER el tipo es decimal. VERIFICAR
             $table->integer('monto');
             $table->timestamp('fecha_inicio');
             $table->timestamp('fecha_fin');

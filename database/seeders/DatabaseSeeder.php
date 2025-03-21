@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,9 +17,28 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        $admin = User::factory()->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('12345')
         ]);
+
+        $role = Role::create(['name'=> 'admin']);
+
+        $role->syncPermissions([
+            'usuario crear',
+            'usuario editar',
+            'usuario eliminar',
+            'usuario ver',
+            'usuario asignar rol',
+            'rol crear',
+            'rol editar',
+            'rol eliminar',
+            'rol ver'
+        ]);
+
+        $admin->assignRole('admin');
+
+
     }
 }
