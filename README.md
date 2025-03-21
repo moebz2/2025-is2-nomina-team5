@@ -87,10 +87,11 @@ Ejecute las migraciones de la base de datos:
 php artisan migrate
 ```
 
-Si es necesario llenar la base de datos con datos de prueba, entonces debe de ejecutar los seeders:
+Es necesario llenar la base de datos con los permisos y usuario administrador, entonces debe de ejecutar los seeders:
 
 ``` bash
-php artisan db:seed
+php artisan db:seed --class=PermissionSeeder #Primero agregamos los permisos
+php artisan db:seed --class=DatabaseSeeder #Crea el usuario admin y le asigna los permisos correspondientes
 ```
 
 ### Iniciar el servidor de desarrollo:
