@@ -24,7 +24,7 @@ class UserController extends Controller
 
         $request->validate([
             'nombre' => 'required|string|max:255',
-            'cedula' => 'required|string|max:255',
+            'cedula' => 'required|integer|unique:users',
             'sexo' => 'required|in:M,F',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
@@ -34,15 +34,15 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'nombre' => $request->nombre,
-            'cedula' => $request->cedula,
-            'sexo' => $request->sexo,
-            'email' => $request->email,
+            'nombre' => strip_tags($request->nombre),
+            'cedula' => strip_tags($request->cedula),
+            'sexo' => strip_tags($request->sexo),
+            'email' => strip_tags($request->email),
             'password' => Hash::make($request->password),
             'nacimiento_fecha' => $request->nacimiento_fecha,
             'ingreso_fecha' => $request->ingreso_fecha,
             'salida_fecha' => $request->salida_fecha,
-            'domicilio' => $request->domicilio,
+            'domicilio' => strip_tags($request->domicilio),
         ]);
 
         return redirect()->route('users.index')->with('success', 'User created successfully.');

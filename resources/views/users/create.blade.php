@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <title>Create User</title>
+    <title>Registrar usuario</title>
 </head>
 
 <body>
-    <h1>Create User</h1>
+    <h1>Registrar usuario</h1>
 
     @if ($errors->any())
     <div>
