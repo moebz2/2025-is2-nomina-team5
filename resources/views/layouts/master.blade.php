@@ -19,6 +19,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     {{-- Para incluir otras librerias desde cada vista se debe incluir mediante @push('nombre_seccion') --}}
 
     {{-- OTROS ESTILOS CSS --}}
