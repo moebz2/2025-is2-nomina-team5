@@ -48,9 +48,6 @@
         <label for="ingreso_fecha">Fecha de ingreso:</label>
         <input type="date" name="ingreso_fecha" id="ingreso_fecha" value="{{ old('ingreso_fecha') }}" required><br>
 
-        <label for="salida_fecha">Fecha de salida:</label>
-        <input type="date" name="salida_fecha" id="salida_fecha" value="{{ old('salida_fecha') }}"><br>
-
         <label for="domicilio">Domicilio:</label>
         <input type="text" name="domicilio" id="domicilio" value="{{ old('domicilio') }}"><br>
 

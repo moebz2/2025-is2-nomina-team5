@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+
+use App\Models\User;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::with('empleado')->get();
+
         return view('users.index', compact('users'));
     }
 
@@ -33,18 +37,24 @@ class UserController extends Controller
             'domicilio' => 'nullable|string|max:255',
         ]);
 
-        User::create([
-            'nombre' => strip_tags($request->nombre),
-            'cedula' => strip_tags($request->cedula),
-            'sexo' => strip_tags($request->sexo),
-            'email' => strip_tags($request->email),
-            'password' => Hash::make($request->password),
-            'nacimiento_fecha' => $request->nacimiento_fecha,
-            'ingreso_fecha' => $request->ingreso_fecha,
-            'salida_fecha' => $request->salida_fecha,
-            'domicilio' => strip_tags($request->domicilio),
-        ]);
+        DB::transaction(function () use ($request) {
+            $usuario = User::create([
+                'nombre' => strip_tags($request->nombre),
+                'cedula' => strip_tags($request->cedula),
+                'sexo' => strip_tags($request->sexo),
+                'email' => strip_tags($request->email),
+                'password' => Hash::make($request->password),
+                'nacimiento_fecha' => $request->nacimiento_fecha,
+                'domicilio' => strip_tags($request->domicilio),
+            ]);
 
-        return redirect()->route('users.index')->with('success', 'User created successfully.');
+            Empleado::create([
+                'usuario_id' => $usuario->id,
+                'fecha_ingreso' => $request->ingreso_fecha,
+                'fecha_egreso' => $request->salida_fecha,
+            ]);
+        });
+
+        return redirect()->route('users.index')->with('success', 'Usuario creado exitosamente');
     }
 }
