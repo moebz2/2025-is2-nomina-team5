@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -73,6 +74,8 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::with('empleado')->findOrFail($id);
+        $user->nacimiento_fecha = Carbon::parse($user->nacimiento_fecha)->format('Y-m-d');
+        $user->empleado->fecha_ingreso = Carbon::parse($user->empleado->fecha_ingreso)->format('Y-m-d');
         $departamentos = Departamento::all();
         return view('users.edit', compact('user', 'departamentos'));
     }
