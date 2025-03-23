@@ -1,0 +1,49 @@
+<a class="shrink-0" aria-label="Home" href="/plus">
+    <h2 class="font-bold uppercase">Nomina IS2</h2>
+</a>
+<div class="@container flex flex-1 justify-start pl-8 gap-5">
+    @can('empleado ver')
+
+    <a class="text-sm/6 text-gray-950" href="/plus/ui-blocks">Empleados</a>
+    @endcan
+    @can('liquidacion ver')
+
+    <a class="text-sm/6 text-gray-950" href="/plus/ui-kit">Liquidaciones</a>
+    @endcan
+    @can('concepto ver')
+
+    <a class="text-sm/6 text-gray-950" href="/plus/templates">Configuración</a>
+    @endcan
+
+</div>
+<div class="flex items-center gap-5 max-md:hidden lg:gap-6">
+    @can('usuario ver')
+
+    <a class="text-sm/6 text-gray-950" href="/plus/ui-blocks">Usuarios</a>
+    @endcan
+    @can('rol ver')
+
+    <a class="text-sm/6 text-gray-950" href="{{ route('roles.index')}}">Roles</a>
+    @endcan
+
+    {{-- SEPARADOR VERTICAL --}}
+    <div class="h-6 w-px bg-gray-950/10"></div>
+    <a class="text-sm/6 text-gray-950" href="/plus/login">Mi perfil</a>
+
+    <a class="rounded-full bg-gray-950 px-2.5 py-0.5 text-sm/6 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950"
+        href="/plus#pricing">Cerrar sesion</a>
+</div>
+{{-- MENU PANTALLAS PEQUEÑAS --}}
+<div class="flex items-center gap-2.5 md:hidden">
+
+        <button type="button"
+        class="relative inline-grid size-7 place-items-center rounded-md text-gray-950 hover:bg-gray-950/5"
+        aria-label="Navigation"><span
+            class="absolute top-1/2 left-1/2 size-11 -translate-1/2 [@media(pointer:fine)]:hidden"></span><svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"
+            data-slot="icon" class="size-4">
+            <path
+                d="M8 2a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM8 6.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM9.5 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z">
+            </path>
+        </svg></button>
+</div>
