@@ -29,6 +29,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::resource('roles', RoleController::class);
 
+    Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+
+    Route::put('users/{id}', [UserController::class, 'update'])->name('users.update');
+
     Route::get('', function () {
         echo "Bienvenido a administrador";
     });
@@ -36,8 +40,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('usuarios', function () {
         echo "Vista de Usuarios";
     });
-
-
 
     // Se debe registrar el recurso LOGOUT
 });

@@ -6,7 +6,6 @@
     @include('users.partials.sidebar')
 @endsection
 
-
 @section('content')
 
     <div class="container p-10 mx-auto">
