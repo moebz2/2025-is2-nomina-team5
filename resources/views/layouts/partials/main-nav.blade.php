@@ -19,19 +19,27 @@
 <div class="flex items-center gap-5 max-md:hidden lg:gap-6">
     @can('usuario ver')
 
-    <a class="text-sm/6 text-gray-950" href="/plus/ui-blocks">Usuarios</a>
+    <a  @if (request()->is('admin/users/*'))
+        aria-current="true"
+    @endif class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950" href="{{route('users.index')}}">Usuarios</a>
     @endcan
     @can('rol ver')
 
-    <a class="text-sm/6 text-gray-950" href="{{ route('roles.index')}}">Roles</a>
+    <a @if (request()->is('admin/roles/*'))
+        aria-current="true"
+    @endif class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950" href="{{route('roles.index')}}">Roles</a>
     @endcan
 
     {{-- SEPARADOR VERTICAL --}}
     <div class="h-6 w-px bg-gray-950/10"></div>
     <a class="text-sm/6 text-gray-950" href="/plus/login">Mi perfil</a>
 
-    <a class="rounded-full bg-gray-950 px-2.5 py-0.5 text-sm/6 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950"
-        href="/plus#pricing">Cerrar sesion</a>
+    <form action="{{route('logout')}}" method="POST">
+
+        <button type="submit" class="rounded-full bg-gray-950 px-2.5 py-0.5 text-sm/6 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950">
+            Cerrar sesion
+        </button>
+    </form>
 </div>
 {{-- MENU PANTALLAS PEQUEÑAS --}}
 <div class="flex items-center gap-2.5 md:hidden">

@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Crear Departamento</title>
-</head>
-<body>
-    <h1>Crear Departamento</h1>
+@extends('layouts.admin-layout')
+
+@section('title', 'Crear departamentos')
 
     @if ($errors->any())
         <div>
@@ -30,5 +26,5 @@
             <button type="submit">Crear</button>
         </div>
     </form>
-</body>
-</html>
+
+@endsection

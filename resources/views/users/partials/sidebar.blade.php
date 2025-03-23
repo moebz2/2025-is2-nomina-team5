@@ -4,23 +4,23 @@
             <li>
                 <ul class="flex flex-col gap-2" role="list">
                     <li>
-                        <a @if(Route::currentRouteName() == 'roles.index') aria-current="true" @endif
+                        <a aria-current="true"
                             class="inline-flex items-center gap-3 text-base/8 text-gray-600 hover:text-gray-950 sm:text-sm/7 **:text-gray-400 **:data-highlight:fill-white **:[svg]:size-5 **:[svg]:sm:size-4 aria-[current]:font-semibold aria-[current]:text-gray-950 aria-[current]:**:text-gray-950 aria-[current]:**:data-highlight:fill-gray-300 hover:**:text-gray-950 hover:**:data-highlight:fill-gray-300"
-                            href="{{route('roles.index')}}">
+                            href="{{ route('users.index')}}">
                             {{-- Agregar icono con span o i --}}
-                            Administrar roles
+                            Lista de usuarios
                         </a>
                     </li>
                     <li>
-                        <a @if(Route::currentRouteName() == 'roles.create') aria-current="true" @endif class="inline-flex items-center gap-3 text-base/8 text-gray-600 hover:text-gray-950 sm:text-sm/7 **:text-gray-400 **:data-highlight:fill-white **:[svg]:size-5 **:[svg]:sm:size-4 aria-[current]:font-semibold aria-[current]:text-gray-950 aria-[current]:**:text-gray-950 aria-[current]:**:data-highlight:fill-gray-300 hover:**:text-gray-950 hover:**:data-highlight:fill-gray-300"
-                            href="{{route('roles.create')}}">
-                            Crear rol
+                        <a class="inline-flex items-center gap-3 text-base/8 text-gray-600 hover:text-gray-950 sm:text-sm/7 **:text-gray-400 **:data-highlight:fill-white **:[svg]:size-5 **:[svg]:sm:size-4 aria-[current]:font-semibold aria-[current]:text-gray-950 aria-[current]:**:text-gray-950 aria-[current]:**:data-highlight:fill-gray-300 hover:**:text-gray-950 hover:**:data-highlight:fill-gray-300"
+                            href="{{route('users.create')}}">
+                            Crear usuario
                         </a>
                     </li>
                     <li>
                         <a class="inline-flex items-center gap-3 text-base/8 text-gray-600 hover:text-gray-950 sm:text-sm/7 **:text-gray-400 **:data-highlight:fill-white **:[svg]:size-5 **:[svg]:sm:size-4 aria-[current]:font-semibold aria-[current]:text-gray-950 aria-[current]:**:text-gray-950 aria-[current]:**:data-highlight:fill-gray-300 hover:**:text-gray-950 hover:**:data-highlight:fill-gray-300"
                             href="#">
-                            Otras opciones
+                            Otra opcion
                         </a>
                     </li>
 

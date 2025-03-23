@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
 
-    public function authenticate(Request $request) : RedirectResponse {
+    public function authenticate(Request $request): RedirectResponse
+    {
 
         // dd("Hola, queriendo iniciar sesion verdad?");
 
@@ -29,7 +30,6 @@ class LoginController extends Controller
             // dd("Sesin iniciada!");
 
             return redirect()->intended('/admin');
-
         }
 
 
@@ -40,6 +40,23 @@ class LoginController extends Controller
             'email' => 'The provided credentials do not match our records.',
 
         ])->onlyInput('email');
+    }
+    public function logout(Request $request): RedirectResponse
 
+    {
+
+        Auth::logout();
+
+
+
+        $request->session()->invalidate();
+
+
+
+        $request->session()->regenerateToken();
+
+
+
+        return redirect('/login');
     }
 }

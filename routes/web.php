@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartamentoController;
+use App\Http\Controllers\RoleController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,6 +27,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::resource('departamentos', DepartamentoController::class);
 
+    Route::resource('roles', RoleController::class);
+
     Route::get('', function () {
         echo "Bienvenido a administrador";
     });
@@ -34,9 +37,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         echo "Vista de Usuarios";
     });
 
+
+
     // Se debe registrar el recurso LOGOUT
 });
 
+Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 /*
 Route::middleware([EnsureUserIsAuthenticated::class])->prefix('admin')->group(function(){
 
