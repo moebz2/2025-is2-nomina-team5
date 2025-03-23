@@ -32,11 +32,11 @@
             <td>{{ $user->sexo }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->nacimiento_fecha }}</td>
-            <td>{{ $user->empleado->fecha_ingreso }}</td>
-            <td>{{ $user->empleado->fecha_egreso }}</td>
+            <td>{{ $user->empleado->fecha_ingreso ?? 'NA' }}</td>
+            <td>{{ $user->empleado->fecha_egreso ?? 'NA' }}</td>
             <td>{{ $user->estado }}</td>
             <td>{{ $user->domicilio }}</td>
-            <td>{{ $user->empleado->departamento->nombre }}</td>
+            <td>{{ $user->empleado->departamento->nombre ?? 'NA' }}</td>
         </tr>
         @endforeach
     </table>

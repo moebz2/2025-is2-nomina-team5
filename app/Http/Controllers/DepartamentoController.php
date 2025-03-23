@@ -7,6 +7,14 @@ use App\Models\Departamento;
 
 class DepartamentoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('can:departamento ver')->only('index');
+        $this->middleware('can:departamento crear')->only('create', 'store');
+        $this->middleware('can:departamento editar')->only('edit', 'update');
+        $this->middleware('can:departamento eliminar')->only('destroy');
+    }
+
     public function create()
     {
         return view('departamentos.create');

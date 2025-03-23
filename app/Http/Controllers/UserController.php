@@ -12,6 +12,15 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('can:usuario ver')->only('index');
+        $this->middleware('can:usuario crear')->only('create', 'store');
+        $this->middleware('can:usuario editar')->only('edit', 'update');
+        $this->middleware('can:usuario eliminar')->only('destroy');
+    }
+
     public function index()
     {
         $users = User::with('empleado.departamento')->get();

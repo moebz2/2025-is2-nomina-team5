@@ -15,73 +15,73 @@ class PermissionSeeder extends Seeder
     {
 
         // PERMISOS USUARIO
-        Permission::create(['name' => 'usuario crear']);
-        Permission::create(['name' => 'usuario editar']); // Permiso para editar todos los datos del usuario
-        Permission::create(['name' => 'usuario editar clave']); // Un empleado puede cambiar su propia contraseña
-        Permission::create(['name' => 'usuario editar estado']);
-        Permission::create(['name' => 'usuario editar datos']); // Datos que no son de ingreso a la cuenta
-        Permission::create(['name' => 'usuario editar departamento']);
-        Permission::create(['name' => 'usuario eliminar']);
-        Permission::create(['name' => 'usuario ver']);
-        Permission::create(['name' => 'usuario asignar rol']);
+        Permission::firstOrCreate(['name' => 'usuario crear']);
+        Permission::firstOrCreate(['name' => 'usuario editar']); // Permiso para editar todos los datos del usuario
+        Permission::firstOrCreate(['name' => 'usuario editar clave']); // Un empleado puede cambiar su propia contraseña
+        Permission::firstOrCreate(['name' => 'usuario editar estado']);
+        Permission::firstOrCreate(['name' => 'usuario editar datos']); // Datos que no son de ingreso a la cuenta
+        Permission::firstOrCreate(['name' => 'usuario editar departamento']);
+        Permission::firstOrCreate(['name' => 'usuario eliminar']);
+        Permission::firstOrCreate(['name' => 'usuario ver']);
+        Permission::firstOrCreate(['name' => 'usuario asignar rol']);
 
 
         // PERMISOS ROL
-        Permission::create(['name' => 'rol crear']); // Crear rol implica asignarle el permiso
-        Permission::create(['name' => 'rol editar']);
-        Permission::create(['name' => 'rol eliminar']);
-        Permission::create(['name' => 'rol ver']);
+        Permission::firstOrCreate(['name' => 'rol crear']); // Crear rol implica asignarle el permiso
+        Permission::firstOrCreate(['name' => 'rol editar']);
+        Permission::firstOrCreate(['name' => 'rol eliminar']);
+        Permission::firstOrCreate(['name' => 'rol ver']);
 
 
         // PERMISOS LIQUIDACION
-        Permission::create(['name' => 'liquidacion crear']);
-        Permission::create(['name' => 'liquidacion editar']);
-        Permission::create(['name' => 'liquidacion eliminar']);
-        Permission::create(['name' => 'liquidacion ver']);
-        Permission::create(['name' => 'liquidacion liquidar']); //Liquidar incluye rechazar la liquidacion
+        Permission::firstOrCreate(['name' => 'liquidacion crear']);
+        Permission::firstOrCreate(['name' => 'liquidacion editar']);
+        Permission::firstOrCreate(['name' => 'liquidacion eliminar']);
+        Permission::firstOrCreate(['name' => 'liquidacion ver']);
+        Permission::firstOrCreate(['name' => 'liquidacion liquidar']); //Liquidar incluye rechazar la liquidacion
 
 
 
         // PERMISOS EMPLEADO
-        Permission::create(['name' => 'empleado crear']);
-        Permission::create(['name' => 'empleado editar']);
-        Permission::create(['name' => 'empleado eliminar']);
-        Permission::create(['name' => 'empleado ver']);
+        Permission::firstOrCreate(['name' => 'empleado crear']);
+        Permission::firstOrCreate(['name' => 'empleado editar']);
+        Permission::firstOrCreate(['name' => 'empleado eliminar']);
+        Permission::firstOrCreate(['name' => 'empleado ver']);
 
         // PERMISOS MOVIMIENTO
-        Permission::create(['name' => 'movimiento crear']);
-        Permission::create(['name' => 'movimiento editar']);
-        Permission::create(['name' => 'movimiento eliminar']);
-        Permission::create(['name' => 'movimiento ver']);
+        Permission::firstOrCreate(['name' => 'movimiento crear']);
+        Permission::firstOrCreate(['name' => 'movimiento editar']);
+        Permission::firstOrCreate(['name' => 'movimiento eliminar']);
+        Permission::firstOrCreate(['name' => 'movimiento ver']);
 
         // PERMISOS CARGO
-        Permission::create(['name' => 'cargo crear']);
-        Permission::create(['name' => 'cargo editar']);
-        Permission::create(['name' => 'cargo eliminar']);
-        Permission::create(['name' => 'cargo ver']);
+        Permission::firstOrCreate(['name' => 'cargo crear']);
+        Permission::firstOrCreate(['name' => 'cargo editar']);
+        Permission::firstOrCreate(['name' => 'cargo eliminar']);
+        Permission::firstOrCreate(['name' => 'cargo ver']);
 
         // PERMISOS DEPARTAMENTO
-        Permission::create(['name' => 'departamento crear']);
-        Permission::create(['name' => 'departamento editar']);
-        Permission::create(['name' => 'departamento eliminar']);
-        Permission::create(['name' => 'departamento ver']);
+        Permission::firstOrCreate(['name' => 'departamento crear']);
+        Permission::firstOrCreate(['name' => 'departamento editar']);
+        Permission::firstOrCreate(['name' => 'departamento eliminar']);
+        Permission::firstOrCreate(['name' => 'departamento ver']);
 
         // PERMISOS PAGO
-        Permission::create(['name' => 'pago crear']);
-        Permission::create(['name' => 'pago editar']);
-        Permission::create(['name' => 'pago eliminar']);
-        Permission::create(['name' => 'pago ver']);
+        Permission::firstOrCreate(['name' => 'pago crear']);
+        Permission::firstOrCreate(['name' => 'pago editar']);
+        Permission::firstOrCreate(['name' => 'pago eliminar']);
+        Permission::firstOrCreate(['name' => 'pago ver']);
 
         // PERMISOS SALARIO
-        Permission::create(['name' => 'salario crear']);
-        Permission::create(['name' => 'salario editar']);
-        Permission::create(['name' => 'salario eliminar']);
-        Permission::create(['name' => 'salario ver']);
+        Permission::firstOrCreate(['name' => 'salario crear']);
+        Permission::firstOrCreate(['name' => 'salario editar']);
+        Permission::firstOrCreate(['name' => 'salario eliminar']);
+        Permission::firstOrCreate(['name' => 'salario ver']);
 
         // PERMISOS CONCEPTOS
-        Permission::create(['name' => 'concepto crear']);
-        Permission::create(['name' => 'concepto editar']);
-        Permission::create(['name' => 'concepto eliminar']);
-        Permission::create(['name' => 'concepto ver']);
+        Permission::firstOrCreate(['name' => 'concepto crear']);
+        Permission::firstOrCreate(['name' => 'concepto editar']);
+        Permission::firstOrCreate(['name' => 'concepto eliminar']);
+        Permission::firstOrCreate(['name' => 'concepto ver']);
     }
 }
