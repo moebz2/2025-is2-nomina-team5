@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <title>User List</title>
+    <title>Lista de Usuarios</title>
 </head>
 
 <body>
-    <h1>User List</h1>
+    <h1>Lista de Usuarios</h1>
     @if (session('success'))
     <p>{{ session('success') }}</p>
     @endif
@@ -40,7 +40,7 @@
         </tr>
         @endforeach
     </table>
-    <a href="{{ route('users.create') }}">Create New User</a>
+    <a href="{{ route('users.create') }}">Registrar nuevo usuario</a>
 </body>
 
 </html>
