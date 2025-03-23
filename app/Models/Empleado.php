@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,20 @@ class Empleado extends Model
     public $timestamps = false;
 
     protected $guarded = [];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'fecha_ingreso' => 'date',
+            'fecha_egreso' => 'date',
+        ];
+    }
+
 
     public function usuario()
     {

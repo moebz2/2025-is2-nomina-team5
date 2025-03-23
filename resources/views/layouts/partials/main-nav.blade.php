@@ -37,7 +37,7 @@
     <form action="{{route('logout')}}" method="POST">
 
         <button type="submit" class="rounded-full bg-gray-950 px-2.5 py-0.5 text-sm/6 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950">
-            Cerrar sesion
+            Cerrar sesión
         </button>
     </form>
 </div>

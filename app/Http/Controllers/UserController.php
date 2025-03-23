@@ -115,4 +115,15 @@ class UserController extends Controller
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado exitosamente');
     }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        DB::transaction(function () use ($user) {
+            $user->update(['estado' => 'baja']);
+            $user->empleado->update(['fecha_egreso' => Carbon::now()]);
+        });
+    
+        return redirect()->route('users.index')->with('success', 'Usuario dado de baja exitosamente');
+    }
 }
