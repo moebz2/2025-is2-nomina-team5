@@ -23,11 +23,10 @@ return new class extends Migration
             $table->timestamp('nacimiento_fecha');
             $table->timestamp('ingreso_fecha');
             $table->timestamp('salida_fecha')->nullable();
-            $table->string('estado', 32); // VERIFICAR: cuales son los estados para el usuario. Puede ser nulo?
-            $table->string('domicilio', 255); //VERIFICAR: puede ser nulo o es necesario agregar datos al crear
+            $table->string('estado', 32);
+            $table->string('domicilio', 255);
             $table->rememberToken();
             $table->timestamps();
-
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
