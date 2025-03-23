@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <title>Registrar usuario</title>
+    <title>Crear Usuario</title>
 </head>
 
 <body>
-    <h1>Registrar usuario</h1>
+    <h1>Crear Usuario</h1>
 
     @if ($errors->any())
     <div>
@@ -18,43 +18,61 @@
     </div>
     @endif
 
-    <form method="POST" action="{{ route('users.store') }}">
+    <form action="{{ route('users.store') }}" method="POST">
         @csrf
-        <label for="nombre">Nombre:</label>
-        <input type="text" name="nombre" id="nombre" value="{{ old('nombre') }}" required><br>
-
-        <label for="cedula">Cédula:</label>
-        <input type="text" name="cedula" id="cedula" value="{{ old('cedula') }}" required><br>
-
-        <label for="sexo">Sexo:</label>
-        <select name="sexo" id="sexo" required>
-            <option value="">Select</option>
-            <option value="M" {{ old('sexo') == 'M' ? 'selected' : '' }}>Masculino</option>
-            <option value="F" {{ old('sexo') == 'F' ? 'selected' : '' }}>Femenino</option>
-        </select><br>
-
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" value="{{ old('email') }}" required><br>
-
-        <label for="password">Contraseña:</label>
-        <input type="password" name="password" id="password" required><br>
-
-        <label for="password_confirmation">Confirmar contraseña:</label>
-        <input type="password" name="password_confirmation" id="password_confirmation" required><br>
-
-        <label for="nacimiento_fecha">Fecha de nacimiento:</label>
-        <input type="date" name="nacimiento_fecha" id="nacimiento_fecha" value="{{ old('nacimiento_fecha') }}" required><br>
-
-        <label for="ingreso_fecha">Fecha de ingreso:</label>
-        <input type="date" name="ingreso_fecha" id="ingreso_fecha" value="{{ old('ingreso_fecha') }}" required><br>
-
-        <label for="domicilio">Domicilio:</label>
-        <input type="text" name="domicilio" id="domicilio" value="{{ old('domicilio') }}"><br>
-
-        <button type="submit">Crear usuario</button>
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="{{ old('nombre') }}" required>
+        </div>
+        <div>
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" name="cedula" value="{{ old('cedula') }}" required>
+        </div>
+        <div>
+            <label for="sexo">Sexo:</label>
+            <select id="sexo" name="sexo" required>
+                <option value="M" {{ old('sexo') == 'M' ? 'selected' : '' }}>Masculino</option>
+                <option value="F" {{ old('sexo') == 'F' ? 'selected' : '' }}>Femenino</option>
+            </select>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+        </div>
+        <div>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="password_confirmation">Confirmar Contraseña:</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" required>
+        </div>
+        <div>
+            <label for="nacimiento_fecha">Fecha de Nacimiento:</label>
+            <input type="date" id="nacimiento_fecha" name="nacimiento_fecha" value="{{ old('nacimiento_fecha') }}" required>
+        </div>
+        <div>
+            <label for="ingreso_fecha">Fecha de Ingreso:</label>
+            <input type="date" id="ingreso_fecha" name="ingreso_fecha" value="{{ old('ingreso_fecha') }}" required>
+        </div>
+        <div>
+            <label for="domicilio">Domicilio:</label>
+            <input type="text" id="domicilio" name="domicilio" value="{{ old('domicilio') }}">
+        </div>
+        <div>
+            <label for="departamento_id">Departamento:</label>
+            <select id="departamento_id" name="departamento_id" required>
+                @foreach ($departamentos as $departamento)
+                <option value="{{ $departamento->id }}" {{ old('departamento_id') == $departamento->id ? 'selected' : '' }}>
+                    {{ $departamento->nombre }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        <div>
+            <button type="submit">Crear</button>
+        </div>
     </form>
-
-    <a href="{{ route('users.index') }}">Back to User List</a>
 </body>
 
 </html>

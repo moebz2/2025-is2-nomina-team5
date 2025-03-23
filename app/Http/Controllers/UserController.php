@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Departamento;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,14 +14,14 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('empleado')->get();
-
+        $users = User::with('empleado.departamento')->get();
         return view('users.index', compact('users'));
     }
 
     public function create()
     {
-        return view('users.create');
+        $departamentos = Departamento::all();
+        return view('users.create', compact('departamentos'));
     }
 
     public function store(Request $request)
@@ -35,6 +36,7 @@ class UserController extends Controller
             'nacimiento_fecha' => 'required|date',
             'ingreso_fecha' => 'required|date',
             'domicilio' => 'nullable|string|max:255',
+            'departamento_id' => 'required|exists:departamentos,id',
         ]);
 
         DB::transaction(function () use ($request) {
@@ -52,6 +54,7 @@ class UserController extends Controller
                 'usuario_id' => $usuario->id,
                 'fecha_ingreso' => $request->ingreso_fecha,
                 'fecha_egreso' => $request->salida_fecha,
+                'departamento_id' => $request->departamento_id,
             ]);
         });
 

@@ -22,6 +22,7 @@
             <th>Salida Fecha</th>
             <th>Estado</th>
             <th>Domicilio</th>
+            <th>Departamento</th>
         </tr>
         @foreach ($users as $user)
         <tr>
@@ -31,10 +32,11 @@
             <td>{{ $user->sexo }}</td>
             <td>{{ $user->email }}</td>
             <td>{{ $user->nacimiento_fecha }}</td>
-            <td>{{ $user->ingreso_fecha }}</td>
-            <td>{{ $user->salida_fecha }}</td>
+            <td>{{ $user->empleado->fecha_ingreso }}</td>
+            <td>{{ $user->empleado->fecha_egreso }}</td>
             <td>{{ $user->estado }}</td>
             <td>{{ $user->domicilio }}</td>
+            <td>{{ $user->empleado->departamento->nombre }}</td>
         </tr>
         @endforeach
     </table>
