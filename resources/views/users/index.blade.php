@@ -41,6 +41,10 @@
         @endforeach
     </table>
     <a href="{{ route('users.create') }}">Registrar nuevo usuario</a>
+
+    <div>
+        {{ $users->links() }}
+    </div>
 </body>
 
 </html>
