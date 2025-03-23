@@ -1,78 +1,127 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.admin-layout')
 
-<head>
-    <title>Crear Usuario</title>
-</head>
+@section('title', 'Crear usuario')
 
-<body>
-    <h1>Crear Usuario</h1>
+@section('sidebar')
+    @include('users.partials.sidebar')
+@endsection
 
-    @if ($errors->any())
-    <div>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
+
+@section('content')
+
+    <div class="container p-10 mx-auto">
+
+        <h1 class="text-3xl font-bold uppercase">Crear Usuario</h1>
+
+        @if ($errors->any())
+            <div>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('users.store') }}" method="POST">
+            @csrf
+
+            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div class="sm:col-span-3">
+                    <label for="nombre" class="input-label">Nombre</label>
+                    <div class="mt-2">
+                        <input type="text" class="form-input" id="nombre" name="nombre" value="{{ old('nombre') }}"
+                            required>
+
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="cedula" class="input-label">Cédula:</label>
+                    <div class="mt-2">
+
+                        <input type="text" class="form-input" id="cedula" name="cedula" value="{{ old('cedula') }}" required>
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="sexo" class="input-label">Sexo:</label>
+                    <div class="mt-2">
+
+                        <select id="sexo" class="form-select" name="sexo" required>
+                            <option value="M" {{ old('sexo') == 'M' ? 'selected' : '' }}>Masculino</option>
+                            <option value="F" {{ old('sexo') == 'F' ? 'selected' : '' }}>Femenino</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="email" class="input-label">Email:</label>
+                    <div class="mt-2">
+
+                        <input type="email" id="email" class="form-input" name="email" value="{{ old('email') }}" required>
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="password" class="input-label">Contraseña:</label>
+                    <div class="mt-2">
+
+                        <input type="password" id="password"  class="form-input" name="password" required>
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="password_confirmation" class="input-label">Confirmar Contraseña:</label>
+                    <div class="mt-2">
+                        <input type="password" id="password_confirmation" class="form-input" name="password_confirmation" required>
+
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="nacimiento_fecha" class="input-label">Fecha de Nacimiento:</label>
+                    <div class="mt-2">
+
+                        <input type="date" id="nacimiento_fecha" class="form-input" name="nacimiento_fecha" value="{{ old('nacimiento_fecha') }}"
+                        required>
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="ingreso_fecha" class="input-label">Fecha de Ingreso:</label>
+                    <div class="mt-2">
+
+                        <input type="date" id="ingreso_fecha" class="form-input" name="ingreso_fecha" value="{{ old('ingreso_fecha') }}" required>
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="domicilio" class="input-label">Domicilio:</label>
+                    <div class="mt-2">
+
+                        <input type="text" id="domicilio" class="form-input" name="domicilio" value="{{ old('domicilio') }}">
+                    </div>
+                </div>
+                <div class="sm:col-span-3">
+                    <label for="departamento_id" class="input-label">Departamento:</label>
+                    <div class="mt-2">
+
+                        <select id="departamento_id" class="form-select" name="departamento_id" required>
+                            @foreach ($departamentos as $departamento)
+                            <option value="{{ $departamento->id }}"
+                                {{ old('departamento_id') == $departamento->id ? 'selected' : '' }}>
+                                {{ $departamento->nombre }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @can('departamento crear')
+                            <a class="text-blue-500 hover:text-blue-700" href="{{route('departamentos.create')}}">Crear departamento</a>
+
+                        @endcan
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button class="p-2 bg-blue-500 font-medium text-white rounded" type="submit">Crear</button>
+            </div>
+        </form>
+
     </div>
-    @endif
 
-    <form action="{{ route('users.store') }}" method="POST">
-        @csrf
-        <div>
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" value="{{ old('nombre') }}" required>
-        </div>
-        <div>
-            <label for="cedula">Cédula:</label>
-            <input type="text" id="cedula" name="cedula" value="{{ old('cedula') }}" required>
-        </div>
-        <div>
-            <label for="sexo">Sexo:</label>
-            <select id="sexo" name="sexo" required>
-                <option value="M" {{ old('sexo') == 'M' ? 'selected' : '' }}>Masculino</option>
-                <option value="F" {{ old('sexo') == 'F' ? 'selected' : '' }}>Femenino</option>
-            </select>
-        </div>
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="{{ old('email') }}" required>
-        </div>
-        <div>
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <div>
-            <label for="password_confirmation">Confirmar Contraseña:</label>
-            <input type="password" id="password_confirmation" name="password_confirmation" required>
-        </div>
-        <div>
-            <label for="nacimiento_fecha">Fecha de Nacimiento:</label>
-            <input type="date" id="nacimiento_fecha" name="nacimiento_fecha" value="{{ old('nacimiento_fecha') }}" required>
-        </div>
-        <div>
-            <label for="ingreso_fecha">Fecha de Ingreso:</label>
-            <input type="date" id="ingreso_fecha" name="ingreso_fecha" value="{{ old('ingreso_fecha') }}" required>
-        </div>
-        <div>
-            <label for="domicilio">Domicilio:</label>
-            <input type="text" id="domicilio" name="domicilio" value="{{ old('domicilio') }}">
-        </div>
-        <div>
-            <label for="departamento_id">Departamento:</label>
-            <select id="departamento_id" name="departamento_id" required>
-                @foreach ($departamentos as $departamento)
-                <option value="{{ $departamento->id }}" {{ old('departamento_id') == $departamento->id ? 'selected' : '' }}>
-                    {{ $departamento->nombre }}
-                </option>
-                @endforeach
-            </select>
-        </div>
-        <div>
-            <button type="submit">Crear</button>
-        </div>
-    </form>
-</body>
 
-</html>
+
+@endsection

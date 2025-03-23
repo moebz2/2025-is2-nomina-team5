@@ -1,50 +1,72 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.admin-layout')
 
-<head>
-    <title>Lista de Usuarios</title>
-</head>
+@section('title', 'Usuarios')
 
-<body>
-    <h1>Lista de Usuarios</h1>
+@section('sidebar')
+    @include('users.partials.sidebar')
+@endsection
+
+@section('content')
+
+<div class="container mx-auto p-10">
+    <h1 class="text-3xl font-medium uppercase">Lista de Usuarios</h1>
     @if (session('success'))
-    <p>{{ session('success') }}</p>
+        <p>{{ session('success') }}</p>
     @endif
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Cédula</th>
-            <th>Sexo</th>
-            <th>Email</th>
-            <th>Nacimiento Fecha</th>
-            <th>Ingreso Fecha</th>
-            <th>Salida Fecha</th>
-            <th>Estado</th>
-            <th>Domicilio</th>
-            <th>Departamento</th>
-        </tr>
-        @foreach ($users as $user)
-        <tr>
-            <td>{{ $user->id }}</td>
-            <td>{{ $user->nombre }}</td>
-            <td>{{ $user->cedula }}</td>
-            <td>{{ $user->sexo }}</td>
-            <td>{{ $user->email }}</td>
-            <td>{{ $user->nacimiento_fecha }}</td>
-            <td>{{ $user->empleado->fecha_ingreso ?? 'NA' }}</td>
-            <td>{{ $user->empleado->fecha_egreso ?? 'NA' }}</td>
-            <td>{{ $user->estado }}</td>
-            <td>{{ $user->domicilio }}</td>
-            <td>{{ $user->empleado->departamento->nombre ?? 'NA' }}</td>
-        </tr>
-        @endforeach
-    </table>
-    <a href="{{ route('users.create') }}">Registrar nuevo usuario</a>
 
-    <div>
-        {{ $users->links() }}
+    <div class="mt-10 not-prose overflow-auto rounded-lg bg-gray-100 outline outline-white/5">
+        <div class="my-8 overflow-hidden">
+            <table class="w-full table-auto border-collapse text-sm">
+                <thead>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">ID</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Nombre</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Cédula</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Sexo</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Email</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Nacimiento
+                        Fecha</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Ingreso
+                        Fecha</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Salida
+                        Fecha</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Estado</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Domicilio
+                    </th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">
+                        Departamento</th>
+                </thead>
+                @foreach ($users as $user)
+                    <tr>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $user->id }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $user->nombre }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $user->cedula }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $user->sexo }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $user->email }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $user->nacimiento_fecha }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
+                            {{ $user->empleado->fecha_ingreso ?? 'NA' }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
+                            {{ $user->empleado->fecha_egreso ?? 'NA' }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $user->estado }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $user->domicilio }}</td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
+                            {{ $user->empleado->departamento->nombre ?? 'NA' }}</td>
+                    </tr>
+                @endforeach
+            </table>
+        </div>
     </div>
-</body>
+    <div class="mt-4">
 
-</html>
+        <a href="{{ route('users.create') }}" class="bg-blue-500 p-2 rounded text-white font-medium">Registrar nuevo usuario</a>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+@endsection
