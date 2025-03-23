@@ -38,6 +38,13 @@
                     <tr>
                         <td class="border-b border-gray-100 p-4 text-gray-500">
                             <a href="{{ route('users.edit', $user->id) }}" class="text-blue-500 hover:text-blue-700 block cursor-pointer">Editar</a>
+
+                            <form action="{{ route('users.setInactive', $user->id) }}" method="POST" class="mt-2" onsubmit="return confirm('¿Está seguro de que desea marcar como inactivo a este usuario?');">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="text-yellow-500 hover:text-yellow-700 block text-left cursor-pointer">Marcar como inactivo</button>
+                            </form>
+
                             <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="mt-2" onsubmit="return confirm('¿Está seguro de que desea dar de baja a este usuario?');">
                                 @csrf
                                 @method('DELETE')

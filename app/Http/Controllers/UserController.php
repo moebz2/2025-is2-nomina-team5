@@ -126,4 +126,12 @@ class UserController extends Controller
     
         return redirect()->route('users.index')->with('success', 'Usuario dado de baja exitosamente');
     }
+
+    public function setInactive($id)
+    {
+        $user = User::findOrFail($id);
+        $user->update(['estado' => 'inactivo']);
+
+        return redirect()->route('users.index')->with('success', 'Usuario marcado como inactivo exitosamente');
+    }
 }

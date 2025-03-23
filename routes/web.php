@@ -33,6 +33,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::put('users/{id}', [UserController::class, 'update'])->name('users.update');
 
+    Route::patch('/users/{id}/inactive', [UserController::class, 'setInactive'])->name('users.setInactive');
+
     Route::get('', function () {
         echo "Bienvenido a administrador";
     });
