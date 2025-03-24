@@ -27,6 +27,15 @@ class LoginController extends Controller
 
             $request->session()->regenerate();
 
+            $user = Auth::user();
+
+            if ($user->estado !== 'contratado') {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Ocurrió un error al intentar iniciar sesión.',
+                ])->onlyInput('email');
+            }
+
             // dd("Sesin iniciada!");
 
             return redirect()->intended('/admin');

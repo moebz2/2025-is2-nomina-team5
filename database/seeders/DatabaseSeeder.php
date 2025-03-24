@@ -58,6 +58,10 @@ class DatabaseSeeder extends Seeder
             'usuario eliminar',
             'usuario ver',
             'usuario asignar rol',
+            'departamento crear',
+            'departamento editar',
+            'departamento eliminar',
+            'departamento ver',
         ]);
     }
 }
