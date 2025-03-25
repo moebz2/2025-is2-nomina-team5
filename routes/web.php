@@ -36,7 +36,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::patch('/users/{id}/inactive', [UserController::class, 'setInactive'])->name('users.setInactive');
 
     Route::get('', function () {
-        echo "Bienvenido a administrador";
+        return view('admin-index');
     });
 
     Route::get('usuarios', function () {

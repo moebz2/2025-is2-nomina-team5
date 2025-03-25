@@ -19,8 +19,8 @@
             <table class="min-w-full table-auto border-collapse text-sm">
                 <thead>
                     <tr>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Acciones</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">ID</th>
+
+                       {{--  <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">ID</th> --}}
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Nombre</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Cédula</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Sexo</th>
@@ -29,29 +29,17 @@
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Ingreso</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Salida</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Estado</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Domicilio</th>
+                        {{-- <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Domicilio</th> --}}
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Rol</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Departamento</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($users as $user)
                     <tr>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">
-                            <a href="{{ route('users.edit', $user->id) }}" class="text-blue-500 hover:text-blue-700 block cursor-pointer">Editar</a>
 
-                            <form action="{{ route('users.setInactive', $user->id) }}" method="POST" class="mt-2" onsubmit="return confirm('¿Está seguro de que desea marcar como inactivo a este usuario?');">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit" class="text-yellow-500 hover:text-yellow-700 block text-left cursor-pointer">Marcar como inactivo</button>
-                            </form>
-
-                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="mt-2" onsubmit="return confirm('¿Está seguro de que desea dar de baja a este usuario?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-500 hover:text-red-700 block text-left cursor-pointer">Dar de baja</button>
-                            </form>
-                        </td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->id }}</td>
+                        {{-- <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->id }}</td> --}}
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->nombre }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->cedula }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->sexo }}</td>
@@ -60,8 +48,45 @@
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->empleado?->fecha_ingreso ? $user->empleado->fecha_ingreso->format('Y-m-d') : 'NA' }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->empleado?->fecha_egreso ? $user->empleado->fecha_egreso->format('Y-m-d') :'NA' }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->estado }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->domicilio }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->empleado->departamento->nombre ?? 'NA' }}</td>
+                        <td class="border-b border-gray-100 p-4 text-gray-500">
+
+                            @foreach ($user->roles as $role)
+                            <span class="ml-3 rounded-lg bg-blue-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-blue-700 ">{{$role->name}}</span>
+
+                            @endforeach
+
+                        <td class="border-b border-gray-100 p-4 text-gray-500">
+                            @if (isset($user->empleado))
+                            <span class="ml-3 rounded-lg bg-purple-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-purple-700 ">{{$user->empleado->departamento->nombre}}</span>
+
+                            @else
+
+                            N/A
+
+                            @endif
+
+                        </td>
+                        <td class="border-b border-gray-100 p-4 text-gray-500 flex items-center gap-2">
+                            <a href="{{ route('users.edit', $user->id) }}" title="Editar" class=" hover:text-blue-500 block cursor-pointer">
+                                <i class="material-symbols-outlined">edit</i>
+                            </a>
+
+                            <form action="{{ route('users.setInactive', $user->id) }}" method="POST" class="mt-2" onsubmit="return confirm('¿Está seguro de que desea marcar como inactivo a este usuario?');">
+                                @csrf
+                                @method('PATCH')
+                                <button title="Dar de baja" type="submit" class=" hover:text-yellow-500 block text-left cursor-pointer">
+                                    <i class="material-symbols-outlined">block</i>
+                                </button>
+                            </form>
+
+                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="mt-2" onsubmit="return confirm('¿Está seguro de que desea dar de baja a este usuario?');">
+                                @csrf
+                                @method('DELETE')
+                                <button title="Eliminar" type="submit" class=" hover:text-red-500 block text-left cursor-pointer">
+                                    <i class="material-symbols-outlined">delete</i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

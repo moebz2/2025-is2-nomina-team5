@@ -15,6 +15,14 @@ class DepartamentoController extends Controller
         $this->middleware('can:departamento eliminar')->only('destroy');
     }
 
+    public function index()
+    {
+        return view('departamentos.index', [
+            'departamentos' => Departamento::all(),
+        ]);
+    }
+
+
     public function create()
     {
         return view('departamentos.create');

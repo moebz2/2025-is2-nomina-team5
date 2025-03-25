@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -31,7 +32,8 @@ class UserController extends Controller
     public function create()
     {
         $departamentos = Departamento::all();
-        return view('users.create', compact('departamentos'));
+        $roles = Role::all();
+        return view('users.create', compact('departamentos', 'roles'));
     }
 
     public function store(Request $request)
@@ -64,6 +66,7 @@ class UserController extends Controller
                 'usuario_id' => $usuario->id,
                 'fecha_ingreso' => $request->ingreso_fecha,
                 'fecha_egreso' => $request->salida_fecha,
+                'estado' => Empleado::ESTADO_CONTRATADO,
                 'departamento_id' => $request->departamento_id,
             ]);
         });
@@ -73,15 +76,26 @@ class UserController extends Controller
 
     public function edit($id)
     {
+
+
+
+
+
+        $roles = Role::all();
         $user = User::with('empleado')->findOrFail($id);
-        $user->nacimiento_fecha = Carbon::parse($user->nacimiento_fecha)->format('Y-m-d');
-        $user->empleado->fecha_ingreso = Carbon::parse($user->empleado->fecha_ingreso)->format('Y-m-d');
+        $fecha_nacimiento = Carbon::parse($user->nacimiento_fecha)->format('Y-m-d');
+        $fecha_ingreso = null;
+        if (isset($user->empleado)) {
+
+            $fecha_ingreso = Carbon::parse($user->empleado->fecha_ingreso)->format('Y-m-d');
+        }
         $departamentos = Departamento::all();
-        return view('users.edit', compact('user', 'departamentos'));
+        return view('users.edit', compact('user', 'departamentos', 'roles', 'fecha_nacimiento', 'fecha_ingreso'));
     }
 
     public function update(Request $request, $id)
     {
+
         $request->validate([
             'nombre' => 'required|string|max:255',
             'cedula' => 'required|integer|unique:users,cedula,' . $id,
@@ -92,6 +106,7 @@ class UserController extends Controller
             'ingreso_fecha' => 'required|date',
             'domicilio' => 'nullable|string|max:255',
             'departamento_id' => 'required|exists:departamentos,id',
+            'role'=> 'required',
         ]);
 
         DB::transaction(function () use ($request, $id) {
@@ -106,11 +121,29 @@ class UserController extends Controller
                 'domicilio' => strip_tags($request->domicilio),
             ]);
 
-            $user->empleado->update([
-                'fecha_ingreso' => $request->ingreso_fecha,
-                'fecha_egreso' => $request->salida_fecha,
-                'departamento_id' => $request->departamento_id,
-            ]);
+            if(isset($user->empleado)){
+
+                $user->empleado->update([
+                    'fecha_ingreso' => $request->ingreso_fecha,
+                    'fecha_egreso' => $request->salida_fecha,
+                    'departamento_id' => $request->departamento_id,
+                ]);
+            }else{
+
+                Empleado::create([
+                    'usuario_id' => $user->id,
+                    'fecha_ingreso' => $request->ingreso_fecha,
+                    'fecha_egreso' => $request->salida_fecha,
+                    'estado' => Empleado::ESTADO_CONTRATADO,
+                    'departamento_id' => $request->departamento_id
+                ]);
+
+
+            }
+
+
+            $user->assignRole($request->role);
+
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado exitosamente');
@@ -123,7 +156,7 @@ class UserController extends Controller
             $user->update(['estado' => 'baja']);
             $user->empleado->update(['fecha_egreso' => Carbon::now()]);
         });
-    
+
         return redirect()->route('users.index')->with('success', 'Usuario dado de baja exitosamente');
     }
 

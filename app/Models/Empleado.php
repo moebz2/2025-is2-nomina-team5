@@ -10,6 +10,11 @@ class Empleado extends Model
 {
     use HasFactory;
 
+    const ESTADO_CONTRATADO = 'CONTRATADO';
+    const ESTADO_DESPEDIDO = 'DESPEDIDO';
+    const ESTADO_INACTIVO = 'INACTIVO';
+
+
     protected $table = 'empleados';
 
     public $timestamps = false;

@@ -56,7 +56,7 @@ class RoleController extends Controller
             }
         }
 
-        return view('roles.create', compact('groupedPermissions', 'availableActions', ));
+        return view('roles.create', compact('groupedPermissions', 'availableActions',));
     }
 
     public function store(Request $request)
@@ -79,14 +79,84 @@ class RoleController extends Controller
             });
 
             return redirect()->route('roles.index')->with('sucess', 'Rol creado con exito');
-
         } catch (Exception $e) {
 
             DB::rollBack();
             return back()->withErrors(['error' => $e->getMessage()]);
         }
+    }
+    public function edit(Request $request, Role $role)
+    {
+        $availableActions = ['ver', 'crear', 'editar', 'eliminar'];
+
+        $permissions = Permission::all()->pluck('name');
+        $groupedPermissions = [];
+
+        // $userPermissions = $request->user()->getAllpermissions()->pluck('name');
+
+        $rolePermissions = $role->permissions->pluck('name');
+
+        $userGroupedPermissions = [];
 
 
+        foreach ($permissions as $permission) {
+            $parts = explode(' ', $permission);
+            if (count($parts) === 2) {
+                $module = $parts[0];
+                $action = $parts[1];
+
+                if (!isset($groupedPermissions[$module])) {
+                    $groupedPermissions[$module] = [];
+                }
+
+                $groupedPermissions[$module][] = $action;
+            }
         }
 
+        foreach ($rolePermissions as $permission) {
+            $parts = explode(' ', $permission);
+            if (count($parts) === 2) {
+                $module = $parts[0];
+                $action = $parts[1];
+
+                if (!isset($userGroupedPermissions[$module])) {
+                    $userGroupedPermissions[$module] = [];
+                }
+
+                $userGroupedPermissions[$module][] = $action;
+            }
+        }
+
+        return view('roles.edit', compact('role', 'groupedPermissions', 'availableActions', 'userGroupedPermissions'));
+    }
+
+    public function update(Request $request, $id)
+    {
+
+
+        // dd($request->input('permissions'));
+
+        $request->validate([
+            'permissions' => 'required|array'
+        ]);
+
+        try {
+
+
+
+
+            $role = Role::findOrFail($id);
+
+            $role->syncPermissions($request->input('permissions'));
+
+
+            return redirect()->route('roles.index')->with('success', 'Rol actualizado exitosamente');
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
 }
