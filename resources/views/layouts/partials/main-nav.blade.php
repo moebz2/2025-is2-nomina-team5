@@ -15,6 +15,11 @@
     <a class="text-sm/6 text-gray-950" href="/plus/templates">Configuración</a>
     @endcan
 
+    @can('departamento ver')
+
+    <a class="text-sm/6 text-gray-950" href="{{route('departamentos.index')}}">Departamentos</a>
+    @endcan
+
 </div>
 <div class="flex items-center gap-5 max-md:hidden lg:gap-6">
     @can('usuario ver')
@@ -36,7 +41,9 @@
 
     <form action="{{route('logout')}}" method="POST">
 
-        <button type="submit" class="rounded-full bg-gray-950 px-2.5 py-0.5 text-sm/6 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950">
+        @csrf
+
+        <button type="submit" class="rounded-full cursor-pointer bg-gray-950 px-2.5 py-0.5 text-sm/6 font-medium text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-950">
             Cerrar sesión
         </button>
     </form>
