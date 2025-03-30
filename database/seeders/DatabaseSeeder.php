@@ -71,14 +71,14 @@ class DatabaseSeeder extends Seeder
             'departamento ver',
         ]);
 
-        Departamento::firstOrCreate(['nombre'=>'Gerencia'],['nombre' => 'Gerencia', 'Departamento de gerencia de la empresa']);
+        Departamento::firstOrCreate(
+            ['nombre' => 'Gerencia'],
+            ['descripcion' => 'Departamento de gerencia de la empresa']
+        );
 
-        Cargo::firstOrCreate(['nombre' => 'Gerente'],['nombre' => 'Gerente', 'departamento_id' => 1, 'descripcion' => 'Gerencia de la empresa']);
-
-
-
-
-
-
+        Cargo::firstOrCreate(
+            ['nombre' => 'Gerente'],
+            ['departamento_id' => 1, 'descripcion' => 'Gerencia de la empresa']
+        );
     }
 }

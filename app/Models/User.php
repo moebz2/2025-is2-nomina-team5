@@ -27,10 +27,6 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    protected $attributes = [
-        'cargo_actual'
-    ];
-
     /**
      * Get the attributes that should be cast.
      *
@@ -45,13 +41,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function cargos() : BelongsToMany
+    public function cargos(): BelongsToMany
     {
         return $this->belongsToMany(Cargo::class, 'cargos_empleado', 'empleado_id', 'cargo_id');
     }
 
-    public function addCargoActualAttribute(){
-        if($this->cargos){
+    public function addCargoActualAttribute()
+    {
+        if ($this->cargos) {
             return $this->cargos()->where('es_actual', true)->first();
         }
 
@@ -59,7 +56,7 @@ class User extends Authenticatable
         return null;
     }
 
-     /**
+    /**
      * Assign a cargo to the user.
      *
      * @param int $cargoId
@@ -103,5 +100,4 @@ class User extends Authenticatable
     {
         return $this->cargos()->where('cargo_id', $cargoId)->exists();
     }
-
 }
