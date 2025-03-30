@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::paginate(10);
+        $users = User::with('cargos')->paginate(10);
 
         // var_export(json_encode($users));
         // dd();

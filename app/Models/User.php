@@ -41,9 +41,11 @@ class User extends Authenticatable
         ];
     }
 
-    public function cargos(): BelongsToMany
+    public function cargos()
     {
-        return $this->belongsToMany(Cargo::class, 'cargos_empleado', 'empleado_id', 'cargo_id');
+        return $this->belongsToMany(Cargo::class, 'cargos_empleado', 'empleado_id', 'cargo_id')
+            ->withPivot('fecha_inicio', 'fecha_fin')
+            ->wherePivot('fecha_fin', null); // Only active cargos
     }
 
     public function addCargoActualAttribute()
@@ -102,5 +104,10 @@ class User extends Authenticatable
     public function tieneCargo(int $cargoId): bool
     {
         return $this->cargos()->where('cargo_id', $cargoId)->exists();
+    }
+
+    public function currentCargo()
+    {
+        return $this->cargos()->first(); // Get the first active cargo
     }
 }
