@@ -16,6 +16,7 @@
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">ID</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Nombre</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Descripción</th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Estado</th>                    
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Acciones</th>
 
 
@@ -27,6 +28,15 @@
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
                             {{ $departamento->descripcion}}
                         </td>
+
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
+                            @if ($departamento->estado == 1)
+                                <span class="rounded-lg bg-green-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-700 ">Activo</span>
+                            @else
+                                <span class="rounded-lg bg-red-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-red-700 ">Inactivo</span>
+                            @endif
+                        </td>
+
                         <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-500">
                             @can('departamento editar')
 
@@ -38,10 +48,14 @@
 
                             @can('departamento eliminar')
 
-                            <button class="hover:text-red-700 cursor-pointer">
-                                <i class="material-symbols-outlined">delete</i>
-
-                            </button>
+                            <form action="{{ route('departamentos.destroy', $departamento->id) }}" method="POST" onsubmit="return confirm('¿Está seguro de que desea dar de baja a este departamento?');">
+                                @csrf
+                                @method('DELETE')
+                                <button title="Eliminar" type="submit" class=" hover:text-red-500 block text-left cursor-pointer">
+                                    <i class="material-symbols-outlined">delete</i>
+                                </button>
+                            </form>
+                            
                             @endcan
 
                         </td>
