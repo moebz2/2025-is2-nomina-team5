@@ -64,6 +64,9 @@ class User extends Authenticatable
      */
     public function asignarCargo(int $cargoId, $fecha_inicio): void
     {
+
+        // TODO: poner fecha de baja al cargo anterior
+
         $this->cargos()->attach($cargoId, ['fecha_inicio' => $fecha_inicio]);
     }
 

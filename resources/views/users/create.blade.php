@@ -62,15 +62,15 @@
 
 
                     <div class="sm:col-span-3">
-                        <label for="role_id" class="input-label">Rol del empleado</label>
+                        <label for="role" class="input-label">Rol del empleado</label>
 
                         <div class="mt-2">
 
 
-                            <select id="role_id" class="form-select" name="role_id" required>
+                            <select id="role" class="form-select" name="role" required>
                                 @foreach ($roles as $role)
 
-                                <option value="{{ $role->id }}">
+                                <option value="{{ $role->name }}">
                                     {{ $role->name }}
                                 </option>
                                 @endforeach
@@ -135,9 +135,9 @@
                         </div>
                     </div>
                     <div class="sm:col-span-3">
-                        <label for="departamento_id" class="input-label">Cargo:</label>
+                        <label for="cargo_id" class="input-label">Cargo:</label>
                         <div class="mt-2">
-                            <select id="departamento_id" class="form-select" name="departamento_id">
+                            <select id="cargo_id" class="form-select" name="cargo_id">
                                 <option value="0" disabled selected>-- SELECCIONE UN CARGO -- </option>
                                 @foreach ($cargos as $cargo)
                                 <option value="{{ $cargo->id }}"
@@ -181,7 +181,7 @@
 <script>
     document.getElementById('fill-test-data').addEventListener('click', function() {
 
-        const plus = 3;
+        const plus = 5;
 
         // Fill text inputs
         document.getElementById('email').value = `test${plus}@example.com`;
@@ -193,9 +193,9 @@
 
         // Fill select inputs
         document.getElementById('sexo').value = 'M';
-        document.getElementById('departamento_id').value = 1; // Replace with a valid cargo ID
+        document.getElementById('cargo_id').value = 1; // Replace with a valid cargo ID
 
-        document.getElementById('role_id').value = 2;
+        document.getElementById('role').value = 'asistenteRRHH';
 
         // Fill date inputs
         document.getElementById('nacimiento_fecha').value = '1990-01-01';

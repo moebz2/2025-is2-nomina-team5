@@ -54,9 +54,8 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'nacimiento_fecha' => 'required|date',
             'ingreso_fecha' => 'nullable|date',
-            'cargo_id' => 'nullable|exists:cargos,id',
+            'cargo_id' => 'required|exists:cargos,id',
             'domicilio' => 'nullable|string|max:255',
-            'departamento_id' => 'required|exists:departamentos,id',
         ]);
 
 
@@ -72,8 +71,8 @@ class UserController extends Controller
                 'domicilio' => strip_tags($request->domicilio),
             ]);
 
-            $role = Role::findOrFail($request->role_id);
-            $usuario->assignRole($role);
+            // syncRoles = Reemplazar rol actual, no agregar
+            $usuario->syncRoles($request->role);
 
             if (isset($request->cargo_id)) {
                 if (!isset($request->ingreso_fecha)) {
@@ -82,7 +81,7 @@ class UserController extends Controller
 
                 $cargo = Cargo::findOrFail($request->cargo_id);
 
-                $usuario->asignarCargo($cargo, $request->ingreso_fecha);
+                $usuario->asignarCargo($cargo->id, $request->ingreso_fecha);
             }
         });
 
@@ -94,16 +93,7 @@ class UserController extends Controller
         $roles = Role::all();
         $user = User::findOrFail($id);
         $fecha_nacimiento = Carbon::parse($user->nacimiento_fecha)->format('Y-m-d');
-        $fecha_ingreso = null;
-
-
-        if (isset($user->empleado)) {
-
-            $fecha_ingreso = Carbon::parse($user->empleado->fecha_ingreso)->format('Y-m-d');
-        }
         $cargos = Cargo::all();
-
-
 
         return view('users.edit', compact('user', 'cargos', 'roles'));
     }
@@ -120,9 +110,7 @@ class UserController extends Controller
             'nacimiento_fecha' => 'required|date',
             'ingreso_fecha' => 'required|date',
             'domicilio' => 'nullable|string|max:255',
-            'departamento_id' => 'required|exists:departamentos,id',
             'cargo_id' => 'required|exists:cargos,id',
-            'salida_fecha' => 'nullable|date',
             'role' => 'required',
         ]);
 
@@ -135,17 +123,17 @@ class UserController extends Controller
                 'email' => strip_tags($request->email),
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
                 'nacimiento_fecha' => $request->nacimiento_fecha,
-                'fecha_ingreso' => $request->ingreso_fecha,
-                'fecha_egreso' => $request->salida_fecha,
-
                 'domicilio' => strip_tags($request->domicilio),
             ]);
 
-            $user->assignRole($request->role);
+            $user->syncRoles($request->role);
 
             $cargo = Cargo::findOrFail($request->cargo_id);
 
-            $user->asignarCargo($cargo);
+            // Solamente intentar asignar cargo si el cargo es diferente al actual
+            if (!$user->cargos()->where('cargo_id', $cargo->id)->exists()) {
+                $user->asignarCargo($cargo->id, $request->ingreso_fecha);
+            }
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado exitosamente');
@@ -156,7 +144,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         DB::transaction(function () use ($user) {
             $user->update(['estado' => 'baja']);
-            $user->empleado->update(['fecha_egreso' => Carbon::now()]);
+            // TODO: setear fecha de baja en cargo_empleado
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario dado de baja exitosamente');
