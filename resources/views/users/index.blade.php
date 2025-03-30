@@ -20,7 +20,7 @@
                 <thead>
                     <tr>
 
-                       {{--  <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">ID</th> --}}
+                        {{-- <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">ID</th> --}}
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Nombre</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Cédula</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Sexo</th>

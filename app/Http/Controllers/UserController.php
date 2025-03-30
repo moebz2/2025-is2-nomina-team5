@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cargo;
-use App\Models\Departamento;
-use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +25,10 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(10);
+
+        // var_export(json_encode($users));
+        // dd();
+
         return view('users.index', compact('users'));
     }
 
@@ -42,6 +44,8 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
+        // dd($request->all());
+
         $request->validate([
             'nombre' => 'required|string|max:255',
             'cedula' => 'required|integer|unique:users',
@@ -55,6 +59,7 @@ class UserController extends Controller
             'departamento_id' => 'required|exists:departamentos,id',
         ]);
 
+
         DB::transaction(function () use ($request) {
             $usuario = User::create([
                 'nombre' => strip_tags($request->nombre),
@@ -67,16 +72,18 @@ class UserController extends Controller
                 'domicilio' => strip_tags($request->domicilio),
             ]);
 
+            $role = Role::findOrFail($request->role_id);
+            $usuario->assignRole($role);
 
-            if(isset($request->cargo_id) && isset($request->ingreso_fecha))
-            {
+            if (isset($request->cargo_id)) {
+                if (!isset($request->ingreso_fecha)) {
+                    $request->ingreso_fecha = Carbon::now();
+                }
+
                 $cargo = Cargo::findOrFail($request->cargo_id);
 
                 $usuario->asignarCargo($cargo, $request->ingreso_fecha);
-
-
             }
-
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario creado exitosamente');
@@ -84,11 +91,6 @@ class UserController extends Controller
 
     public function edit($id)
     {
-
-
-
-
-
         $roles = Role::all();
         $user = User::findOrFail($id);
         $fecha_nacimiento = Carbon::parse($user->nacimiento_fecha)->format('Y-m-d');
@@ -121,7 +123,7 @@ class UserController extends Controller
             'departamento_id' => 'required|exists:departamentos,id',
             'cargo_id' => 'required|exists:cargos,id',
             'salida_fecha' => 'nullable|date',
-            'role'=> 'required',
+            'role' => 'required',
         ]);
 
         DB::transaction(function () use ($request, $id) {
@@ -144,9 +146,6 @@ class UserController extends Controller
             $cargo = Cargo::findOrFail($request->cargo_id);
 
             $user->asignarCargo($cargo);
-
-
-
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado exitosamente');
