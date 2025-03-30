@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('empleado_conceptos', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('empleado_id')->references('id')->on('empleados');
+            $table->foreignId('empleado_id')->references('id')->on('users');
             $table->foreignId('concepto_id')->references('id')->on('conceptos');
             $table->decimal('valor');
             $table->timestamp('fecha_inicio');

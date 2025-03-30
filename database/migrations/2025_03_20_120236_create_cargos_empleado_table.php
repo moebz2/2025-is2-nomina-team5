@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('cargos_empleado', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('empleado_id')->references('id')->on('empleados');
+            // Actualizado referencia a tabla usuario
+            $table->foreignId('empleado_id')->unique()->references('id')->on('users');
             $table->foreignId('cargo_id')->references('id')->on('cargos');
-            $table->timestamp('fecha_inicio');
-            $table->timestamp('fecha_fin');
+            $table->date('fecha_inicio');
+            $table->date('fecha_fin')->nullable();
             $table->boolean('es_principal')->default(true);
 
             // $table->timestamps();

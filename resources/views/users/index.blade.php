@@ -27,11 +27,11 @@
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Email</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Nacimiento</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Ingreso</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Salida</th>
+                        {{-- <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Salida</th> --}}
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Estado</th>
                         {{-- <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Domicilio</th> --}}
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Rol</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Departamento</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Cargo</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Acciones</th>
                     </tr>
                 </thead>
@@ -45,8 +45,8 @@
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->sexo }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->email }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->nacimiento_fecha->format('Y-m-d') }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->empleado?->fecha_ingreso ? $user->empleado->fecha_ingreso->format('Y-m-d') : 'NA' }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->empleado?->fecha_egreso ? $user->empleado->fecha_egreso->format('Y-m-d') :'NA' }}</td>
+                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->cargo_actual ? $user->cargo_actual->fecha_ingreso->format('Y-m-d') : 'Sin cargo' }}</td>
+                        {{-- <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->fecha_egreso ? $user->fecha_egreso->format('Y-m-d') :'NA' }}</td> --}}
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->estado }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">
 
@@ -56,12 +56,12 @@
                             @endforeach
 
                         <td class="border-b border-gray-100 p-4 text-gray-500">
-                            @if (isset($user->empleado))
-                            <span class="ml-3 rounded-lg bg-purple-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-purple-700 ">{{$user->empleado->departamento->nombre}}</span>
+                            @if (isset($user->cargo_actual))
+                            <span class="ml-3 rounded-lg bg-purple-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-purple-700 ">{{$user->cargo_actual->nombre}}</span>
 
                             @else
 
-                            N/A
+                            Sin cargo
 
                             @endif
 

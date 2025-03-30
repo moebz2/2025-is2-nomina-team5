@@ -21,9 +21,12 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->timestamp('nacimiento_fecha');
-            $table->timestamp('ingreso_fecha');
-            $table->timestamp('salida_fecha')->nullable();
-            $table->string('estado', 32);
+            // $table->timestamp('ingreso_fecha');
+            // $table->timestamp('salida_fecha')->nullable();
+            $table->enum('estado', ['contratado', 'inactivo', 'baja'])->default('contratado');
+            // $table->timestamp('fecha_ingreso');
+            // $table->timestamp('fecha_egreso')->nullable();
+            // $table->string('estado', 32);
             $table->string('domicilio', 255);
             $table->rememberToken();
             $table->timestamps();

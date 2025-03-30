@@ -128,7 +128,7 @@
                             <label for="nacimiento_fecha" class="input-label">Fecha de Nacimiento:</label>
                             <div class="mt-2">
                                 <input type="date" id="nacimiento_fecha" class="form-input" name="nacimiento_fecha"
-                                    value="{{ old('nacimiento_fecha', $fecha_nacimiento) }}" required>
+                                    value="{{ old('nacimiento_fecha', $user->fecha_nacimiento) }}" required>
                             </div>
                         </div>
                         <div class="sm:col-span-3">
@@ -136,7 +136,7 @@
                             <div class="mt-2">
 
                                 <input type="date" id="ingreso_fecha" class="form-input" name="ingreso_fecha"
-                                    value="{{ old('ingreso_fecha', $fecha_ingreso) }}"
+                                    value="{{ old('ingreso_fecha', $user->fecha_ingreso) }}"
                                     required>
                             </div>
                         </div>
@@ -148,19 +148,18 @@
                             </div>
                         </div>
                         <div class="sm:col-span-3">
-                            <label for="departamento_id" class="input-label">Departamento:</label>
+                            <label for="cargo_id" class="input-label">Cargo:</label>
                             <div class="mt-2">
-                                <select id="departamento_id" class="form-select" name="departamento_id" required>
-                                    @foreach ($departamentos as $departamento)
-                                        <option value="{{ $departamento->id }}"
-                                            {{ old('departamento_id', isset($user->empleado) ? $user->empleado->departamento_id : 0) == $departamento->id ? 'selected' : '' }}>
-                                            {{ $departamento->nombre }}
+                                <select id="cargo_id" class="form-select" name="cargo_id" required>
+                                    @foreach ($cargos as $cargo)
+                                        <option value="{{ $cargo->id }}">
+                                            {{ $cargo->nombre }} - DTO: {{$cargo->departamento->nombre}}
                                         </option>
                                     @endforeach
                                 </select>
-                                @can('departamento crear')
+                                @can('cargo crear')
                                     <a class="text-blue-500 hover:text-blue-700 text-sm"
-                                        href="{{ route('departamentos.create') }}">Crear departamento</a>
+                                        href="">Crear cargo</a>
                                 @endcan
                             </div>
                         </div>

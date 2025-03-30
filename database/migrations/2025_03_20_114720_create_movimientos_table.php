@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('movimientos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('empleado_id')->references('id')->on('empleados');
+            // Actualizado referencia a tabla usuario
+            $table->foreignId('empleado_id')->references('id')->on('users');
             $table->foreignId('concepto_id')->references('id')->on('conceptos');
             $table->integer('monto');
             $table->timestamp('validez_inicio');

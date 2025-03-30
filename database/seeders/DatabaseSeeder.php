@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Cargo;
+use App\Models\Departamento;
 use App\Models\User;
 use Carbon\Carbon;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -20,13 +22,14 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $admin = User::firstOrCreate(
-            ['email' => 'admin@example.com'],
+            ['email' => 'admin@nomina.com'],
             [
                 'nombre' => 'Administrador',
-                'email' => 'admin@example.com',
+                'email' => 'admin@nomina.com',
                 'cedula' => '1234567',
                 'sexo' => 'M',
                 'nacimiento_fecha' => date_create('1990-01-01'),
+                // 'fecha_ingreso' => date_create('2020-01-01'),
                 'password' => Hash::make('12345'),
                 'estado' => 'contratado',
                 'remember_token' => Str::random(10),
@@ -54,7 +57,7 @@ class DatabaseSeeder extends Seeder
 
         $admin->assignRole('admin');
 
-        $asistRole = Role::firstOrCreate(['name' => 'asistenteRrhh']);
+        $asistRole = Role::firstOrCreate(['name' => 'asistenteRRHH']);
 
         $asistRole->syncPermissions([
             'usuario crear',
@@ -67,5 +70,15 @@ class DatabaseSeeder extends Seeder
             'departamento eliminar',
             'departamento ver',
         ]);
+
+        Departamento::firstOrCreate(['nombre'=>'Gerencia'],['nombre' => 'Gerencia', 'Departamento de gerencia de la empresa']);
+
+        Cargo::firstOrCreate(['nombre' => 'Gerente'],['nombre' => 'Gerente', 'departamento_id' => 1, 'descripcion' => 'Gerencia de la empresa']);
+
+
+
+
+
+
     }
 }

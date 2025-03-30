@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('liquidaciones_empleado_cabecera', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('empleado_id')->references('id')->on('empleados');
+            // Actualizado referencia a tabla usuario
+            $table->foreignId('empleado_id')->references('id')->on('users');
             $table->foreignId('liquidacion_cabecera_id')->references('id')->on('liquidaciones_cabecera');
             $table->string('estado',32);
             $table->timestamp('periodo_inicio');
