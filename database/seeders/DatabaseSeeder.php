@@ -45,7 +45,11 @@ class DatabaseSeeder extends Seeder
             'rol crear',
             'rol editar',
             'rol eliminar',
-            'rol ver'
+            'rol ver',
+            'departamento crear',
+            'departamento editar',
+            'departamento eliminar',
+            'departamento ver',
         ]);
 
         $admin->assignRole('admin');

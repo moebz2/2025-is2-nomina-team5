@@ -8,9 +8,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\RoleController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (Auth::check()) {
+        return redirect('/admin'); // Redirect to /admin if logged in
+    }
+    return redirect('/login'); // Redirect to /login if logged out
 });
 
 Route::get('/login', function () {
@@ -42,8 +46,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('usuarios', function () {
         echo "Vista de Usuarios";
     });
-
-    // Se debe registrar el recurso LOGOUT
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
