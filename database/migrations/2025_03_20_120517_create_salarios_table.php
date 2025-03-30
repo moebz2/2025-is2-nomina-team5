@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('salarios', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('empleado_id')->references('id')->on('empleados');
+            // Actualizado referencia a tabla usuario
+            $table->foreignId('empleado_id')->references('id')->on('users');
             $table->integer('monto');
             $table->timestamp('fecha_inicio');
             $table->timestamp('fecha_fin');

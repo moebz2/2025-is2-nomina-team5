@@ -63,11 +63,11 @@
 
                         <div class="sm:col-span-3">
                             <label for="role_id" class="input-label">Rol del empleado</label>
-                            <p class="text-sm text-gray-700">Presione CTL para seleccionar mas de una opción</p>
+
                             <div class="mt-2">
 
 
-                                <select id="role_id" class="form-select" name="role_id" multiple required>
+                                <select id="role_id" class="form-select" name="role_id" required>
                                     @foreach ($roles as $role)
 
                                         <option value="{{ $role->id }}">
@@ -126,15 +126,8 @@
                                     value="{{ old('nacimiento_fecha') }}" required>
                             </div>
                         </div>
-                        <div class="sm:col-span-3">
-                            <label for="ingreso_fecha" class="input-label">Fecha de Ingreso:</label>
-                            <div class="mt-2">
-                                <input type="date" id="ingreso_fecha" class="form-input" name="ingreso_fecha"
-                                    value="{{ old('ingreso_fecha') }}"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="sm:col-span-3">
+
+                        <div class="sm:col-span-6">
                             <label for="domicilio" class="input-label">Domicilio:</label>
                             <div class="mt-2">
                                 <input type="text" id="domicilio" class="form-input" name="domicilio"
@@ -142,20 +135,28 @@
                             </div>
                         </div>
                         <div class="sm:col-span-3">
-                            <label for="departamento_id" class="input-label">Departamento:</label>
+                            <label for="departamento_id" class="input-label">Cargo:</label>
                             <div class="mt-2">
-                                <select id="departamento_id" class="form-select" name="departamento_id" required>
-                                    @foreach ($departamentos as $departamento)
-                                        <option value="{{ $departamento->id }}"
-                                            {{ old('departamento_id') }}>
-                                            {{ $departamento->nombre }}
+                                <select id="departamento_id" class="form-select" name="departamento_id">
+                                    <option value="0" disabled selected>-- SELECCIONE UN CARGO -- </option>
+                                    @foreach ($cargos as $cargo)
+                                        <option value="{{ $cargo->id }}"
+                                            {{ old('cargo_id') }}>
+                                            {{ $cargo->nombre }}  - DPTO: {{ $cargo->departamento->nombre}}
                                         </option>
                                     @endforeach
                                 </select>
-                                @can('departamento crear')
+                                @can('cargo crear')
                                     <a class="text-blue-500 hover:text-blue-700 text-sm"
-                                        href="{{ route('departamentos.create') }}">Crear departamento</a>
+                                        href="">Crear cargo</a>
                                 @endcan
+                            </div>
+                        </div>
+                        <div class="sm:col-span-3">
+                            <label for="ingreso_fecha" class="input-label">Fecha de Ingreso:</label>
+                            <div class="mt-2">
+                                <input type="date" id="ingreso_fecha" class="form-input" name="ingreso_fecha"
+                                    value="{{ old('ingreso_fecha') }}">
                             </div>
                         </div>
 

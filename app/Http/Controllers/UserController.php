@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cargo;
 use App\Models\Departamento;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
@@ -25,15 +26,17 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with('empleado.departamento')->paginate(10);
+        $users = User::paginate(10);
         return view('users.index', compact('users'));
     }
 
     public function create()
     {
-        $departamentos = Departamento::all();
+
         $roles = Role::all();
-        return view('users.create', compact('departamentos', 'roles'));
+        $cargos = Cargo::all();
+
+        return view('users.create', compact('cargos', 'roles'));
     }
 
     public function store(Request $request)
@@ -46,7 +49,8 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'nacimiento_fecha' => 'required|date',
-            'ingreso_fecha' => 'required|date',
+            'ingreso_fecha' => 'nullable|date',
+            'cargo_id' => 'nullable|exists:cargos,id',
             'domicilio' => 'nullable|string|max:255',
             'departamento_id' => 'required|exists:departamentos,id',
         ]);
@@ -59,16 +63,20 @@ class UserController extends Controller
                 'email' => strip_tags($request->email),
                 'password' => Hash::make($request->password),
                 'nacimiento_fecha' => $request->nacimiento_fecha,
+                // 'fecha_ingreso' => $request->ingreso_fecha,
                 'domicilio' => strip_tags($request->domicilio),
             ]);
 
-            Empleado::create([
-                'usuario_id' => $usuario->id,
-                'fecha_ingreso' => $request->ingreso_fecha,
-                'fecha_egreso' => $request->salida_fecha,
-                'estado' => Empleado::ESTADO_CONTRATADO,
-                'departamento_id' => $request->departamento_id,
-            ]);
+
+            if(isset($request->cargo_id) && isset($request->ingreso_fecha))
+            {
+                $cargo = Cargo::findOrFail($request->cargo_id);
+
+                $usuario->asignarCargo($cargo, $request->ingreso_fecha);
+
+
+            }
+
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario creado exitosamente');
@@ -82,15 +90,20 @@ class UserController extends Controller
 
 
         $roles = Role::all();
-        $user = User::with('empleado')->findOrFail($id);
+        $user = User::findOrFail($id);
         $fecha_nacimiento = Carbon::parse($user->nacimiento_fecha)->format('Y-m-d');
         $fecha_ingreso = null;
+
+
         if (isset($user->empleado)) {
 
             $fecha_ingreso = Carbon::parse($user->empleado->fecha_ingreso)->format('Y-m-d');
         }
-        $departamentos = Departamento::all();
-        return view('users.edit', compact('user', 'departamentos', 'roles', 'fecha_nacimiento', 'fecha_ingreso'));
+        $cargos = Cargo::all();
+
+
+
+        return view('users.edit', compact('user', 'cargos', 'roles'));
     }
 
     public function update(Request $request, $id)
@@ -106,6 +119,8 @@ class UserController extends Controller
             'ingreso_fecha' => 'required|date',
             'domicilio' => 'nullable|string|max:255',
             'departamento_id' => 'required|exists:departamentos,id',
+            'cargo_id' => 'required|exists:cargos,id',
+            'salida_fecha' => 'nullable|date',
             'role'=> 'required',
         ]);
 
@@ -118,31 +133,19 @@ class UserController extends Controller
                 'email' => strip_tags($request->email),
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
                 'nacimiento_fecha' => $request->nacimiento_fecha,
+                'fecha_ingreso' => $request->ingreso_fecha,
+                'fecha_egreso' => $request->salida_fecha,
+
                 'domicilio' => strip_tags($request->domicilio),
             ]);
 
-            if(isset($user->empleado)){
-
-                $user->empleado->update([
-                    'fecha_ingreso' => $request->ingreso_fecha,
-                    'fecha_egreso' => $request->salida_fecha,
-                    'departamento_id' => $request->departamento_id,
-                ]);
-            }else{
-
-                Empleado::create([
-                    'usuario_id' => $user->id,
-                    'fecha_ingreso' => $request->ingreso_fecha,
-                    'fecha_egreso' => $request->salida_fecha,
-                    'estado' => Empleado::ESTADO_CONTRATADO,
-                    'departamento_id' => $request->departamento_id
-                ]);
-
-
-            }
-
-
             $user->assignRole($request->role);
+
+            $cargo = Cargo::findOrFail($request->cargo_id);
+
+            $user->asignarCargo($cargo);
+
+
 
         });
 

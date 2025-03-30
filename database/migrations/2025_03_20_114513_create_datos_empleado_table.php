@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('datos_empleado', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('empleado_id')->references('id')->on('empleados');
+            // Actualizado referencia a tabla usuario
+            $table->foreignId('empleado_id')->references('id')->on('users');
             $table->string('tipo_dato', 50);
             $table->text('valor');
             $table->timestamp('fecha_actualizacion');
