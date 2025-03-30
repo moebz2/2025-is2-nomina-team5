@@ -46,7 +46,7 @@ class DepartamentoControllerTest extends TestCase
         ]);
     }
 
-    public function testAlmacenaUnDepartamentoConErroresDeValidacion()
+    public function testNoAlmacenaUnDepartamentoConErroresDeValidacion()
     {
         $this->authenticate();
 
@@ -82,7 +82,7 @@ class DepartamentoControllerTest extends TestCase
         ]);
     }
 
-    public function testActualizaUnDepartamentoInexistente()
+    public function testNoActualizaUnDepartamentoInexistente()
     {
         $this->authenticate();
 
@@ -110,7 +110,7 @@ class DepartamentoControllerTest extends TestCase
         ]);
     }
 
-    public function testMarcaDepartamentoComoInactivoInexistente()
+    public function testErrorSiIntentaMarcarDepartamentoInexistenteComoInactivo()
     {
         $this->authenticate();
 
