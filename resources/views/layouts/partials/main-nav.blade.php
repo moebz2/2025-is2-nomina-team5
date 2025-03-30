@@ -1,4 +1,4 @@
-<a class="shrink-0" aria-label="Home" href="/plus">
+<a class="shrink-0" aria-label="Home" href="/">
     <h2 class="font-bold uppercase">Nomina IS2</h2>
 </a>
 <div class="@container flex flex-1 justify-start pl-8 gap-5">
