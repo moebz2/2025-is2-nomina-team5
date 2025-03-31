@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cargo extends Model
 {
-    //
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
 
     protected $fillable = [
         'departamento_id',
