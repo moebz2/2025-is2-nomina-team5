@@ -30,7 +30,7 @@
             </div>
 
             <div class="sm:col-span-3"></div>
-            <div class="sm:col-span-4">
+            <div class="sm:col-span-3">
                 <label for="descripcion" class="input-label">Descripción</label>
                 <div class="mt-2">
                     <textarea id="descripcion" class="form-input" name="descripcion">{{ old('descripcion', $departamento->descripcion) }}</textarea>

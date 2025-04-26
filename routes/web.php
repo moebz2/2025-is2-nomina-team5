@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Controllers\ConceptoController;
 use App\Http\Controllers\LoginController;
-use App\Http\Middleware\EnsureUserIsAuthenticated;
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
@@ -32,6 +31,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('departamentos', DepartamentoController::class);
 
     Route::resource('roles', RoleController::class);
+
+    Route::resource('conceptos', ConceptoController::class);
 
     Route::get('users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 
