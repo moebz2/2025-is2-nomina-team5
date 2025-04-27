@@ -15,4 +15,13 @@ class LiquidacionEmpleadoController extends Controller
 
         return view('liquidacion-empleado.index', compact('liquidacionEmpleados'));
     }
+
+    public function show($liquidacionEmpleadoId)
+    {
+        $detalles = \App\Models\LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
+            ->with(['cabecera', 'movimiento'])
+            ->get();
+
+        return view('liquidacion-empleado.detalles', compact('detalles'));
+    }
 }

@@ -64,7 +64,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('movimientos/generar', [MovimientoController::class, 'generarMovimientos'])->name('movimientos.generar');
 
-    Route::get('/liquidacion-empleados/{liquidacionId}', [LiquidacionEmpleadoController::class, 'index'])->name('liquidacion-empleado.index');});
+    Route::get('/liquidacion-empleados/{liquidacionId}', [LiquidacionEmpleadoController::class, 'index'])->name('liquidacion-empleado.index');
+
+    Route::get('/liquidacion-empleado/{id}', [LiquidacionEmpleadoController::class, 'show'])->name('liquidacion-empleado.show');
+});
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 /*
