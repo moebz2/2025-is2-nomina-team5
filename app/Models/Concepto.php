@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Concepto extends Model
 {
+
+    // TODO: Configurable en tabla parámetro
+    const IPS_PORCENTAJE = 0.09;
+
     use HasFactory;
 
     /**

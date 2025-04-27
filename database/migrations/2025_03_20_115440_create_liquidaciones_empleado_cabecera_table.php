@@ -13,17 +13,13 @@ return new class extends Migration
     {
         Schema::create('liquidaciones_empleado_cabecera', function (Blueprint $table) {
             $table->id();
-
-            // Actualizado referencia a tabla usuario
             $table->foreignId('empleado_id')->references('id')->on('users');
             $table->foreignId('liquidacion_cabecera_id')->references('id')->on('liquidaciones_cabecera');
-            $table->string('estado',32);
-            $table->timestamp('periodo_inicio');
-            $table->timestamp('periodo_fin');
+            $table->foreignId('generacion_usuario_id')->references('id')->on('users'); // Usuario que creó el registro
+            $table->string('estado', 32);
+            $table->timestamp('periodo');
             $table->timestamp('verificacion_fecha')->nullable();
-            // VERIFICAR: Hace falta agregar quien hace la verificacion: usuario_id?
-
-            // $table->timestamps();
+            $table->unique(['empleado_id', 'periodo']);
         });
     }
 

@@ -28,6 +28,7 @@ return new class extends Migration
             // $table->timestamp('fecha_egreso')->nullable();
             // $table->string('estado', 32);
             $table->string('domicilio', 255);
+            $table->integer('hijos')->default(0); // cantidad de hijos menores
             $table->rememberToken();
             $table->timestamps();
         });

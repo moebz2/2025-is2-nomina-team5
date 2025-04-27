@@ -5,20 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class LiquidacionEmpleadoCabecera extends Model
+class EmpleadoConcepto extends Model
 {
     use HasFactory;
-
-    const ESTADO_PENDIENTE = 'pendiente';
-    const ESTADO_VERIFICADO = 'aprobado';
-    const ESTADO_RECHAZADO = 'rechazado';
 
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'liquidaciones_empleado_cabecera';
+    protected $table = 'empleado_conceptos';
 
     /**
      * The attributes that are mass assignable.
@@ -27,10 +23,11 @@ class LiquidacionEmpleadoCabecera extends Model
      */
     protected $fillable = [
         'empleado_id',
-        'liquidacion_cabecera_id',
+        'concepto_id',
+        'valor',
+        'fecha_inicio',
+        'fecha_fin',
         'estado',
-        'periodo',
-        'verificacion_fecha',
     ];
 
     /**
@@ -39,12 +36,14 @@ class LiquidacionEmpleadoCabecera extends Model
      * @var array
      */
     protected $casts = [
-        'periodo' => 'datetime',
-        'verificacion_fecha' => 'datetime',
+        'valor' => 'decimal:2',
+        'fecha_inicio' => 'datetime',
+        'fecha_fin' => 'datetime',
+        'estado' => 'boolean',
     ];
 
     /**
-     * Get the employee (user) associated with this liquidation.
+     * Get the employee (user) associated with this concept.
      */
     public function empleado()
     {
@@ -52,10 +51,10 @@ class LiquidacionEmpleadoCabecera extends Model
     }
 
     /**
-     * Get the liquidation header associated with this employee liquidation.
+     * Get the concept associated with this employee concept.
      */
-    public function liquidacionCabecera()
+    public function concepto()
     {
-        return $this->belongsTo(LiquidacionCabecera::class, 'liquidacion_cabecera_id');
+        return $this->belongsTo(Concepto::class, 'concepto_id');
     }
 }
