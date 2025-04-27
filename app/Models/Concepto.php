@@ -24,6 +24,9 @@ class Concepto extends Model
     protected $fillable = [
         'nombre',
         'ips_incluye',
+        'aguinaldo_incluye',
+        'tipo_concepto',
+        'es_debito',
         'estado',
     ];
 
@@ -36,4 +39,10 @@ class Concepto extends Model
         'ips_incluye' => 'boolean',
         'estado' => 'boolean',
     ];
+
+    const TIPO_SALARIO = 'salario';
+    const TIPO_BONIFICACION = 'bonificacion';
+    const TIPO_GENERAL = 'general';
+
+
 }

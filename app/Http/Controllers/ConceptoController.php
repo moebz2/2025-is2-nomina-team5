@@ -29,14 +29,21 @@ class ConceptoController extends Controller
 
     public function store(Request $request)
     {
+
+
         $request->validate([
             'nombre' => 'required|string|max:255',
             'ips_incluye' => 'required|boolean',
+            'aguinaldo_incluye' => 'required|boolean',
+
         ]);
 
         Concepto::create([
             'nombre' => $request->nombre,
             'ips_incluye' => $request->ips_incluye,
+            'aguinaldo_incluye' => $request->aguinaldo_incluye,
+            'tipo_concepto' => Concepto::TIPO_GENERAL,
+            'es_debito' => boolval($request->es_debito)
         ]);
 
         return redirect()->route('conceptos.index')->with('success', 'Concepto creado exitosamente');

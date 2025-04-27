@@ -4,21 +4,24 @@
 <div class="@container flex flex-1 justify-start pl-8 gap-5">
     @can('empleado ver')
 
-    <a class="text-sm/6 text-gray-950" href="/plus/ui-blocks">Empleados</a>
+    <a class="text-sm/6 text-gray-950" href="#">Empleados</a>
     @endcan
     @can('liquidacion ver')
 
-    <a class="text-sm/6 text-gray-950" href="/plus/ui-kit">Liquidaciones</a>
+    <a class="text-sm/6 text-gray-950" href="#">Liquidaciones</a>
     @endcan
-    @can('concepto ver')
 
-    <a class="text-sm/6 text-gray-950" href="/plus/templates">Configuración</a>
-    @endcan
+
+
+
 
     @can('departamento ver')
 
     <a class="text-sm/6 text-gray-950" href="{{route('departamentos.index')}}">Departamentos</a>
     @endcan
+
+
+    <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950" @if (request()->is('admin/conceptos/*')) aria-current="true" @endif href="{{route('conceptos.index')}}">Conceptos</a>
 
 </div>
 <div class="flex items-center gap-5 max-md:hidden lg:gap-6">
