@@ -36,5 +36,15 @@ class ConceptoSeeder extends Seeder
             'es_modificable' => false,
         ]);
 
+        // Concepto de ips no modificable
+        Concepto::create([
+            'nombre' => 'IPS',
+            'ips_incluye' => false,
+            'aguinaldo_incluye' => false,
+            'tipo_concepto' => Concepto::TIPO_IPS,
+            'es_debito' => true,
+            'estado' => true,
+            'es_modificable' => false,
+        ]);
     }
 }

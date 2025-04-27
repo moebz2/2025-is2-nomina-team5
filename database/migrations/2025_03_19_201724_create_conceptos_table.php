@@ -28,13 +28,17 @@ return new class extends Migration
             // Determinamos si se incluye en el cálculo del aguinaldo
             $table->boolean('aguinaldo_incluye')->default(true);
 
-            // Diferenciamos salario, bonificación y tipos de conceptos
+            // Diferenciamos salario, bonificacion de otros tipos
+            // de conceptos. Conviene incluir como atributos estaticos
+            // en el modelo de concepto para acceder de forma directa
             $table->enum('tipo_concepto', ['salario', 'bonificacion', 'ips', 'general'])->default('general');
 
-            // Se indica como true cuando un concepto es débito (resta), todo lo demás es crédito (suma)
+            // Se indica como true cuando un concepto es debito (resta) todo lo demas es credito (suma)
             $table->boolean('es_debito')->default(false);
 
-            // Aseguramos que los conceptos salario y bonificación no sean modificables en el sistema
+            // Con esta campo aseguramos que los conceptos salario
+            // y bonificacion no sean modificables en el sistema
+            // despues de creadas
             $table->boolean('es_modificable')->default(true);
         });
     }

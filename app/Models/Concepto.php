@@ -10,6 +10,7 @@ class Concepto extends Model
 
     const TIPO_SALARIO = 'salario';
     const TIPO_BONIFICACION = 'bonificacion';
+    const TIPO_IPS = 'ips';
     const TIPO_GENERAL = 'general';
 
     // TODO: Configurable en tabla parámetro
