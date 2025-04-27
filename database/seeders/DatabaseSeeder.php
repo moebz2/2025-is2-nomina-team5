@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Cargo;
+use App\Models\Concepto;
 use App\Models\Departamento;
+use App\Models\Parametro;
 use App\Models\User;
 use Carbon\Carbon;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -79,6 +81,13 @@ class DatabaseSeeder extends Seeder
         Cargo::firstOrCreate(
             ['nombre' => 'Gerente'],
             ['departamento_id' => 1, 'descripcion' => 'Gerencia de la empresa']
+        );
+
+        // crear un parametro llamado 'salario_minimo' con valor 2798309
+
+        Parametro::firstOrCreate(
+            ['nombre' => 'salario_minimo'],
+            ['valor' => 2798309]
         );
     }
 }

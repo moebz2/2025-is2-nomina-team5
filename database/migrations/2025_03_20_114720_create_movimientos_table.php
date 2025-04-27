@@ -17,8 +17,7 @@ return new class extends Migration
             $table->foreignId('empleado_id')->references('id')->on('users');
             $table->foreignId('concepto_id')->references('id')->on('conceptos');
             $table->integer('monto');
-            $table->timestamp('validez_inicio');
-            $table->timestamp('validez_fin')->nullable();
+            $table->timestamp('validez_fecha');
             $table->timestamp('generacion_fecha');
             $table->timestamp('eliminacion_fecha')->nullable();
             // $table->timestamps();
