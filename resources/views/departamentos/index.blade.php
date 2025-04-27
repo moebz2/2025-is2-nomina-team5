@@ -13,12 +13,12 @@
         <div class="my-8 overflow-hidden">
             <table class="w-full table-auto border-collapse text-sm">
                 <thead>
+
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">ID</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Nombre</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Descripción</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Estado</th>                    
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Acciones</th>
-
 
                 </thead>
                 @foreach ($departamentos as $departamento)

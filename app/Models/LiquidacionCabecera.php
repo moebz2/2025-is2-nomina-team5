@@ -40,6 +40,8 @@ class LiquidacionCabecera extends Model
         'periodo' => 'date',
     ];
 
+    public $timestamps = false;
+
     /**
      * Get the user who approved the liquidation.
      */

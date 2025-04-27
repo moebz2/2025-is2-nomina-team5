@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('empleado_id')->references('id')->on('users');
             $table->foreignId('liquidacion_cabecera_id')->references('id')->on('liquidaciones_cabecera');
-            $table->foreignId('generacion_usuario_id')->references('id')->on('users'); // Usuario que creó el registro
+            $table->foreignId('generacion_usuario_id')->nullable()->constrained()->references('id')->on('users'); // Usuario que creó el registro
             $table->string('estado', 32);
             $table->timestamp('periodo');
             $table->timestamp('verificacion_fecha')->nullable();

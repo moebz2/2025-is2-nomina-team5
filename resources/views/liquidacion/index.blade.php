@@ -2,10 +2,6 @@
 
 @section('title', 'Liquidaciones')
 
-@section('sidebar')
-@include('liquidaciones.partials.sidebar')
-@endsection
-
 @section('content')
 
 <div class="container mx-auto p-10">
@@ -57,7 +53,7 @@
         </div>
     </div>
     <div class="mt-4">
-        <a href="{{ route('liquidaciones.create') }}" class="bg-blue-500 p-2 rounded text-white font-medium">Registrar nueva liquidación</a>
+        <a href="{{ route('liquidacion.generarForm') }}" class="bg-blue-500 p-2 rounded text-white font-medium">Registrar nueva liquidación</a>
     </div>
 </div>
 

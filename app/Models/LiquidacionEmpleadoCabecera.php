@@ -13,6 +13,8 @@ class LiquidacionEmpleadoCabecera extends Model
     const ESTADO_VERIFICADO = 'aprobado';
     const ESTADO_RECHAZADO = 'rechazado';
 
+    public $timestamps = false;
+
     /**
      * The table associated with the model.
      *
