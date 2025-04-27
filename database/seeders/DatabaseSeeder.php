@@ -55,6 +55,10 @@ class DatabaseSeeder extends Seeder
             'departamento editar',
             'departamento eliminar',
             'departamento ver',
+            'concepto crear',
+            'concepto editar',
+            'concepto eliminar',
+            'concepto ver',
         ]);
 
         $admin->assignRole('admin');

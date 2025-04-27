@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Concepto;
@@ -9,6 +10,7 @@ use App\Models\Movimiento;
 use App\Models\Parametro;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LiquidacionService
 {
@@ -33,14 +35,21 @@ class LiquidacionService
                 $liquidacionEmpleadoCabecera = $this->crearLiquidacionEmpleado($empleado, $liquidacionCabecera, $periodo);
 
                 // Traer todos los movimientos del empleado en el periodo
-                $movimientos = $this->obtenerMovimientosEmpleado($empleado, $periodo);
+                $movimientosAProcesar = $this->obtenerMovimientosEmpleado($empleado, $periodo);
+
+                // dd($movimientosAProcesar);
 
                 // Registrar 9% de descuento por IPS, de
                 // movimientos con concepto.ips_incluye = true
-                $this->registrarIpsDescuento($empleado, $movimientos, $periodo);
+                $this->registrarIpsDescuento($empleado, $movimientosAProcesar, $periodo);
+
+                $movimientosAIncluir = $this->obtenerMovimientosEmpleado($empleado, $periodo);
+
+                // log('movimientosAProcesar', json_encode($movimientosAProcesar));
+                // log('movimientosAIncluir', json_encode($movimientosAIncluir));
 
                 // Registrar movimientos en la liquidación
-                $this->registrarMovimientosEnLiquidacion($liquidacionEmpleadoCabecera, $movimientos);
+                $this->registrarMovimientosEnLiquidacion($liquidacionEmpleadoCabecera, $movimientosAIncluir);
             }
         });
     }
@@ -59,7 +68,7 @@ class LiquidacionService
     private function obtenerEmpleadosContratados()
     {
         return User::where('estado', 'contratado')
-            ->with('cargos')
+            ->orderBy('id', 'desc')
             ->get();
     }
 
@@ -81,10 +90,14 @@ class LiquidacionService
 
     private function obtenerMovimientosEmpleado($empleado, $periodo)
     {
-        return Movimiento::where('empleado_id', $empleado->id)
+        $query = Movimiento::where('empleado_id', $empleado->id)
             ->where('validez_fecha', '>=', date_create($periodo . '-01'))
-            ->where('validez_fecha', '<', date_create($periodo . '-01')->modify('first day of next month'))
-            ->get();
+            ->where('validez_fecha', '<', date_create($periodo . '-01')->modify('first day of next month'));
+
+        error_log('obtenerMovimientosEmpleado.Query:' . json_encode($query->toSql()));
+        error_log('obtenerMovimientosEmpleado.Bindings:' . json_encode($query->getBindings()));
+
+        return $query->get();
     }
 
     private function registrarIpsDescuento($empleado, $movimientos, $periodo)
@@ -111,6 +124,10 @@ class LiquidacionService
     private function registrarMovimientosEnLiquidacion($liquidacionEmpleadoCabecera, $movimientos)
     {
         foreach ($movimientos as $movimiento) {
+
+            error_log('registrarMovimientosEnLiquidacion.movimiento:' . json_encode($movimiento));
+            error_log('registrarMovimientosEnLiquidacion.liquidacionEmpleadoCabecera:' . json_encode($liquidacionEmpleadoCabecera));
+
             LiquidacionEmpleadoDetalle::create([
                 'cabecera_id' => $liquidacionEmpleadoCabecera->id,
                 'movimiento_id' => $movimiento->id,

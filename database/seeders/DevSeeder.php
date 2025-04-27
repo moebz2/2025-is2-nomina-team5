@@ -25,6 +25,8 @@ class DevSeeder extends Seeder
             LiquidacionEmpleadoCabecera::query()->delete();
             LiquidacionCabecera::query()->delete();
             Movimiento::query()->delete();
+            EmpleadoConcepto::query()->delete();
+            User::where('email', '!=', 'admin@nomina.com')->delete();
         });
 
         $usersData = [
