@@ -23,8 +23,13 @@
 
     <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950" @if (request()->is('admin/conceptos/*')) aria-current="true" @endif href="{{route('conceptos.index')}}">Conceptos</a>
 
+    <a class="text-sm/6 text-gray-950" href="{{route('liquidacion.index')}}">Liquidaciones</a>
+
 </div>
 <div class="flex items-center gap-5 max-md:hidden lg:gap-6">
+
+    <a class="text-sm/6 text-gray-950" href="{{route('configuracion.index')}}">Configuración</a>
+
     @can('usuario ver')
 
     <a  @if (request()->is('admin/users/*'))

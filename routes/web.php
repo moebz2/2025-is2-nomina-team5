@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\ConceptoController;
+use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\LiquidacionController;
+use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Auth;
 
@@ -56,6 +58,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('liquidacion/generar', [LiquidacionController::class, 'generar'])->name('liquidacion.generar');
 
     Route::post('liquidacion/eliminar-generados', [LiquidacionController::class, 'eliminarGenerados'])->name('liquidacion.eliminarGenerados');
+
+    Route::get('configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
+
+    Route::post('movimientos/generar', [MovimientoController::class, 'generarMovimientos'])->name('movimientos.generar');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
