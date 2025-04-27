@@ -54,6 +54,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('liquidacion/generar', [LiquidacionController::class, 'showFormGenerar'])->name('liquidacion.generarForm');
 
     Route::post('liquidacion/generar', [LiquidacionController::class, 'generar'])->name('liquidacion.generar');
+
+    Route::post('liquidacion/eliminar-generados', [LiquidacionController::class, 'eliminarGenerados'])->name('liquidacion.eliminarGenerados');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');

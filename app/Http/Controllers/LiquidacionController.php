@@ -11,6 +11,7 @@ use App\Models\Movimiento;
 use App\Models\Parametro;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class LiquidacionController extends Controller
 {
@@ -28,12 +29,13 @@ class LiquidacionController extends Controller
 
     public function generar(Request $request)
     {
+        Log::error('This is an error');
+
         $request->validate([
             'periodo' => 'required|date',
         ]);
 
         DB::transaction(function () use ($request) {
-
 
             // crear liquidacion_cabecera
 
@@ -44,8 +46,10 @@ class LiquidacionController extends Controller
                 'estado' => 'pendiente',
                 'aprobacion_fecha' => null,
                 'aprobacion_usuario_id' => null,
-                'periodo' => $periodo,
+                'periodo' => $periodo . '-01',
             ]);
+
+            error_log('LiquidacionController.generar.1');
 
             // traer usuarios estado 'contratado'
 
@@ -60,6 +64,8 @@ class LiquidacionController extends Controller
             }
 
             $bonificacionPorHijo = 0.05;
+
+            error_log('LiquidacionController.generar.2');
 
             foreach ($empleados as $empleado) {
                 // Columns:
@@ -79,6 +85,8 @@ class LiquidacionController extends Controller
                         'verificacion_fecha' => null,
                     ]
                 );
+
+                error_log('LiquidacionController.generar.3');
 
                 // Registrar movimiento del salario del empleado
 
@@ -104,6 +112,8 @@ class LiquidacionController extends Controller
                     'generacion_fecha' => now(),
                 ]);
 
+                error_log('LiquidacionController.generar.4');
+
                 // Registrar movimiento de la bonificación por hijo menor de 18 años, si el empleado gana menos de 3 salarios mínimos oficiales. El monto es el 5% del salario mínimo oficial por cada hijo menor de 18 años.
 
                 if ($salarioMonto < ($salarioMinimo * 3)) {
@@ -121,6 +131,8 @@ class LiquidacionController extends Controller
                     }
                 }
 
+                error_log('LiquidacionController.generar.5');
+
                 // Traer todos los movimientos del empleado en el periodo
 
                 $movimientos = Movimiento::where('empleado_id', $empleado->id)
@@ -135,6 +147,8 @@ class LiquidacionController extends Controller
                         date_create($periodo . '-01')->modify('first day of next month')
                     )
                     ->get();
+
+                error_log('LiquidacionController.generar.6');
 
                 // Registrar 9% de descuento por IPS, de
                 // movimientos con concepto.ips_incluye = true
@@ -158,6 +172,8 @@ class LiquidacionController extends Controller
                     'generacion_fecha' => now(),
                 ]);
 
+                error_log('LiquidacionController.generar.7');
+
                 // Registrar movimientos en la liquidación
 
                 foreach ($movimientos as $movimiento) {
@@ -169,7 +185,49 @@ class LiquidacionController extends Controller
             }
         });
 
+        error_log('LiquidacionController.generar.8');
+
+        dd('fin');
+        return;
 
         return redirect()->route('liquidacion.index')->with('success', 'Liquidación generada correctamente');
+    }
+
+    // No sé si va a ser útil después, esto es para poder probar
+    // fácilmente nomás.
+    public function eliminarGenerados(Request $request)
+    {
+        $request->validate([
+            'periodo' => 'required|date',
+        ]);
+
+        $periodo = $request->input('periodo');
+
+        DB::transaction(function () use ($periodo) {
+            // Find the liquidation header for the given period
+            $liquidacionCabecera = LiquidacionCabecera::where('periodo', $periodo . '-01')->first();
+
+            if (!$liquidacionCabecera) {
+                return redirect()->back()->withErrors(['error' => 'No se encontró la liquidación para el período especificado.']);
+            }
+
+            // Delete LiquidacionEmpleadoDetalle records
+            LiquidacionEmpleadoDetalle::whereHas('cabecera', function ($query) use ($liquidacionCabecera) {
+                $query->where('liquidacion_cabecera_id', $liquidacionCabecera->id);
+            })->delete();
+
+            // Delete Movimiento records
+            Movimiento::where('validez_fecha', '>=', date_create($periodo . '-01')->format('Y-m-d'))
+                ->where('validez_fecha', '<', date_create($periodo . '-01')->modify('first day of next month')->format('Y-m-d'))
+                ->delete();
+
+            // Delete LiquidacionEmpleadoCabecera records
+            LiquidacionEmpleadoCabecera::where('liquidacion_cabecera_id', $liquidacionCabecera->id)->delete();
+
+            // Delete LiquidacionCabecera record
+            $liquidacionCabecera->delete();
+        });
+
+        return redirect()->route('liquidacion.index')->with('success', 'Registros eliminados correctamente.');
     }
 }

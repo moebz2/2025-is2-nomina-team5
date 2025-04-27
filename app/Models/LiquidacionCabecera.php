@@ -35,9 +35,9 @@ class LiquidacionCabecera extends Model
      * @var array
      */
     protected $casts = [
-        'generacion_fecha' => 'datetime',
-        'aprobacion_fecha' => 'datetime',
-        'periodo' => 'date',
+        'generacion_fecha' => 'datetime:Y-m-d H:i:s',
+        'aprobacion_fecha' => 'datetime:Y-m-d H:i:s',
+        'periodo' => 'date:Y-m-d',
     ];
 
     public $timestamps = false;

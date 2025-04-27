@@ -41,8 +41,8 @@ class LiquidacionEmpleadoCabecera extends Model
      * @var array
      */
     protected $casts = [
-        'periodo' => 'datetime',
-        'verificacion_fecha' => 'datetime',
+        'periodo' => 'datetime:Y-m-d H:i:s',
+        'verificacion_fecha' => 'datetime:Y-m-d H:i:s',
     ];
 
     /**

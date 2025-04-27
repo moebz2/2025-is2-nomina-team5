@@ -38,9 +38,9 @@ class Movimiento extends Model
      * @var array
      */
     protected $casts = [
-        'validez_fecha' => 'datetime',
-        'generacion_fecha' => 'datetime',
-        'eliminacion_fecha' => 'datetime',
+        'validez_fecha' => 'datetime:Y-m-d H:i:s',
+        'generacion_fecha' => 'datetime:Y-m-d H:i:s',
+        'eliminacion_fecha' => 'datetime:Y-m-d H:i:s',
     ];
 
     /**
