@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\LiquidacionController;
+use App\Http\Controllers\LiquidacionEmpleadoController;
 use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Auth;
@@ -62,7 +63,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
 
     Route::post('movimientos/generar', [MovimientoController::class, 'generarMovimientos'])->name('movimientos.generar');
-});
+
+    Route::get('/liquidacion-empleados/{liquidacionId}', [LiquidacionEmpleadoController::class, 'index'])->name('liquidacion-empleado.index');});
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 /*
