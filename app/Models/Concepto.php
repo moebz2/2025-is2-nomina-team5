@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Concepto extends Model
 {
 
+    const TIPO_SALARIO = 'salario';
+    const TIPO_BONIFICACION = 'bonificacion';
+    const TIPO_GENERAL = 'general';
+
     // TODO: Configurable en tabla parámetro
     const IPS_PORCENTAJE = 0.09;
 
@@ -28,6 +32,9 @@ class Concepto extends Model
     protected $fillable = [
         'nombre',
         'ips_incluye',
+        'aguinaldo_incluye',
+        'tipo_concepto',
+        'es_debito',
         'estado',
     ];
 
