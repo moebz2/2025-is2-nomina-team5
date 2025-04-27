@@ -16,7 +16,7 @@
                 <thead>
                     <tr>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">ID</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Empleado</th>
+
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Periodo</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Estado</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Fecha de Generación</th>
@@ -27,24 +27,22 @@
                     @foreach ($liquidaciones as $liquidacion)
                     <tr>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $liquidacion->id }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $liquidacion->empleado->name }}</td>
+
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $liquidacion->periodo->format('Y-m') }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $liquidacion->estado }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500">{{ $liquidacion->generacion_fecha->format('Y-m-d') }}</td>
                         <td class="border-b border-gray-100 p-4 text-gray-500 flex items-center gap-2">
-                            <a href="{{ route('liquidaciones.show', $liquidacion->id) }}" title="Ver" class="hover:text-blue-500 block cursor-pointer">
+                            <a href="" title="Ver" class="hover:text-blue-500 block cursor-pointer">
                                 <i class="material-symbols-outlined">visibility</i>
                             </a>
-                            <a href="{{ route('liquidaciones.edit', $liquidacion->id) }}" title="Editar" class="hover:text-blue-500 block cursor-pointer">
-                                <i class="material-symbols-outlined">edit</i>
-                            </a>
-                            <form action="{{ route('liquidaciones.destroy', $liquidacion->id) }}" method="POST" class="mt-2" onsubmit="return confirm('¿Está seguro de que desea eliminar esta liquidación?');">
+                            
+                            {{-- <form action="{{ route('liquidaciones.destroy', $liquidacion->id) }}" method="POST" class="mt-2" onsubmit="return confirm('¿Está seguro de que desea eliminar esta liquidación?');">
                                 @csrf
                                 @method('DELETE')
                                 <button title="Eliminar" type="submit" class="hover:text-red-500 block text-left cursor-pointer">
                                     <i class="material-symbols-outlined">delete</i>
                                 </button>
-                            </form>
+                            </form> --}}
                         </td>
                     </tr>
                     @endforeach

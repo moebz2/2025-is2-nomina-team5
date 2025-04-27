@@ -17,7 +17,8 @@ class LiquidacionController extends Controller
 {
     public function index()
     {
-        $liquidaciones = LiquidacionCabecera::with('aprobacionUsuario')->get();
+        $liquidaciones = LiquidacionCabecera::orderBy('periodo', 'desc')
+            ->get();
 
         return view('liquidacion.index', compact('liquidaciones'));
     }
@@ -179,7 +180,7 @@ class LiquidacionController extends Controller
                 foreach ($movimientos as $movimiento) {
                     LiquidacionEmpleadoDetalle::create([
                         'cabecera_id' => $liquidacionEmpleadoCabecera->id,
-                        'movimiento_id' => $movimiento->monto,
+                        'movimiento_id' => $movimiento->id,
                     ]);
                 }
             }
