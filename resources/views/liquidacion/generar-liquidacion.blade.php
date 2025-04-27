@@ -1,0 +1,40 @@
+@extends('layouts.admin-layout')
+
+@section('title', 'Generar Liquidación')
+
+@section('content')
+
+<div class="container mx-auto p-10">
+    <h1 class="text-3xl font-bold uppercase">Generar Liquidación</h1>
+    <p class="mt-1 text-sm text-gray-600">Seleccione el período para generar la liquidación.</p>
+
+    @if ($errors->any())
+        <div class="mt-4">
+            <ul class="list-disc list-inside text-red-500">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form action="{{ route('liquidacion.generar') }}" method="POST" class="mt-8 space-y-6">
+        @csrf
+
+        <div>
+            <label for="periodo" class="block text-sm font-medium text-gray-700">Mes</label>
+            <input type="month" name="periodo" id="periodo" required
+                class="mt-1 block w-45
+                 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm">
+        </div>
+
+        <div class="mt-6">
+            <button type="submit"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Generar
+            </button>
+        </div>
+    </form>
+</div>
+
+@endsection

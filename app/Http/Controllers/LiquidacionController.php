@@ -13,12 +13,19 @@ use App\Models\User;
 
 class LiquidacionController extends Controller
 {
-    public function tomarDatosGeneracion()
+    public function index()
     {
-        return view('liquidacion.tomarDatosGeneracion');
+        $liquidaciones = LiquidacionCabecera::with('aprobacionUsuario')->get();
+
+        return view('liquidacion.index', compact('liquidaciones'));
     }
 
-    public function generarLiquidacion(Request $request)
+    public function showFormGenerar()
+    {
+        return view('liquidacion.generar-liquidacion');
+    }
+
+    public function generar(Request $request)
     {
         $request->validate([
             'periodo' => 'required|date',
