@@ -27,8 +27,7 @@ class Movimiento extends Model
         'empleado_id',
         'concepto_id',
         'monto',
-        'validez_inicio',
-        'validez_fin',
+        'validez_fecha',
         'generacion_fecha',
         'eliminacion_fecha',
     ];

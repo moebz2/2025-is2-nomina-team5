@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Cargo;
+use App\Models\Concepto;
 use App\Models\Departamento;
 use App\Models\Parametro;
 use App\Models\User;
@@ -82,7 +83,25 @@ class DatabaseSeeder extends Seeder
             ['departamento_id' => 1, 'descripcion' => 'Gerencia de la empresa']
         );
 
+        // crear conceptos salario, bonificacion, ips
+
+        Concepto::firstOrCreate(
+            ['nombre' => 'Salario'],
+            ['tipo_concepto' => 'salario']
+        );
+
+        Concepto::firstOrCreate(
+            ['nombre' => 'Bonificacion'],
+            ['tipo_concepto' => 'bonificacion']
+        );
+
+        Concepto::firstOrCreate(
+            ['nombre' => 'IPS'],
+            ['tipo_concepto' => 'ips']
+        );
+
         // crear un parametro llamado 'ips' con valor 0.09
+
         Parametro::firstOrCreate(
             ['nombre' => 'ips'],
             ['valor' => 0.09]
