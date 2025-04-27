@@ -64,8 +64,6 @@ class LiquidacionController extends Controller
                 return redirect()->back()->withErrors(['error' => 'No se encontró el salario mínimo']);
             }
 
-            $bonificacionPorHijo = 0.05;
-
             error_log('LiquidacionController.generar.2');
 
             foreach ($empleados as $empleado) {
@@ -86,53 +84,6 @@ class LiquidacionController extends Controller
                         'verificacion_fecha' => null,
                     ]
                 );
-
-                error_log('LiquidacionController.generar.3');
-
-                // Registrar movimiento del salario del empleado
-
-                // Descomentar tras merge con cambios de Juan
-
-                // $conceptoSalario = Concepto::where('tipo_concepto', 'salario')->first();
-                // $conceptoEmpleadoSalario = EmpleadoConcepto::where('empleado_id', $empleado->id)
-                //     ->where('concepto_id', $conceptoSalario->id) // Salario
-                //     ->first();
-                // if (empty($conceptoEmpleadoSalario->valor)) {
-                //     return redirect()->back()->withErrors(['error' => 'No se encontró el salario del empleado']);
-                // }
-                // $salarioMonto = $conceptoEmpleadoSalario->valor;
-
-                $salarioMonto = 12500000;
-
-                Movimiento::create([
-                    'empleado_id' => $empleado->id,
-                    // 'concepto_id' => $concepto->id, // Descomentar tras merge con cambios de Juan
-                    'concepto_id' => 1,
-                    'monto' => $salarioMonto,
-                    'validez_fecha' => date_create($periodo . '-01'),
-                    'generacion_fecha' => now(),
-                ]);
-
-                error_log('LiquidacionController.generar.4');
-
-                // Registrar movimiento de la bonificación por hijo menor de 18 años, si el empleado gana menos de 3 salarios mínimos oficiales. El monto es el 5% del salario mínimo oficial por cada hijo menor de 18 años.
-
-                if ($salarioMonto < ($salarioMinimo * 3)) {
-                    $hijosMenores = $empleado->hijos;
-                    if ($hijosMenores > 0) {
-                        $bonificacionHijos = $salarioMinimo * $bonificacionPorHijo * $hijosMenores;
-                        Movimiento::create([
-                            'empleado_id' => $empleado->id,
-                            // 'concepto_id' => $concepto->id, // Descomentar tras merge con cambios de Juan
-                            'concepto_id' => 2,
-                            'monto' => $bonificacionHijos,
-                            'validez_fecha' => date_create($periodo . '-01'),
-                            'generacion_fecha' => now(),
-                        ]);
-                    }
-                }
-
-                error_log('LiquidacionController.generar.5');
 
                 // Traer todos los movimientos del empleado en el periodo
 
@@ -187,9 +138,6 @@ class LiquidacionController extends Controller
         });
 
         error_log('LiquidacionController.generar.8');
-
-        dd('fin');
-        return;
 
         return redirect()->route('liquidacion.index')->with('success', 'Liquidación generada correctamente');
     }

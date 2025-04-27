@@ -37,6 +37,7 @@ class DevSeeder extends Seeder
                 'password' => 'password123',
                 'salario' => 12500000,
                 'bonificacion' => 1000000,
+                'domicilio' => 'Calle Falsa 123',
             ],
             [
                 'email' => 'ggonzalez@nomina.com',
@@ -47,6 +48,7 @@ class DevSeeder extends Seeder
                 'password' => 'password123',
                 'salario' => 15700000,
                 'bonificacion' => 750000,
+                'domicilio' => 'Avenida Siempre Viva 456',
             ],
             [
                 'email' => 'arojas@nomina.com',
@@ -57,6 +59,7 @@ class DevSeeder extends Seeder
                 'password' => 'password123',
                 'salario' => 22400000,
                 'bonificacion' => 1369000,
+                'domicilio' => 'Calle Principal 789',
             ],
         ];
 
@@ -80,10 +83,10 @@ class DevSeeder extends Seeder
                     'sexo' => $userData['sexo'],
                     'nacimiento_fecha' => date_create($userData['nacimiento_fecha']),
                     'password' => Hash::make($userData['password']),
+                    'domicilio' => $userData['domicilio'],
                 ]
             );
 
-            // Create EmpleadoConcepto for bonification
             EmpleadoConcepto::create([
                 'empleado_id' => $user->id,
                 'concepto_id' => $bonificacionConcepto->id,
@@ -92,7 +95,6 @@ class DevSeeder extends Seeder
                 'estado' => true,
             ]);
 
-            // Create EmpleadoConcepto for salary
             EmpleadoConcepto::create([
                 'empleado_id' => $user->id,
                 'concepto_id' => $salarioConcepto->id,

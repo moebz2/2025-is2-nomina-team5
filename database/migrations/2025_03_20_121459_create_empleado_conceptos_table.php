@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->foreignId('empleado_id')->references('id')->on('users');
             $table->foreignId('concepto_id')->references('id')->on('conceptos');
-            $table->decimal('valor');
+            $table->integer('valor');
             $table->timestamp('fecha_inicio');
             $table->timestamp('fecha_fin')->nullable();
             $table->boolean('estado')->default(true);
