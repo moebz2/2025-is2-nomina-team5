@@ -20,12 +20,16 @@ class DevSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::transaction(function () {
+
+        $nombreConceptoPrueba = 'Prueba no imponible por IPS';
+
+        DB::transaction(function () use ($nombreConceptoPrueba) {
             LiquidacionEmpleadoDetalle::query()->delete();
             LiquidacionEmpleadoCabecera::query()->delete();
             LiquidacionCabecera::query()->delete();
             Movimiento::query()->delete();
             EmpleadoConcepto::query()->delete();
+            Concepto::where('nombre', $nombreConceptoPrueba)->delete();
             User::where('email', '!=', 'admin@nomina.com')->delete();
         });
 
@@ -75,6 +79,15 @@ class DevSeeder extends Seeder
             throw new \Exception('Concepto with tipo_concepto = TIPO_SALARIO not found.');
         }
 
+        $conceptoPrueba = Concepto::create([
+            'nombre' => $nombreConceptoPrueba,
+            'tipo_concepto' => Concepto::TIPO_GENERAL,
+            'es_debito' => false,
+            'estado' => true,
+            'ips_incluye' => false,
+            'aguinaldo_incluye' => true,
+        ]);
+
         foreach ($usersData as $userData) {
             $user = User::firstOrCreate(
                 ['email' => $userData['email']],
@@ -101,6 +114,14 @@ class DevSeeder extends Seeder
                 'empleado_id' => $user->id,
                 'concepto_id' => $salarioConcepto->id,
                 'valor' => $userData['salario'],
+                'fecha_inicio' => now(),
+                'estado' => true,
+            ]);
+
+            EmpleadoConcepto::create([
+                'empleado_id' => $user->id,
+                'concepto_id' => $conceptoPrueba->id,
+                'valor' => 250000,
                 'fecha_inicio' => now(),
                 'estado' => true,
             ]);
