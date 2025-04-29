@@ -26,6 +26,8 @@
     {{-- ICONOS --}}
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 
     {{-- Para incluir otras librerias desde cada vista se debe incluir mediante @push('nombre_seccion') --}}
 

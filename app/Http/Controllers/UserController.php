@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cargo;
+use App\Models\Concepto;
+use App\Models\EmpleadoConcepto;
+use App\Models\Movimiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -39,6 +43,16 @@ class UserController extends Controller
         $cargos = Cargo::all();
 
         return view('users.create', compact('cargos', 'roles'));
+    }
+
+    public function show($id){
+        $user = User::findOrFail($id);
+        $cargo = $user->currentCargo();
+        $movimientos = $user->movimientos;
+        $conceptos = Concepto::all();
+        $liquidaciones = $user->liquidaciones;
+
+        return view('users.show', compact('user', 'cargo', 'conceptos', 'movimientos', 'liquidaciones'));
     }
 
     public function store(Request $request)
@@ -156,5 +170,61 @@ class UserController extends Controller
         $user->update(['estado' => 'inactivo']);
 
         return redirect()->route('users.index')->with('success', 'Usuario marcado como inactivo exitosamente');
+    }
+
+    public function asignarConcepto(Request $request, $id)
+    {
+        try{
+
+            $request->validate([
+                'empleado_id' => 'required|exists:users,id',
+                'concepto_id' => 'required|exists:conceptos,id',
+                'valor' => 'required|numeric',
+                'fecha_inicio' => 'required|date',
+                'fecha_fin' => 'nullable|date'
+            ]);
+
+
+            EmpleadoConcepto::create($request->all());
+
+            return redirect()->route('users.show', $id)->with('success', 'Concepto asignado exitosamente');
+
+
+        }catch(Exception $e){
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+
+    }
+    public function registrarMovimiento(Request $request, $id){
+
+        try{
+
+            $request->validate([
+                'empleado_id' => 'required|exists:users,id',
+                'concepto_id' => 'required|exists:conceptos,id',
+                'monto' => 'required|numeric',
+                'validez_fecha' => 'required|date',
+
+            ]);
+
+            $periodo = Carbon::parse($request->validez_fecha)->format('Y-m');
+
+            [$year, $month] = explode('-', $periodo);
+
+            $data = $request->all();
+
+            $data['generacion_fecha'] = now();
+            $data['validez_fecha'] = Carbon::createFromDate($year, $month, 1);
+
+
+
+            Movimiento::create($data);
+
+            return redirect()->route('users.show', $id)->with('success', 'Movimiento registrado exitosamente');
+
+        }catch(Exception $e){
+            return back()->withErrors(['error' => $e->getMessage()]);
+
+        }
     }
 }
