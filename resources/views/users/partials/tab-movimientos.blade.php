@@ -105,7 +105,7 @@
                             class="form-select" required>
                             <option value="" disabled selected>-- SELECCIONE EL CONCEPTO --</option>
                             @foreach ($user->conceptos as $concepto)
-                                <option value="{{ $concepto->concepto->id }}">{{ $concepto->concepto->nombre }}</option>
+                                <option value="{{ $concepto->id }}">{{ $concepto->nombre }}</option>
                             @endforeach
                         </select>
                         <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"

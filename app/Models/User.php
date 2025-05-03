@@ -117,7 +117,8 @@ class User extends Authenticatable
 
     public function conceptos()
     {
-        return $this->hasMany(EmpleadoConcepto::class, 'empleado_id');
+        return $this->belongsToMany(Concepto::class, 'empleado_conceptos', 'empleado_id', 'concepto_id')
+            ->withPivot('valor', 'fecha_inicio', 'fecha_fin', 'estado');
     }
     public function movimientos()
     {

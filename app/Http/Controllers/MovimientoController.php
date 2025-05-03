@@ -31,7 +31,7 @@ class MovimientoController extends Controller
             Movimiento::create([
                 'empleado_id' => $empleadoConcepto->empleado_id,
                 'concepto_id' => $empleadoConcepto->concepto_id,
-                'monto' => $empleadoConcepto->valor,
+                'monto' => intval($empleadoConcepto->valor) ,
                 'validez_fecha' => Carbon::createFromDate($year, $month, 1),
                 'generacion_fecha' => now(),
             ]);

@@ -51,8 +51,12 @@ class UserController extends Controller
         $movimientos = $user->movimientos;
         $conceptos = Concepto::all();
         $liquidaciones = $user->liquidaciones;
+        $salario = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
+        $bonificacion = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_BONIFICACION)->first();
+        $ips = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_IPS)->first();
 
-        return view('users.show', compact('user', 'cargo', 'conceptos', 'movimientos', 'liquidaciones'));
+
+        return view('users.show', compact('user', 'cargo', 'conceptos', 'movimientos', 'liquidaciones', 'ips', 'salario', 'bonificacion'));
     }
 
     public function store(Request $request)
@@ -184,6 +188,16 @@ class UserController extends Controller
                 'fecha_fin' => 'nullable|date'
             ]);
 
+            $concepto = Concepto::findOrFail($request->concepto_id);
+            $user = User::findOrFail($id);
+
+            if(strcmp($concepto->tipo_concepto, Concepto::TIPO_BONIFICACION) === 0){
+
+                if($user->hijos === 0){
+                    throw new Exception('El empleado no tiene hijos');
+                }
+
+            }
 
             EmpleadoConcepto::create($request->all());
 
