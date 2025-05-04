@@ -36,7 +36,7 @@
                         <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $movimiento->concepto->nombre }}
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            {{$movimiento->monto}}
+                            {{ number_format($movimiento->monto, 0, ',', '.') }}
                         </td>
 
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
@@ -105,7 +105,7 @@
                             class="form-select" required>
                             <option value="" disabled selected>-- SELECCIONE EL CONCEPTO --</option>
                             @foreach ($user->conceptos as $concepto)
-                                <option value="{{ $concepto->concepto->id }}">{{ $concepto->concepto->nombre }}</option>
+                                <option value="{{ $concepto->id }}">{{ $concepto->nombre }}</option>
                             @endforeach
                         </select>
                         <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"

@@ -8,40 +8,18 @@ use App\Models\Departamento;
 use App\Models\Parametro;
 use App\Models\User;
 use Carbon\Carbon;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@nomina.com'],
-            [
-                'nombre' => 'Administrador',
-                'email' => 'admin@nomina.com',
-                'cedula' => '1234567',
-                'sexo' => 'M',
-                'nacimiento_fecha' => date_create('1990-01-01'),
-                // 'fecha_ingreso' => date_create('2020-01-01'),
-                'password' => Hash::make('12345'),
-                'estado' => 'contratado',
-                'remember_token' => Str::random(10),
-                'domicilio' => 'Asuncion, Paraguay'
-            ]
-        );
-
-        $role = Role::firstOrCreate(['name' => 'admin']);
-
-        $role->syncPermissions([
+        // 1. Crear todos los permisos primero
+        $permisos = [
             'usuario crear',
             'usuario editar',
             'usuario eliminar',
@@ -59,12 +37,20 @@ class DatabaseSeeder extends Seeder
             'concepto editar',
             'concepto eliminar',
             'concepto ver',
-        ]);
+        ];
 
-        $admin->assignRole('admin');
+        foreach ($permisos as $permiso) {
+            Permission::firstOrCreate([
+                'name' => $permiso,
+                'guard_name' => 'web',
+            ]);
+        }
+
+        // 2. Crear roles y asignar permisos
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $adminRole->syncPermissions($permisos);
 
         $asistRole = Role::firstOrCreate(['name' => 'asistenteRRHH']);
-
         $asistRole->syncPermissions([
             'usuario crear',
             'usuario editar',
@@ -77,6 +63,26 @@ class DatabaseSeeder extends Seeder
             'departamento ver',
         ]);
 
+        // 3. Crear usuario administrador
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@nomina.com'],
+            [
+                'nombre' => 'Administrador',
+                'email' => 'admin@nomina.com',
+                'cedula' => '1234567',
+                'sexo' => 'M',
+                'nacimiento_fecha' => date_create('1990-01-01'),
+                'password' => Hash::make('12345'),
+                'estado' => 'contratado',
+                'remember_token' => Str::random(10),
+                'domicilio' => 'Asuncion, Paraguay',
+                'aplica_bonificacion_familiar' => false,
+            ]
+        );
+
+        $admin->assignRole('admin');
+
+        // 4. Crear datos de referencia
         Departamento::firstOrCreate(
             ['nombre' => 'Gerencia'],
             ['descripcion' => 'Departamento de gerencia de la empresa']
@@ -87,10 +93,8 @@ class DatabaseSeeder extends Seeder
             ['departamento_id' => 1, 'descripcion' => 'Gerencia de la empresa']
         );
 
-        // crear un parametro llamado 'salario_minimo' con valor 2798309
-
         Parametro::firstOrCreate(
-            ['nombre' => 'salario_minimo'],
+            ['nombre' => Parametro::SALARIO_MINIMO],
             ['valor' => 2798309]
         );
     }
