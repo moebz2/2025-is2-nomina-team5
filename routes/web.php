@@ -14,8 +14,6 @@ use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Auth;
 
-
-
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect('/admin'); // Redirect to /admin if logged in
@@ -33,17 +31,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Registrar todas las vistas de un usuario autenticado
 
-    //Route::resource('users', UserController::class);
-    Route::resource('users', UserController::class)->except(['show']);
-
-
     // Recursos de USUARIO
+
+    Route::resource('users', UserController::class);
 
     Route::post('users/{id}/conceptos', [UserController::class, 'asignarConcepto'])->name('users.asignarConcepto');
 
     Route::post('users/{id}/movimientos', [UserController::class, 'registrarMovimiento'])->name('users.registrarMovimiento');
-
-
 
     Route::resource('departamentos', DepartamentoController::class);
 
