@@ -57,9 +57,11 @@
                 </table>
             </div>
         </div>
-        <div class="mt-4">
+        <div class="mt-4 flex gap-4">
             <a href="{{ route('liquidacion.generarForm') }}"
                 class="bg-blue-500 p-2 rounded text-white font-medium">Registrar nueva liquidación</a>
+
+
         </div>
     </div>
 

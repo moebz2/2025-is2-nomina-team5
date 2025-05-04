@@ -23,9 +23,8 @@
 
         <div>
             <label for="periodo" class="block text-sm font-medium text-gray-700">Mes</label>
-            <input type="month" name="periodo" id="periodo" required
-                class="mt-1 block w-45
-                 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm">
+            <input type="date" name="periodo" class="form-input" id="periodo" required
+                >
         </div>
 
         <div class="mt-6">
@@ -40,12 +39,11 @@
 
     <form action="{{ route('liquidacion.eliminarGenerados') }}" method="POST" class="mt-8 space-y-6">
         @csrf
-
+        @method('DELETE')
         <div>
             <label for="periodo" class="block text-sm font-medium text-gray-700">Mes</label>
-            <input type="month" name="periodo" id="periodo" required
-                class="mt-1 block w-45
-             rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring focus:ring-red-500 focus:ring-opacity-50 sm:text-sm">
+            <input type="date" name="periodo" id="periodo" required
+                class="form-input">
         </div>
 
         <div class="mt-6">

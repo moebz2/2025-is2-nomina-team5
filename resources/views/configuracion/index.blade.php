@@ -25,7 +25,7 @@
 
         <div>
             <label for="fecha" class="block text-sm font-medium text-gray-700">Mes</label>
-            <input type="month" name="fecha" id="fecha" required
+            <input type="date" name="fecha" class="form-input" id="fecha" required
                 value="{{ now()->format('Y-m') }}"
                 class="mt-1 block w-45 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50 sm:text-sm">
         </div>
