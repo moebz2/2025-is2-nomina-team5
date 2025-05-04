@@ -25,9 +25,9 @@ class ConceptoSeeder extends Seeder
             'es_modificable' => false,
         ]);
 
-        //Concepto de bonificacion no modificable
+        // Concepto de bonificacion no modificable
         Concepto::create([
-            'nombre' => 'Bonificacion familiar',
+            'nombre' => 'Bonificación familiar',
             'ips_incluye' => true,
             'aguinaldo_incluye' => true,
             'tipo_concepto' => Concepto::TIPO_BONIFICACION,

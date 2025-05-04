@@ -38,8 +38,8 @@ class DevSeeder extends Seeder
                 'sexo' => 'M',
                 'nacimiento_fecha' => '1990-01-01',
                 'password' => 'password123',
-                'salario' => 12500000,
-                'bonificacion' => 1000000,
+                // Menor a 3 salarios mínimos para que genere bonificación familiar
+                'salario' => 6000000,
                 'domicilio' => 'Calle Falsa 123',
                 'aplica_bonificacion_familiar' => true,
                 'hijos' => [
@@ -55,7 +55,6 @@ class DevSeeder extends Seeder
                 'nacimiento_fecha' => '1985-05-15',
                 'password' => 'password123',
                 'salario' => 15700000,
-                'bonificacion' => 750000,
                 'domicilio' => 'Avenida Siempre Viva 456',
                 'aplica_bonificacion_familiar' => false,
                 'hijos' => [],
@@ -68,7 +67,6 @@ class DevSeeder extends Seeder
                 'nacimiento_fecha' => '1992-03-10',
                 'password' => 'password123',
                 'salario' => 22400000,
-                'bonificacion' => 1369000,
                 'domicilio' => 'Calle Principal 789',
                 'aplica_bonificacion_familiar' => true,
                 'hijos' => [
@@ -77,7 +75,6 @@ class DevSeeder extends Seeder
             ],
         ];
 
-        $bonificacionConcepto = Concepto::where('tipo_concepto', Concepto::TIPO_BONIFICACION)->first();
         $salarioConcepto = Concepto::where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
 
         $conceptoPrueba = Concepto::create([
@@ -105,6 +102,7 @@ class DevSeeder extends Seeder
             );
 
             // Insertar hijos
+
             foreach ($userData['hijos'] as $hijo) {
                 Hijo::create([
                     'empleado_id' => $user->id,
@@ -114,13 +112,6 @@ class DevSeeder extends Seeder
             }
 
             // Insertar conceptos
-            EmpleadoConcepto::create([
-                'empleado_id' => $user->id,
-                'concepto_id' => $bonificacionConcepto->id,
-                'valor' => $userData['bonificacion'],
-                'fecha_inicio' => now(),
-                'estado' => true,
-            ]);
 
             EmpleadoConcepto::create([
                 'empleado_id' => $user->id,
