@@ -110,4 +110,10 @@ class User extends Authenticatable
     {
         return $this->cargos()->first(); // Get the first active cargo
     }
+    public function hijos()
+    {
+        return $this->hasMany(Hijo::class, 'empleado_id');
+    }
+    
+
 }

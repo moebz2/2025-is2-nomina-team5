@@ -30,6 +30,9 @@
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Rol</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Estado</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Acciones</th>
+                        <th>Bonificación Familiar</th>
+                        <th>Hijos</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -76,6 +79,13 @@
                                 </button>
                             </form>
                         </td>
+                        <td>
+                            {{ $user->aplica_bonificacion_familiar ? 'Sí' : 'No' }}
+                        </td>
+                        <td>
+                        {{ is_iterable($user->hijos) ? $user->hijos->count() : 0 }} hijo(s)
+                        </td>
+
                     </tr>
                     @endforeach
                 </tbody>

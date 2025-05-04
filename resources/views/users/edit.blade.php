@@ -164,6 +164,32 @@
                             @endcan
                         </div>
                     </div>
+                    <div class="form-group mt-3">
+                    <label>
+                        <input type="checkbox" name="aplica_bonificacion_familiar" value="1" {{ old('aplica_bonificacion_familiar', $user->aplica_bonificacion_familiar) ? 'checked' : '' }}>
+                        ¿Aplica Bonificación Familiar?
+                    </label>
+                    </div>
+                    <div id="hijos-section" class="mt-3" style="{{ $user->aplica_bonificacion_familiar ? '' : 'display:none' }}">
+    <h5>Hijos</h5>
+    <button type="button" class="btn btn-sm btn-secondary mb-2" onclick="agregarHijo()">Agregar hijo</button>
+    <div id="hijos-wrapper">
+    @foreach (is_iterable($user->hijos) ? $user->hijos : [] as $index => $hijo)
+
+            <div class="form-row mb-2">
+                <div class="col">
+                    <input type="text" class="form-control" name="hijos[{{ $index }}][nombre]" value="{{ $hijo->nombre }}" placeholder="Nombre del hijo" required>
+                </div>
+                <div class="col">
+                <input type="date" class="form-control" name="hijos[{{ $index }}][fecha_nacimiento]" value="{{ \Carbon\Carbon::parse($hijo->fecha_nacimiento)->format('Y-m-d') }}">
+
+            </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+
                 </div>
 
             </div>
@@ -206,5 +232,31 @@
         document.getElementById('ingreso_fecha').value = '2025-01-01';
     });
 </script>
+<script>
+    const checkbox = document.querySelector('input[name="aplica_bonificacion_familiar"]');
+    const hijosSection = document.getElementById('hijos-section');
+    const hijosWrapper = document.getElementById('hijos-wrapper');
+    let hijoIndex = {{ count($user->hijos) }};
+
+    checkbox?.addEventListener('change', function () {
+        hijosSection.style.display = this.checked ? 'block' : 'none';
+    });
+
+    function agregarHijo() {
+        const div = document.createElement('div');
+        div.classList.add('form-row', 'mb-2');
+        div.innerHTML = `
+            <div class="col">
+                <input type="text" class="form-control" name="hijos[${hijoIndex}][nombre]" placeholder="Nombre del hijo" required>
+            </div>
+            <div class="col">
+                <input type="date" class="form-control" name="hijos[${hijoIndex}][fecha_nacimiento]" required>
+            </div>
+        `;
+        hijosWrapper.appendChild(div);
+        hijoIndex++;
+    }
+</script>
+
 
 @endsection
