@@ -1,6 +1,7 @@
 <a class="shrink-0" aria-label="Home" href="/">
     <h2 class="font-bold uppercase">Nomina IS2</h2>
 </a>
+@if(empty($isExport))
 <div class="@container flex flex-1 justify-start pl-8 gap-5">
     @can('empleado ver')
 
@@ -70,3 +71,4 @@
             </path>
         </svg></button>
 </div>
+@endif
