@@ -37,6 +37,14 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('users', UserController::class)->except(['show']);
 
 
+    // Recursos de USUARIO
+
+    Route::post('users/{id}/conceptos', [UserController::class, 'asignarConcepto'])->name('users.asignarConcepto');
+
+    Route::post('users/{id}/movimientos', [UserController::class, 'registrarMovimiento'])->name('users.registrarMovimiento');
+
+
+
     Route::resource('departamentos', DepartamentoController::class);
 
     Route::resource('roles', RoleController::class);
@@ -63,7 +71,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('liquidacion/generar', [LiquidacionController::class, 'generar'])->name('liquidacion.generar');
 
-    Route::post('liquidacion/eliminar-generados', [LiquidacionController::class, 'eliminarGenerados'])->name('liquidacion.eliminarGenerados');
+    Route::delete('liquidacion/eliminar-generados', [LiquidacionController::class, 'eliminarGenerados'])->name('liquidacion.eliminarGenerados');
+
+    Route::delete('liquidacion/eliminar-todos', [LiquidacionController::class, 'eliminarTodos'])->name('liquidacion.eliminarTodos');
 
     Route::get('configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
 

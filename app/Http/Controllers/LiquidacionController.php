@@ -11,6 +11,7 @@ use App\Models\Movimiento;
 use App\Models\Parametro;
 use App\Models\User;
 use App\Services\LiquidacionService;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -61,6 +62,8 @@ class LiquidacionController extends Controller
             'periodo' => 'required|date',
         ]);
 
+
+
         $periodo = $request->input('periodo');
 
         DB::transaction(function () use ($periodo) {
@@ -89,5 +92,25 @@ class LiquidacionController extends Controller
         });
 
         return redirect()->route('liquidacion.index')->with('success', 'Registros eliminados correctamente.');
+    }
+
+    public function eliminarTodos(Request $request)
+    {
+        try{
+
+            $liquidaciones = LiquidacionCabecera::all();
+
+            foreach ($liquidaciones as $liquidacion) {
+                $liquidacion->delete();
+            }
+
+            return redirect()->route('liquidacion.index')->with('success', 'Todos los registros eliminados correctamente.');
+
+        }catch(Exception $e){
+
+            dd($e->getMessage());
+            // return redirect()->route('liquidacion.index')->with('error', $e->getMessage());
+
+        }
     }
 }
