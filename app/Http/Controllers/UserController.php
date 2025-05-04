@@ -47,7 +47,8 @@ class UserController extends Controller
         return view('users.create', compact('cargos', 'roles'));
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $user = User::findOrFail($id);
         $cargo = $user->currentCargo();
         $movimientos = $user->movimientos;
@@ -100,9 +101,6 @@ class UserController extends Controller
             } else {
                 $usuario->hijos()->delete(); // por si viene algo indebido
             }
-            
-            
-            
 
             if (isset($request->cargo_id)) {
                 if (!isset($request->ingreso_fecha)) {
@@ -121,7 +119,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $roles = Role::all();
-        $user = User::with('hijos')->findOrFail($id);
+        $user = User::with(['cargos', 'hijos'])->findOrFail($id);
 
         $fecha_nacimiento = Carbon::parse($user->nacimiento_fecha)->format('Y-m-d');
         $cargos = Cargo::all();
@@ -169,26 +167,23 @@ class UserController extends Controller
                 $user->asignarCargo($cargo->id, $request->ingreso_fecha);
             }
 
+            // Eliminar y guardar hijos solo si aplica bonificación familiar
+            if ($request->has('aplica_bonificacion_familiar')) {
+                // Eliminar hijos actuales
+                $user->hijos()->delete();
 
-           // Eliminar y guardar hijos solo si aplica bonificación familiar
-if ($request->has('aplica_bonificacion_familiar')) {
-    // Eliminar hijos actuales
-    $user->hijos()->delete();
-
-    // Guardar hijos nuevos
-    if ($request->has('hijos') && is_array($request->hijos)) {
-        foreach ($request->hijos as $hijoData) {
-            if (!empty($hijoData['nombre']) && !empty($hijoData['fecha_nacimiento'])) {
-                $user->hijos()->create($hijoData);
+                // Guardar hijos nuevos
+                if ($request->has('hijos') && is_array($request->hijos)) {
+                    foreach ($request->hijos as $hijoData) {
+                        if (!empty($hijoData['nombre']) && !empty($hijoData['fecha_nacimiento'])) {
+                            $user->hijos()->create($hijoData);
+                        }
+                    }
+                }
+            } else {
+                // Si no aplica bonificación, asegurarse de borrar todos los hijos
+                $user->hijos()->delete();
             }
-        }
-    }
-} else {
-    // Si no aplica bonificación, asegurarse de borrar todos los hijos
-    $user->hijos()->delete();
-}
-
-
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado exitosamente');
@@ -215,7 +210,7 @@ if ($request->has('aplica_bonificacion_familiar')) {
 
     public function asignarConcepto(Request $request, $id)
     {
-        try{
+        try {
 
             $request->validate([
                 'empleado_id' => 'required|exists:users,id',
@@ -229,16 +224,14 @@ if ($request->has('aplica_bonificacion_familiar')) {
             EmpleadoConcepto::create($request->all());
 
             return redirect()->route('users.show', $id)->with('success', 'Concepto asignado exitosamente');
-
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
-
     }
-    public function registrarMovimiento(Request $request, $id){
+    public function registrarMovimiento(Request $request, $id)
+    {
 
-        try{
+        try {
 
             $request->validate([
                 'empleado_id' => 'required|exists:users,id',
@@ -262,10 +255,8 @@ if ($request->has('aplica_bonificacion_familiar')) {
             Movimiento::create($data);
 
             return redirect()->route('users.show', $id)->with('success', 'Movimiento registrado exitosamente');
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
-
         }
     }
 }
