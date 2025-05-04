@@ -114,6 +114,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Hijo::class, 'empleado_id');
     }
-    
+    public function hijosMenores()
+{
+    return $this->hijos()->whereDate('fecha_nacimiento', '>', now()->subYears(18));
+}
 
 }

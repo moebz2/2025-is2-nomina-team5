@@ -83,7 +83,7 @@
                             {{ $user->aplica_bonificacion_familiar ? 'Sí' : 'No' }}
                         </td>
                         <td>
-                        {{ is_iterable($user->hijos) ? $user->hijos->count() : 0 }} hijo(s)
+                        {{ is_iterable($user->hijosMenores) ? $user->hijosMenores->count() : 0 }} hijo(s)
                         </td>
 
                     </tr>
