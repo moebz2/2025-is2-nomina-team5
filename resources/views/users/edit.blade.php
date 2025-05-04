@@ -140,7 +140,7 @@
                             <div class="mt-2">
 
                                 <input type="date" id="ingreso_fecha" class="form-input" name="ingreso_fecha"
-                                    value="{{ optional($user->currentCargo())->pivot->fecha_inicio }}">
+                                    value="{{ optional($user->currentCargo())?->pivot?->fecha_inicio }}">
                             </div>
                             <div class="sm:col-span-3">
                                 <label for="domicilio" class="input-label">Domicilio:</label>
@@ -174,8 +174,8 @@
                             </div>
                             <div id="hijos-section" class="mt-3"
                                 style="{{ $user->aplica_bonificacion_familiar ? '' : 'display:none' }}">
-                                <h5>Hijos</h5>
-                                <button type="button" class="btn btn-sm btn-secondary mb-2"
+                                <h5 class="text-base/7 font-semibold text-gray-900">Hijos</h5>
+                                <button type="button" class="p-1 bg-gray-100 font-medium text-black rounded"
                                     onclick="agregarHijo()">Agregar
                                     hijo</button>
                                 <div id="hijos-wrapper">

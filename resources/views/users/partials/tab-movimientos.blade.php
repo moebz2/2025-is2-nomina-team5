@@ -36,7 +36,7 @@
                         <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $movimiento->concepto->nombre }}
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            {{$movimiento->monto}}
+                            {{ number_format($movimiento->monto, 0, ',', '.') }}
                         </td>
 
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">

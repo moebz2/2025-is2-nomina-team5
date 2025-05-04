@@ -24,7 +24,7 @@
             @csrf
 
 
-            <div x-data="{ ips: '0', aguinaldo: '0'}" class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div x-data="{ ips: '0', aguinaldo: '0' }" class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                 <div class="sm:col-span-3">
                     <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre del concepto</label>
                     <div class="mt-2">
@@ -36,15 +36,17 @@
                 <div class="form-group mt-3">
                     <label>
                         <input type="checkbox" name="aplica_bonificacion_familiar" value="1">
-                            ¿Aplica Bonificación Familiar?
+                        ¿Aplica Bonificación Familiar?
                     </label>
                 </div>
                 <div id="hijos-section" class="mt-4" style="display: none;">
                     <h5>Hijos</h5>
-                        <button type="button" class="btn btn-sm btn-secondary mb-2" onclick="agregarHijo()">Agregar hijo</button>
+                    <button type="button"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        onclick="agregarHijo()">Agregar hijo</button>
 
-                <div id="hijos-wrapper"></div>
-            </div>
+                    <div id="hijos-wrapper"></div>
+                </div>
 
 
                 <div class="sm:col-span-3"></div>
@@ -68,7 +70,7 @@
                     </div>
 
 
-                   {{--  <fieldset>
+                    {{--  <fieldset>
                         <legend class="text-sm/6 font-semibold text-gray-900">Calculos especiales</legend>
                         <p class="mt-1 text-sm/6 text-gray-600">Indique que tipo de calculos deben realizarse al incluir el concepto en la liquidación</p>
                         <div class="mt-6 space-y-6">
@@ -129,8 +131,8 @@
                         de hacer la liquidación correspondiente</p>
 
                     <div class="mt-2 grid grid-cols-1">
-                        <select id="aguinaldo_incluye" name="aguinaldo_incluye" x-model="aguinaldo" autocomplete="aguinaldo_incluye"
-                            class="form-select">
+                        <select id="aguinaldo_incluye" name="aguinaldo_incluye" x-model="aguinaldo"
+                            autocomplete="aguinaldo_incluye" class="form-select">
                             <option value="1" {{ old('aguinaldo_incluye') == '1' ? 'selected' : '' }}>Incluir
                             </option>
                             <option value="0" {{ old('aguinaldo_incluye') == '0' ? 'selected' : '' }}>No incluir
@@ -150,11 +152,13 @@
                     <p class="mt-1 text-sm/6 text-gray-600">Indique si el concepto sera de débito o crédito.</p>
                     <div class="mt-6 space-y-6">
                         <div class="flex items-center gap-x-3">
-                            <input id="es_debito" name="es_debito" value="1" type="radio" class="form-radio" :disabled="aguinaldo == '1'">
+                            <input id="es_debito" name="es_debito" value="1" type="radio" class="form-radio"
+                                :disabled="aguinaldo == '1'">
                             <label for="es_debito" class="block text-sm/6 font-medium text-gray-900">Débito</label>
                         </div>
                         <div class="flex items-center gap-x-3">
-                            <input id="es_credito" name="es_debito" type="radio" value="0" class="form-radio" checked>
+                            <input id="es_credito" name="es_debito" type="radio" value="0" class="form-radio"
+                                checked>
                             <label for="es_credito" class="block text-sm/6 font-medium text-gray-900">Crédito</label>
                         </div>
 
@@ -174,19 +178,19 @@
     </div>
 
     <script>
-    const checkbox = document.querySelector('input[name="aplica_bonificacion_familiar"]');
-    const hijosSection = document.getElementById('hijos-section');
-    let hijoIndex = 0;
+        const checkbox = document.querySelector('input[name="aplica_bonificacion_familiar"]');
+        const hijosSection = document.getElementById('hijos-section');
+        let hijoIndex = 0;
 
-    checkbox?.addEventListener('change', function () {
-        hijosSection.style.display = this.checked ? 'block' : 'none';
-    });
+        checkbox?.addEventListener('change', function() {
+            hijosSection.style.display = this.checked ? 'block' : 'none';
+        });
 
-    function agregarHijo() {
-        const wrapper = document.getElementById('hijos-wrapper');
-        const div = document.createElement('div');
-        div.classList.add('mb-2');
-        div.innerHTML = `
+        function agregarHijo() {
+            const wrapper = document.getElementById('hijos-wrapper');
+            const div = document.createElement('div');
+            div.classList.add('mb-2');
+            div.innerHTML = `
             <div class="form-row">
                 <div class="col">
                     <input type="text" class="form-control" name="hijos[${hijoIndex}][nombre]" placeholder="Nombre del hijo" required>
@@ -196,10 +200,10 @@
                 </div>
             </div>
         `;
-        wrapper.appendChild(div);
-        hijoIndex++;
-    }
-</script>
+            wrapper.appendChild(div);
+            hijoIndex++;
+        }
+    </script>
 
 
 

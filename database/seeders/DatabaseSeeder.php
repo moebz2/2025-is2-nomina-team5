@@ -94,7 +94,7 @@ class DatabaseSeeder extends Seeder
         );
 
         Parametro::firstOrCreate(
-            ['nombre' => 'salario_minimo'],
+            ['nombre' => Parametro::SALARIO_MINIMO],
             ['valor' => 2798309]
         );
     }
