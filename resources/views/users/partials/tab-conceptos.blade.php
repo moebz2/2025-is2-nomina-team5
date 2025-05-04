@@ -10,63 +10,63 @@
                     {{-- <th
                         class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">
                         ID</th> --}}
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Nombre
                     </th>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Valor
                     </th>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Calculos</th>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
-                        Periodo validez
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                        Vigencia
                     </th>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Acciones</th>
                 </thead>
 
-                @foreach ($user->conceptos as $asignacion)
+                @foreach ($user->conceptos as $concepto)
                     <tr>
                         {{-- <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $concepto->id }}</td> --}}
-                        <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $asignacion->concepto->nombre }}
+                        <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $concepto->nombre }}
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            {{$asignacion->valor}}
+
+                            Gs. {{ number_format($concepto->valor, 0, ',', '.') }}
+
                         </td>
 
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            @if ($asignacion->concepto->ips_incluye)
+                            @if ($concepto->ips_incluye)
                                 <span
                                     class="rounded-lg bg-purple-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-purple-700 ">IPS</span>
-
                             @endif
-                            @if ($asignacion->concepto->aguinaldo_incluye)
+                            @if ($concepto->aguinaldo_incluye)
                                 <span
                                     class="rounded-lg bg-indigo-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-indigo-700 ">Aguinaldo</span>
-
                             @endif
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            Desde {{$asignacion->fecha_inicio->format('Y-m-d')}} al @if($asignacion->fecha_fin) {{$asignacion->fecha_fin}} @else infinito @endif
+
+                            Desde {{ $concepto->pivot->fecha_inicio }}  @if ($concepto->pivot->fecha_fin)
+                               al {{ $concepto->pivot->fecha_fin }}
+
+                            @endif
+
+
+
                         </td>
 
                         <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-700">
 
                             @can('concepto editar')
-                                    <a href=""
-                                        class="hover:text-gray-700 cursor-pointer">
-                                        <i class="material-symbols-outlined">edit</i>
-                                    </a>
+                                <a href="" class="hover:text-gray-700 cursor-pointer">
+                                    <i class="material-symbols-outlined">edit</i>
+                                </a>
                             @endcan
 
                             @can('concepto eliminar')
-                                <form action=""
-                                    method="POST"
+                                <form action="" method="POST"
                                     onsubmit="return confirm('¿Está seguro de que desea dar de baja este concepto?');">
                                     @csrf
                                     @method('DELETE')
@@ -87,7 +87,8 @@
     </div>
 
     <div class="flex jusitfy-end mt-4">
-        <button x-show="!conceptoForm" x-on:click="conceptoForm = true" class="px-2 py-1 flex items-center bg-blue-500 rounded text-medium hover:bg-blue-700 text-white">
+        <button x-show="!conceptoForm" x-on:click="conceptoForm = true"
+            class="px-2 py-1 flex items-center bg-blue-500 rounded text-medium hover:bg-blue-700 text-white">
             <span class="material-symbols-outlined">add</span>
             Agregar concepto
         </button>
@@ -98,7 +99,7 @@
 
         <h3 class="text-xl font-medium">Asignar nuevo concepto</h3>
 
-        <form action="{{route('users.asignarConcepto', $user->id)}}" method="POST">
+        <form action="{{ route('users.asignarConcepto', $user->id) }}" method="POST">
             @csrf
 
 
@@ -107,13 +108,12 @@
                 <input type="text" value="{{ $user->id }}" name="empleado_id" hidden>
 
                 <div class="sm:col-span-3">
-                    <label for="concepto_id"
-                        class="block text-sm font-medium text-gray-700">Concepto</label>
+                    <label for="concepto_id" class="block text-sm font-medium text-gray-700">Concepto</label>
 
 
                     <div class="mt-2 grid grid-cols-1">
-                        <select id="concepto_id" name="concepto_id" autocomplete="concepto_id"
-                            class="form-select" required>
+                        <select id="concepto_id" name="concepto_id" autocomplete="concepto_id" class="form-select"
+                            required>
                             <option value="" disabled selected>-- SELECCIONE EL CONCEPTO --</option>
                             @foreach ($conceptos as $concepto)
                                 <option value="{{ $concepto->id }}">{{ $concepto->nombre }}</option>
@@ -141,17 +141,18 @@
                 <div class="sm:col-span-3">
                     <label for="fecha_inicio" class="block text-sm font-medium text-gray-700">Fecha de inicio</label>
                     <div class="mt-2">
-                        <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ old('fecha_inicio') }}" required
-                            class="form-input">
+                        <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ old('fecha_inicio') }}"
+                            required class="form-input">
                     </div>
                 </div>
                 <div class="sm:col-span-3">
                     <label for="fecha_fin" class="block text-sm font-medium text-gray-700">Fecha fin</label>
                     <div class="mt-2">
                         <input type="date" name="fecha_fin" id="fecha_fin" value="{{ old('fecha_fin') }}"
-                        class="form-input">
+                            class="form-input">
                     </div>
-                    <p class="mt-1 text-sm/6 text-gray-600">Deje sin fecha de finalizar para calcular mensualmente el concepto</p>
+                    <p class="mt-1 text-sm/6 text-gray-600">Deje sin fecha de finalizar para calcular mensualmente el
+                        concepto</p>
                 </div>
 
 
@@ -163,7 +164,8 @@
                     class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     Guardar concepto
                 </button>
-                <button x-show="conceptoForm" x-on:click="conceptoForm = false" class="px-2 py-1 flex items-center bg-red-500 rounded text-medium hover:bg-red-700 text-white">
+                <button x-show="conceptoForm" x-on:click="conceptoForm = false"
+                    class="px-2 py-1 flex items-center bg-red-500 rounded text-medium hover:bg-red-700 text-white">
 
                     Cancelar
                 </button>

@@ -115,9 +115,20 @@ class User extends Authenticatable
         return $this->cargos()->first(); // Get the first active cargo
     }
 
+    public function hijos()
+    {
+        return $this->hasMany(Hijo::class, 'empleado_id');
+    }
+
+    public function hijosMenores()
+    {
+        return $this->hijos()->whereDate('fecha_nacimiento', '>', now()->subYears(18));
+    }
+
     public function conceptos()
     {
-        return $this->hasMany(EmpleadoConcepto::class, 'empleado_id');
+        return $this->belongsToMany(Concepto::class, 'empleado_conceptos', 'empleado_id', 'concepto_id')
+            ->withPivot('valor', 'fecha_inicio', 'fecha_fin', 'estado');
     }
     public function movimientos()
     {
@@ -127,6 +138,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(LiquidacionEmpleadoCabecera::class, 'empleado_id');
     }
-
-
 }

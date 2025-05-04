@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\LiquidacionController;
 use App\Http\Controllers\LiquidacionEmpleadoController;
@@ -30,15 +31,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Registrar todas las vistas de un usuario autenticado
 
-    Route::resource('users', UserController::class);
-
     // Recursos de USUARIO
+
+    Route::resource('users', UserController::class);
 
     Route::post('users/{id}/conceptos', [UserController::class, 'asignarConcepto'])->name('users.asignarConcepto');
 
     Route::post('users/{id}/movimientos', [UserController::class, 'registrarMovimiento'])->name('users.registrarMovimiento');
-
-
 
     Route::resource('departamentos', DepartamentoController::class);
 
