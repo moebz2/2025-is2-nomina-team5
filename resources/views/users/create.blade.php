@@ -159,6 +159,16 @@
                                 value="{{ old('ingreso_fecha') }}">
                         </div>
                     </div>
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="aplica_bonificacion_familiar" name="aplica_bonificacion_familiar">
+                        <label class="form-check-label" for="aplica_bonificacion_familiar">Aplica bonificación familiar</label>
+                    </div>
+                    <div id="hijos-section" style="display: none;" class="sm:col-span-6">
+    <h5 class="text-lg font-semibold mt-4">Hijos</h5>
+    <button type="button" class="p-1 bg-gray-500 text-white rounded mb-2" onclick="agregarHijo()">Agregar hijo</button>
+    <div id="hijos-wrapper"></div>
+</div>
+
                 </div>
 
             </div>
@@ -202,5 +212,33 @@
         document.getElementById('ingreso_fecha').value = '2025-01-01';
     });
 </script>
+<script>
+    const bonifCheckbox = document.getElementById('aplica_bonificacion_familiar');
+    const hijosSection = document.getElementById('hijos-section');
+    let hijoIndex = 0;
+
+    bonifCheckbox.addEventListener('change', function () {
+        hijosSection.style.display = this.checked ? 'block' : 'none';
+    });
+
+    function agregarHijo() {
+        const wrapper = document.getElementById('hijos-wrapper');
+        const div = document.createElement('div');
+        div.classList.add('mb-2');
+        div.innerHTML = `
+            <div class="form-row grid grid-cols-2 gap-4">
+                <div>
+                    <input type="text" class="form-input" name="hijos[${hijoIndex}][nombre]" placeholder="Nombre del hijo" required>
+                </div>
+                <div>
+                    <input type="date" class="form-input" name="hijos[${hijoIndex}][fecha_nacimiento]" required>
+                </div>
+            </div>
+        `;
+        wrapper.appendChild(div);
+        hijoIndex++;
+    }
+</script>
+
 
 @endsection

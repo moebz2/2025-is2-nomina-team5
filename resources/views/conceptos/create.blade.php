@@ -33,6 +33,20 @@
                     </div>
                 </div>
 
+                <div class="form-group mt-3">
+                    <label>
+                        <input type="checkbox" name="aplica_bonificacion_familiar" value="1">
+                            ¿Aplica Bonificación Familiar?
+                    </label>
+                </div>
+                <div id="hijos-section" class="mt-4" style="display: none;">
+                    <h5>Hijos</h5>
+                        <button type="button" class="btn btn-sm btn-secondary mb-2" onclick="agregarHijo()">Agregar hijo</button>
+
+                <div id="hijos-wrapper"></div>
+            </div>
+
+
                 <div class="sm:col-span-3"></div>
 
                 <div class="sm:col-span-2">
@@ -103,5 +117,35 @@
             </div>
         </form>
     </div>
+
+    <script>
+    const checkbox = document.querySelector('input[name="aplica_bonificacion_familiar"]');
+    const hijosSection = document.getElementById('hijos-section');
+    let hijoIndex = 0;
+
+    checkbox?.addEventListener('change', function () {
+        hijosSection.style.display = this.checked ? 'block' : 'none';
+    });
+
+    function agregarHijo() {
+        const wrapper = document.getElementById('hijos-wrapper');
+        const div = document.createElement('div');
+        div.classList.add('mb-2');
+        div.innerHTML = `
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" class="form-control" name="hijos[${hijoIndex}][nombre]" placeholder="Nombre del hijo" required>
+                </div>
+                <div class="col">
+                    <input type="date" class="form-control" name="hijos[${hijoIndex}][fecha_nacimiento]" required>
+                </div>
+            </div>
+        `;
+        wrapper.appendChild(div);
+        hijoIndex++;
+    }
+</script>
+
+
 
 @endsection

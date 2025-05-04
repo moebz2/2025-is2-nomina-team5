@@ -44,4 +44,9 @@ class Empleado extends Model
     {
         return $this->belongsTo(Departamento::class, 'departamento_id');
     }
+    public function hijos() 
+    {
+        return $this->hasMany(Hijo::class);
+    }
+
 }

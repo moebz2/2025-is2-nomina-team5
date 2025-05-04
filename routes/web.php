@@ -6,12 +6,15 @@ use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
+
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\LiquidacionController;
 use App\Http\Controllers\LiquidacionEmpleadoController;
 use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Auth;
+
+
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -30,7 +33,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Registrar todas las vistas de un usuario autenticado
 
-    Route::resource('users', UserController::class);
+    //Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->except(['show']);
+
 
     Route::resource('departamentos', DepartamentoController::class);
 
