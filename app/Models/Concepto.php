@@ -47,5 +47,7 @@ class Concepto extends Model
     protected $casts = [
         'ips_incluye' => 'boolean',
         'estado' => 'boolean',
+        'aguinaldo_incluye' => 'boolean',
+        'es_debito' => 'boolean',
     ];
 }

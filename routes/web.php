@@ -32,6 +32,14 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::resource('users', UserController::class);
 
+    // Recursos de USUARIO
+
+    Route::post('users/{id}/conceptos', [UserController::class, 'asignarConcepto'])->name('users.asignarConcepto');
+
+    Route::post('users/{id}/movimientos', [UserController::class, 'registrarMovimiento'])->name('users.registrarMovimiento');
+
+
+
     Route::resource('departamentos', DepartamentoController::class);
 
     Route::resource('roles', RoleController::class);
@@ -58,7 +66,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('liquidacion/generar', [LiquidacionController::class, 'generar'])->name('liquidacion.generar');
 
-    Route::post('liquidacion/eliminar-generados', [LiquidacionController::class, 'eliminarGenerados'])->name('liquidacion.eliminarGenerados');
+    Route::delete('liquidacion/eliminar-generados', [LiquidacionController::class, 'eliminarGenerados'])->name('liquidacion.eliminarGenerados');
+
+    Route::delete('liquidacion/eliminar-todos', [LiquidacionController::class, 'eliminarTodos'])->name('liquidacion.eliminarTodos');
 
     Route::get('configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
 
@@ -67,6 +77,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/liquidacion-empleados/{liquidacionId}', [LiquidacionEmpleadoController::class, 'index'])->name('liquidacion-empleado.index');
 
     Route::get('/liquidacion-empleado/{id}', [LiquidacionEmpleadoController::class, 'show'])->name('liquidacion-empleado.show');
+
+    Route::get('/liquidacion-empleado/{id}/export', [LiquidacionEmpleadoController::class, 'export'])->name('liquidacion-empleado.export');    
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');

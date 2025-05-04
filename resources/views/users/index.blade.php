@@ -21,15 +21,15 @@
                     <tr>
 
                         {{-- <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">ID</th> --}}
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Nombre</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Cédula</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Sexo</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Email</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Nacimiento</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Cargo</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Rol</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Estado</th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Acciones</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Nombre</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Cédula</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Sexo</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Email</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Nacimiento</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Cargo</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Estado</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Rol</th>
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,16 +38,16 @@
 
 
                         {{-- <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->id }}</td> --}}
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->nombre }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->cedula }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->sexo }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->email }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->nacimiento_fecha->format('Y-m-d') }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500"> {{ $user->currentCargo() ? $user->currentCargo()->nombre : 'Sin cargo' }}
+                        <td class="border-b border-gray-100 p-4 font-medium">{{ $user->nombre }}</td>
+                        <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->cedula }}</td>
+                        <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->sexo }}</td>
+                        <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->email }}</td>
+                        <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->nacimiento_fecha->format('Y-m-d') }}</td>
+                        <td class="border-b border-gray-100 p-4 text-gray-700"> {{ $user->currentCargo() ? $user->currentCargo()->nombre : 'Sin cargo' }}
                         </td>
-                        {{-- <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->fecha_egreso ? $user->fecha_egreso->format('Y-m-d') :'NA' }}</td> --}}
-                        <td class="border-b border-gray-100 p-4 text-gray-500">{{ $user->estado }}</td>
-                        <td class="border-b border-gray-100 p-4 text-gray-500">
+                        {{-- <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->fecha_egreso ? $user->fecha_egreso->format('Y-m-d') :'NA' }}</td> --}}
+                        <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->estado }}</td>
+                        <td class="border-b border-gray-100 p-4 text-gray-700">
 
                             @foreach ($user->roles as $role)
                             <span class="ml-3 rounded-lg bg-blue-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-blue-700 ">{{$role->name}}</span>
@@ -56,6 +56,9 @@
 
                         </td>
                         <td class="border-b border-gray-100 p-4 text-gray-500 flex items-center gap-2">
+                            <a href="{{ route('users.show', $user->id) }}" title="Ver" class=" hover:text-blue-500 block cursor-pointer">
+                                <i class="material-symbols-outlined">preview</i>
+                            </a>
                             <a href="{{ route('users.edit', $user->id) }}" title="Editar" class=" hover:text-blue-500 block cursor-pointer">
                                 <i class="material-symbols-outlined">edit</i>
                             </a>
