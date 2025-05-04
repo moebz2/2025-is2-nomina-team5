@@ -19,7 +19,7 @@
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Calculos</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
-                        Periodo validez
+                        Vigencia
                     </th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Acciones</th>
@@ -32,7 +32,7 @@
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
 
-                            Gs. {{ number_format($asignacion->valor, 0, ',', '.') }}
+                            Gs. {{ number_format($concepto->valor, 0, ',', '.') }}
 
                         </td>
 
@@ -48,11 +48,12 @@
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
 
-                            Desde {{ $asignacion->fecha_inicio->format('Y-m-d') }} al @if ($asignacion->fecha_fin)
-                                {{ $asignacion->fecha_fin }}
-                            @else
-                                infinito
+                            Desde {{ $concepto->pivot->fecha_inicio }}  @if ($concepto->pivot->fecha_fin)
+                               al {{ $concepto->pivot->fecha_fin }}
+
                             @endif
+
+
 
                         </td>
 
