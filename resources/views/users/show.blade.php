@@ -79,6 +79,43 @@
             </div>
         </div>
 
+        <div class="grid grid-cols-4 mt-4 gap-4">
+            <div class="border border-gray-400 p-4 rounded">
+              <p class="text-sm font-medium text-gray-700">IPS</p>
+              <h3 class="md:text-2xl text-xl font-medium">
+                @if ($ips)
+                    {{$ips->pivot->valor}} %
+                @else
+                    No asignado
+                @endif
+              </h3>
+            </div>
+            <div class="border border-gray-400 p-4 rounded">
+              <p class="text-sm font-medium text-gray-700">Salario</p>
+              <h3 class="md:text-2xl text-xl font-medium">
+                @if ($salario)
+                    {{$salario->pivot->valor}} Gs
+                @else
+                    No asignado
+                @endif
+              </h3>
+            </div>
+            <div class="border border-gray-400 p-4 rounded">
+              <p class="text-sm font-medium text-gray-700">Bonif. Familiar</p>
+              <h3 class="md:text-2xl text-xl font-medium">
+                @if ($bonificacion)
+                    {{$bonificacion->pivot->valor}} Gs
+                @else
+                    No asignado
+                @endif
+              </h3>
+            </div>
+            <div class="border border-gray-400 p-4 rounded">
+              <p class="text-sm font-medium text-gray-700">Cant. Hijos</p>
+              <h3 class="md:text-2xl text-xl font-medium">{{$user->hijos}}</h3>
+            </div>
+          </div>
+
         <div x-data="{ tab: 'conceptos', conceptoForm: false, movimientoForm: false }" class="mt-4 w- border border-gray-300 rounded p-4">
             <ul class="flex text-gray-700">
 
@@ -100,6 +137,8 @@
 
             </ul>
             <div>
+
+                
 
 
                 @include('users.partials.tab-conceptos')

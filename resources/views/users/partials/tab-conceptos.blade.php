@@ -25,31 +25,35 @@
                         Acciones</th>
                 </thead>
 
-                @foreach ($user->conceptos as $asignacion)
+                @foreach ($user->conceptos as $concepto)
                     <tr>
                         {{-- <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $concepto->id }}</td> --}}
-                        <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $asignacion->concepto->nombre }}
+                        <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $concepto->nombre }}
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
+
                             Gs. {{ number_format($asignacion->valor, 0, ',', '.') }}
+
                         </td>
 
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            @if ($asignacion->concepto->ips_incluye)
+                            @if ($concepto->ips_incluye)
                                 <span
                                     class="rounded-lg bg-purple-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-purple-700 ">IPS</span>
                             @endif
-                            @if ($asignacion->concepto->aguinaldo_incluye)
+                            @if ($concepto->aguinaldo_incluye)
                                 <span
                                     class="rounded-lg bg-indigo-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-indigo-700 ">Aguinaldo</span>
                             @endif
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
+
                             Desde {{ $asignacion->fecha_inicio->format('Y-m-d') }} al @if ($asignacion->fecha_fin)
                                 {{ $asignacion->fecha_fin }}
                             @else
                                 infinito
                             @endif
+
                         </td>
 
                         <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-700">

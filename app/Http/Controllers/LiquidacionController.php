@@ -11,6 +11,7 @@ use App\Models\Movimiento;
 use App\Models\Parametro;
 use App\Models\User;
 use App\Services\LiquidacionService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -43,7 +44,8 @@ class LiquidacionController extends Controller
             'periodo' => 'required|date',
         ]);
 
-        $periodo = $request->input('periodo');
+
+        $periodo = Carbon::parse($request->input('periodo'))->format('Y-m');
 
         try {
             $this->liquidacionService->generarLiquidacion($periodo);
@@ -64,7 +66,7 @@ class LiquidacionController extends Controller
 
 
 
-        $periodo = $request->input('periodo');
+        $periodo = Carbon::parse($request->input('periodo'))->format('Y-m');
 
         DB::transaction(function () use ($periodo) {
             // Find the liquidation header for the given period
