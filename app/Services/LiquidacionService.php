@@ -72,7 +72,7 @@ class LiquidacionService
             ->get();
     }
 
-    private function obtenerSalarioMinimo()
+    public function obtenerSalarioMinimo()
     {
         return Parametro::where('nombre', Parametro::SALARIO_MINIMO)->first()->valor;
     }
