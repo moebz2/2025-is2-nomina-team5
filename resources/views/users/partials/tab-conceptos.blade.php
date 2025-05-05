@@ -7,9 +7,9 @@
         <div class="my-8 overflow-hidden">
             <table class="w-full table-auto border-collapse text-sm">
                 <thead>
-                    {{-- <th
+                    <th
                         class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">
-                        ID</th> --}}
+                        ID</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Nombre
                     </th>
@@ -25,14 +25,14 @@
                         Acciones</th>
                 </thead>
 
-                @foreach ($user->conceptos as $concepto)
+                @foreach ($user->conceptos()->where('es_modificable', true)->get() as $concepto)
                     <tr>
-                        {{-- <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $concepto->id }}</td> --}}
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $concepto->id }}</td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $concepto->nombre }}
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
 
-                            Gs. {{ number_format($concepto->valor, 0, ',', '.') }}
+                            Gs. {{ number_format($concepto->pivot->valor, 0, ',', '.') }}
 
                         </td>
 
@@ -66,7 +66,7 @@
                             @endcan
 
                             @can('concepto eliminar')
-                                <form action="" method="POST"
+                                <form action="{{route('users.eliminarConcepto', ['user' => $user->id, 'concepto' => $concepto->id] )}}" method="POST"
                                     onsubmit="return confirm('¿Está seguro de que desea dar de baja este concepto?');">
                                     @csrf
                                     @method('DELETE')

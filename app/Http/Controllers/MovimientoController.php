@@ -59,22 +59,34 @@ class MovimientoController extends Controller
         error_log('generarMovimientos.salarioConceptoId: ' . $salarioConcepto->id);
 
         if ($bonificacionConcepto) {
-            $empleados = User::with(['hijos', 'conceptos'])->where('aplica_bonificacion_familiar', true)->get();
+
+            $empleados = User::with(['hijos', 'conceptos'])->where('estado', 'contratado')->orderBy('id', 'desc')->get();
+
+
+
 
             foreach ($empleados as $empleado) {
+
+                $hijosMenores = $empleado->hijosMenores;
+
+                if($hijosMenores->count() == 0)
+                {
+
+                    continue;
+
+                }
+
                 error_log('generarMovimientos.empleadoId: ' . $empleado->id);
                 error_log('generarMovimientos.empleadoNombre: ' . $empleado->nombre);
 
-                $hijosMenores = $empleado->hijos->filter(function ($hijo) {
-                    return Carbon::parse($hijo->fecha_nacimiento)->age < 18;
-                });
+                $concepto_salario = $empleado->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
 
-                $salario = $empleado->conceptos->firstWhere('concepto_id', $salarioConcepto->id)->valor;
-
-                if (empty($salario)) {
+                if (empty($concepto_salario)) {
                     error_log('No se encontró el salario para el empleado: ' . $empleado->id);
                     continue;
                 }
+
+                $salario = $concepto_salario->pivot->valor;
 
                 error_log('generarMovimientos.salario: ' . $salario);
                 error_log('generarMovimientos.salarioPorTres: ' . ($salarioMinimo * 3));

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LiquidacionEmpleadoCabecera;
+use App\Models\LiquidacionEmpleadoDetalle;
 use Illuminate\Http\Request;
 
 class LiquidacionEmpleadoController extends Controller
@@ -18,7 +19,9 @@ class LiquidacionEmpleadoController extends Controller
 
     public function show($liquidacionEmpleadoId)
     {
-        $detalles = \App\Models\LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
+
+
+        $detalles = LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
             ->with(['cabecera', 'movimiento'])
             ->get();
 
