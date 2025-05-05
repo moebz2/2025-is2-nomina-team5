@@ -33,7 +33,7 @@
                     </div>
                 </div>
 
-                <div class="form-group mt-3">
+               {{--  <div class="form-group mt-3">
                     <label>
                         <input type="checkbox" name="aplica_bonificacion_familiar" value="1">
                         ¿Aplica Bonificación Familiar?
@@ -46,14 +46,14 @@
                         onclick="agregarHijo()">Agregar hijo</button>
 
                     <div id="hijos-wrapper"></div>
-                </div>
+                </div> --}}
 
 
                 <div class="sm:col-span-3"></div>
 
                 <div class="sm:col-span-3">
                     <label for="ips_incluye" class="block text-sm font-medium text-gray-700">Incluir IPS</label>
-                    <p class="mt-1 text-sm/6 text-gray-600">Indique si se incluye el calculo de la liquidación</p>
+
 
                     <div class="mt-2 grid grid-cols-1">
                         <select id="ips_incluye" name="ips_incluye" x-bind="ips" autocomplete="ips_incluye"
@@ -68,6 +68,7 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
+                    <p class="mt-1 text-sm/6 text-gray-600">Indique si se incluye el calculo de la liquidación</p>
 
 
                     {{--  <fieldset>
@@ -126,9 +127,6 @@
                 <div class="sm:col-span-2">
                     <label for="aguinaldo_incluye" class="block text-sm font-medium text-gray-700">Incluír en
                         aguinaldo</label>
-                    <p class="mt-1 text-sm/6 text-gray-600">El concepto incluido en el aguinaldo será caclulado
-                        al momento
-                        de hacer la liquidación correspondiente</p>
 
                     <div class="mt-2 grid grid-cols-1">
                         <select id="aguinaldo_incluye" name="aguinaldo_incluye" x-model="aguinaldo"
@@ -145,6 +143,10 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
+                    <p class="mt-1 text-sm/6 text-gray-600">El concepto incluido en el aguinaldo será caclulado
+                        al momento
+                        de hacer la liquidación correspondiente</p>
+
                 </div>
 
                 <fieldset class="sm:col-span-3">
@@ -177,7 +179,7 @@
         </form>
     </div>
 
-    <script>
+    {{-- <script>
         const checkbox = document.querySelector('input[name="aplica_bonificacion_familiar"]');
         const hijosSection = document.getElementById('hijos-section');
         let hijoIndex = 0;
@@ -203,7 +205,7 @@
             wrapper.appendChild(div);
             hijoIndex++;
         }
-    </script>
+    </script> --}}
 
 
 

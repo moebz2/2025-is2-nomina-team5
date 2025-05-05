@@ -83,5 +83,19 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'concepto editar']);
         Permission::firstOrCreate(['name' => 'concepto eliminar']);
         Permission::firstOrCreate(['name' => 'concepto ver']);
+
+        // Hijos
+        Permission::firstOrCreate(['name' => 'hijos crear']);
+        Permission::firstOrCreate(['name' => 'hijos editar']);
+        Permission::firstOrCreate(['name' => 'hijos eliminar']);
+        Permission::firstOrCreate(['name' => 'hijos ver']);
+
+        // Parametros
+        Permission::firstOrCreate(['name' => 'parametros crear']);
+        Permission::firstOrCreate(['name' => 'parametros editar']);
+        Permission::firstOrCreate(['name' => 'parametros eliminar']);
+        Permission::firstOrCreate(['name' => 'parametros ver']);
+
+
     }
 }

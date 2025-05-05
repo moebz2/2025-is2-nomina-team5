@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Exception;
 use Spatie\Permission\Models\Role;
 use App\Models\Hijo;
+use App\Models\Parametro;
 
 class UserController extends Controller
 {
@@ -52,14 +53,16 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $cargo = $user->currentCargo();
         $movimientos = $user->movimientos;
-        $conceptos = Concepto::all();
+        $conceptos = Concepto::where('es_modificable', true)->get();
         $liquidaciones = $user->liquidaciones;
         $salario = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
         $bonificacion = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_BONIFICACION)->first();
-        $ips = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_IPS)->first();
+        $ips = Concepto::IPS_PORCENTAJE;
+
+        $salario_minimo = Parametro::where('nombre', Parametro::SALARIO_MINIMO)->first();
 
 
-        return view('users.show', compact('user', 'cargo', 'conceptos', 'movimientos', 'liquidaciones', 'ips', 'salario', 'bonificacion'));
+        return view('users.show', compact('user', 'cargo', 'conceptos', 'movimientos', 'liquidaciones', 'ips', 'salario', 'bonificacion', 'salario_minimo'));
     }
 
     public function store(Request $request)
@@ -89,12 +92,11 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
                 'nacimiento_fecha' => $request->nacimiento_fecha,
                 'domicilio' => strip_tags($request->domicilio),
-                'aplica_bonificacion_familiar' => $request->has('aplica_bonificacion_familiar') ? true : false,
             ]);
             // syncRoles = Reemplazar rol actual, no agregar
             $usuario->syncRoles($request->role);
 
-            if ($request->has('aplica_bonificacion_familiar')) {
+            /*  if ($request->has('aplica_bonificacion_familiar')) {
                 if ($request->has('hijos') && is_array($request->hijos)) {
                     foreach ($request->hijos as $hijoData) {
                         if (!empty($hijoData['nombre']) && !empty($hijoData['fecha_nacimiento'])) {
@@ -104,7 +106,7 @@ class UserController extends Controller
                 }
             } else {
                 $usuario->hijos()->delete(); // por si viene algo indebido
-            }
+            } */
 
             if (isset($request->cargo_id)) {
                 if (!isset($request->ingreso_fecha)) {
@@ -159,7 +161,7 @@ class UserController extends Controller
                 'password' => $request->password ? Hash::make($request->password) : $user->password,
                 'nacimiento_fecha' => $request->nacimiento_fecha,
                 'domicilio' => strip_tags($request->domicilio),
-                'aplica_bonificacion_familiar' => $request->has('aplica_bonificacion_familiar'),
+                // 'aplica_bonificacion_familiar' => $request->has('aplica_bonificacion_familiar'),
             ]);
 
             $user->syncRoles($request->role);
@@ -172,7 +174,7 @@ class UserController extends Controller
             }
 
             // Eliminar y guardar hijos solo si aplica bonificación familiar
-            if ($request->has('aplica_bonificacion_familiar')) {
+          /*   if ($request->has('aplica_bonificacion_familiar')) {
                 // Eliminar hijos actuales
                 $user->hijos()->delete();
 
@@ -187,7 +189,7 @@ class UserController extends Controller
             } else {
                 // Si no aplica bonificación, asegurarse de borrar todos los hijos
                 $user->hijos()->delete();
-            }
+            } */
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado exitosamente');
@@ -227,12 +229,11 @@ class UserController extends Controller
             $concepto = Concepto::findOrFail($request->concepto_id);
             $user = User::findOrFail($id);
 
-            if(strcmp($concepto->tipo_concepto, Concepto::TIPO_BONIFICACION) === 0){
+            if (strcmp($concepto->tipo_concepto, Concepto::TIPO_BONIFICACION) === 0) {
 
-                if($user->hijos === 0){
+                if ($user->hijos === 0) {
                     throw new Exception('El empleado no tiene hijos');
                 }
-
             }
 
             EmpleadoConcepto::create($request->all());
@@ -270,6 +271,88 @@ class UserController extends Controller
 
             return redirect()->route('users.show', $id)->with('success', 'Movimiento registrado exitosamente');
         } catch (Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function eliminarConcepto(Request $request, User $user,  $concepto)
+    {
+        try {
+
+
+            $user->conceptos()->detach($concepto);
+
+
+
+
+
+            return redirect()->route('users.show', $user->id)->with('success', 'Concepto eliminado exitosamente');
+        } catch (Exception $e) {
+
+            dd($e->getMessage());
+        }
+    }
+
+    // Hijos
+
+    public function agregarHijo(Request $request, $id)
+    {
+
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'fecha_nacimiento' => 'required|date',
+        ]);
+
+        try {
+
+            $user = User::findOrFail($id);
+
+            $user->hijos()->create($request->all());
+
+            return redirect()->route('users.show', $id)->with('success', 'Hijo creado exitosamente');
+        } catch (Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
+    }
+
+    public function asignarSalario(Request $request, $id)
+    {
+
+        $request->validate([
+            'empleado_id' => 'required|exists:users,id',
+            'valor' => 'required|numeric|min:1',
+
+        ]);
+
+        try {
+
+            $user = User::findOrFail($id);
+
+            $salario = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
+
+            if (isset($salario)) {
+
+                $salario->estado = false;
+                $salario->fecha_fin = now();
+                $salario->save();
+
+
+            }
+
+            $concepto_salario = Concepto::where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
+
+            EmpleadoConcepto::create([
+                'empleado_id' => $user->id,
+                'concepto_id' => $concepto_salario->id,
+                'valor' => $request->valor,
+                'fecha_inicio' => now(),
+                'estado' => true,
+            ]);
+
+            return redirect()->route('users.show', $id)->with('success', 'Salario asignado exitosamente');
+
+        } catch (Exception $e) {
+
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }

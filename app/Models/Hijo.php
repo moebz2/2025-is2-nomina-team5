@@ -16,6 +16,10 @@ class Hijo extends Model
         'fecha_nacimiento',
     ];
 
+    protected $appends = [
+        'edad'
+    ];
+
     public function empleado()
     {
         return $this->belongsTo(Empleado::class);
@@ -24,5 +28,13 @@ class Hijo extends Model
     public function esMenorDe18()
     {
         return Carbon::parse($this->fecha_nacimiento)->diffInYears(now()) < 18;
+    }
+
+    public function getEdadAttribute (){
+
+        return intval( Carbon::parse($this->fecha_nacimiento)->diffInYears(now()));
+
+
+
     }
 }

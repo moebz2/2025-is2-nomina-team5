@@ -39,6 +39,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('users/{id}/movimientos', [UserController::class, 'registrarMovimiento'])->name('users.registrarMovimiento');
 
+    Route::delete('users/{user}/conceptos/{concepto}', [UserController::class, 'eliminarConcepto'])->name('users.eliminarConcepto');
+
+    Route::post('users/{id}/salarios', [UserController::class, 'asignarSalario'])->name('users.asignarSalario');
+
+    Route::post('users/{user}/hijos', [UserController::class, 'agregarHijo'])->name('users.agregarHijo');
+
     Route::resource('departamentos', DepartamentoController::class);
 
     Route::resource('roles', RoleController::class);

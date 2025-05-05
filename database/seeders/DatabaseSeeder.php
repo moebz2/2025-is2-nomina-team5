@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
                 'estado' => 'contratado',
                 'remember_token' => Str::random(10),
                 'domicilio' => 'Asuncion, Paraguay',
-                'aplica_bonificacion_familiar' => false,
+                // 'aplica_bonificacion_familiar' => false,
             ]
         );
 

@@ -27,17 +27,17 @@
                             </th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Sexo</th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Email</th>
-                            <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Nacimiento
-                            </th>
+                            {{-- <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Nacimiento
+                            </th> --}}
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Cargo
                             </th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Estado
                             </th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Rol</th>
+                            <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Bonificación Familiar</th>
+                            <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Hijos</th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Acciones
                             </th>
-                            <th>Bonificación Familiar</th>
-                            <th>Hijos</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,13 +50,23 @@
                                 <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->cedula }}</td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->sexo }}</td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->email }}</td>
-                                <td class="border-b border-gray-100 p-4 text-gray-700">
-                                    {{ $user->nacimiento_fecha->format('Y-m-d') }}</td>
+                                {{-- <td class="border-b border-gray-100 p-4 text-gray-700">
+                                    {{ $user->nacimiento_fecha->format('Y-m-d') }}</td> --}}
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
                                     {{ $user->currentCargo() ? $user->currentCargo()->nombre : 'Sin cargo' }}
                                 </td>
                                 {{-- <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->fecha_egreso ? $user->fecha_egreso->format('Y-m-d') :'NA' }}</td> --}}
-                                <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->estado }}</td>
+                                <td class="border-b border-gray-100 p-4 text-gray-700">
+                                    @if (strcmp($user->estado, 'baja') == 0)
+
+                                    <span
+                                    class="ml-3 rounded-lg bg-yellow-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-yellow-700 ">De baja</span>
+                                    @else
+                                    <span
+                                    class="ml-3 rounded-lg bg-indigo-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-indigo-700 ">{{ $user->estado }}</span>
+
+                                    @endif
+                                </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
 
                                     @foreach ($user->roles as $role)
@@ -64,6 +74,18 @@
                                             class="ml-3 rounded-lg bg-blue-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-blue-700 ">{{ $role->name }}</span>
                                     @endforeach
 
+                                </td>
+                                <td class="border-b border-gray-100 p-4 text-gray-700">
+                                    @if ($user->hijosMenores->count() > 0)
+                                    <span
+                                    class="ml-3 rounded-lg bg-green-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-700 ">Incluye</span>
+                                    @else
+                                    <span
+                                    class="ml-3 rounded-lg bg-red-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-red-700 ">No incluye</span>
+                                    @endif
+                                </td>
+                                <td class="border-b border-gray-100 p-4 text-gray-700">
+                                    {{ is_iterable($user->hijosMenores) ? $user->hijosMenores->count() : 0 }} hijo(s)
                                 </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-500 flex items-center gap-2">
                                     <a href="{{ route('users.show', $user->id) }}" title="Ver"
@@ -96,12 +118,7 @@
                                         </button>
                                     </form>
                                 </td>
-                                <td>
-                                    {{ $user->aplica_bonificacion_familiar ? 'Sí' : 'No' }}
-                                </td>
-                                <td>
-                                    {{ is_iterable($user->hijosMenores) ? $user->hijosMenores->count() : 0 }} hijo(s)
-                                </td>
+
 
                             </tr>
                         @endforeach
