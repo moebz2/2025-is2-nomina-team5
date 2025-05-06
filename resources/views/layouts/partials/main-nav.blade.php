@@ -3,16 +3,18 @@
 </a>
 @if(empty($isExport))
 <div class="@container flex flex-1 justify-start pl-8 gap-5">
-    @can('empleado ver')
+    @can('concepto ver')
 
-    <a class="text-sm/6 text-gray-950" href="#">Empleados</a>
+    <a class="text-sm/6 text-gray-950" href="{{route('conceptos.index')}}">Conceptos</a>
     @endcan
     @can('liquidacion ver')
 
-    <a class="text-sm/6 text-gray-950" href="#">Liquidaciones</a>
+    <a class="text-sm/6 text-gray-950" href="{{route('liquidacion.index')}}">Liquidaciones</a>
     @endcan
 
-
+    @can('cargo ver')
+        <a href="" class="text-sm/6 text-gray-950">Cargos</a>
+    @endcan
 
 
 
@@ -21,10 +23,19 @@
     <a class="text-sm/6 text-gray-950" href="{{route('departamentos.index')}}">Departamentos</a>
     @endcan
 
+    @can('conceptos ver')
 
     <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950" @if (request()->is('admin/conceptos/*')) aria-current="true" @endif href="{{route('conceptos.index')}}">Conceptos</a>
 
+
+    @endcan
+
+    @can('liquidaciones ver')
+
     <a class="text-sm/6 text-gray-950" href="{{route('liquidacion.index')}}">Liquidaciones</a>
+    @endcan
+
+
 
 </div>
 <div class="flex items-center gap-5 max-md:hidden lg:gap-6">

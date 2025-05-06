@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LiquidacionEmpleadoCabecera;
+use App\Models\LiquidacionEmpleadoDetalle;
 use Illuminate\Http\Request;
 use Spatie\Browsershot\Browsershot;
 use Spatie\LaravelPdf\Facades\Pdf;
@@ -20,6 +21,7 @@ class LiquidacionEmpleadoController extends Controller
 
     public function show($liquidacionEmpleadoId)
     {
+
         $cabecera = \App\Models\LiquidacionEmpleadoCabecera::with('empleado')
             ->findOrFail($liquidacionEmpleadoId);
         $detalles = \App\Models\LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
@@ -45,6 +47,7 @@ class LiquidacionEmpleadoController extends Controller
             ->findOrFail($liquidacionEmpleadoId);
 
         $detalles = \App\Models\LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
+
             ->with(['cabecera', 'movimiento'])
             ->get();
 

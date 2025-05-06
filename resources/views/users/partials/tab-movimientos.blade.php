@@ -104,7 +104,7 @@
                         <select id="concepto_id" name="concepto_id" autocomplete="concepto_id"
                             class="form-select" required>
                             <option value="" disabled selected>-- SELECCIONE EL CONCEPTO --</option>
-                            @foreach ($user->conceptos as $concepto)
+                            @foreach ($conceptos as $concepto)
                                 <option value="{{ $concepto->id }}">{{ $concepto->nombre }}</option>
                             @endforeach
                         </select>
