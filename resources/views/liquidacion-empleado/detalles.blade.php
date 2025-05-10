@@ -4,7 +4,33 @@
 
 @section('content')
 
+
+
     <div class="container mx-auto p-10">
+
+        @if (session('success'))
+<div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50"
+    role="alert">
+    <span class="font-medium">Exito!</span> {{ session('success') }}
+</div>
+@endif
+
+@if (session('errors'))
+
+
+
+
+
+
+    
+    <div v-for="error in session('errors')" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 " role="alert">
+        <span class="font-medium">Error!</span> {{session('errors')}}
+    </div>
+
+
+@endif
+
+
         <div class="flex items-center justify-between mb-4">
             <h1 class="text-3xl font-medium uppercase mb-3">Detalles de Liquidación del Empleado</h1>
 

@@ -22,45 +22,105 @@ class LiquidacionEmpleadoController extends Controller
     public function show($liquidacionEmpleadoId)
     {
 
-        $cabecera = \App\Models\LiquidacionEmpleadoCabecera::with('empleado')
+        $cabecera = LiquidacionEmpleadoCabecera::with('empleado')
             ->findOrFail($liquidacionEmpleadoId);
-        $detalles = \App\Models\LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
+        $detalles = LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
             ->with(['cabecera', 'movimiento'])
             ->get();
+
+        $creditos = [];
+        $debitos = [];
+        $totalCredito = 0;
+        $totalDebito = 0;
+
+        foreach ($detalles as $detalle) {
+            $isDebito = $detalle->movimiento->concepto->es_debito;
+
+            if ($isDebito) {
+                array_push($debitos, $detalle);
+                $totalDebito += $detalle->movimiento->monto;
+            } else {
+                array_push($creditos, $detalle);
+                $totalCredito += $detalle->movimiento->monto;
+            }
+        }
         $empleadoNombre = $cabecera->empleado->nombre ?? 'N/A';
 
-        return view('liquidacion-empleado.detalles', [
+        return view('liquidacion-empleado.detalles-liquidacion', [
             'liquidacionEmpleadoId' => $liquidacionEmpleadoId,
             'detalles' => $detalles,
             'empleadoNombre' => $empleadoNombre,
-            'periodo' => $cabecera->liquidacionCabecera->periodo
+            'periodo' => $cabecera->liquidacionCabecera->periodo,
+            'cabecera' => $cabecera,
+            'creditos' => $creditos,
+            'debitos' => $debitos,
+            'empleado' => $cabecera->empleado,
+            'totalCredito' => $totalCredito,
+            'totalDebito' => $totalDebito,
         ]);
     }
 
     public function export($liquidacionEmpleadoId)
     {
 
-        $nodePath = '/home/userubu/.nvm/versions/node/v20.18.1/bin/node';
-        $npmPath = '/home/userubu/.nvm/versions/node/v20.18.1/bin/npm';
+        $nodePath = env('NODE_PATH', null);
+        $npmPath = env('NPM_PATH', null);
 
-        $cabecera = \App\Models\LiquidacionEmpleadoCabecera::with('empleado')
+        if($nodePath == null || $npmPath == null){
+
+            return back()->withErrors('Asegurese de  especificar en su ardchivo .env las rutas de NPM y NODE para general el pdf');
+
+
+        }
+
+        $cabecera = LiquidacionEmpleadoCabecera::with('empleado')
             ->findOrFail($liquidacionEmpleadoId);
 
-        $detalles = \App\Models\LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
+        $detalles = LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
 
             ->with(['cabecera', 'movimiento'])
             ->get();
 
+            $creditos = [];
+            $debitos = [];
+            $totalCredito = 0;
+            $totalDebito = 0;
+    
+            foreach ($detalles as $detalle) {
+                $isDebito = $detalle->movimiento->concepto->es_debito;
+    
+                if ($isDebito) {
+                    array_push($debitos, $detalle);
+                    $totalDebito += $detalle->movimiento->monto;
+                } else {
+                    array_push($creditos, $detalle);
+                    $totalCredito += $detalle->movimiento->monto;
+                }
+            }
+
         $empleadoNombre = $cabecera->empleado->nombre ?? 'N/A';
 
-        return Pdf::view('liquidacion-empleado.detalles', ['detalles' => $detalles, 'isExport' => true, 'empleadoNombre' => $empleadoNombre, 'periodo' => $cabecera->liquidacionCabecera->periodo])
+        return Pdf::view('liquidacion-empleado.detalles-liquidacion', 
+            ['detalles' => $detalles, 
+            'isExport' => true, 
+            'empleadoNombre' => $empleadoNombre, 
+            'periodo' => $cabecera->liquidacionCabecera->periodo,
+            'cabecera' => $cabecera,
+            'creditos' => $creditos,
+            'debitos' => $debitos,
+            'empleado' => $cabecera->empleado,
+            'totalCredito' => $totalCredito,
+            'totalDebito' => $totalDebito,
+            
+            
+            ])
             ->format('A4')
             ->name('document.pdf')
             ->withBrowsershot(function (Browsershot $browsershot) use ($nodePath, $npmPath) {
                 $browsershot
                     ->setNodeBinary($nodePath)
                     ->setNpmBinary($npmPath)
-                    ->setIncludePath('$PATH:/home/userubu/.nvm/versions/node/v20.18.1/bin');
+                    ->setIncludePath(env('INCLUDE_PATH'));
             });
     }
 }
