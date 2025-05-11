@@ -13,6 +13,7 @@ use App\Http\Controllers\LiquidacionEmpleadoController;
 use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\RoleController;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ReporteDescuentosController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -84,6 +85,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/liquidacion-empleado/{id}', [LiquidacionEmpleadoController::class, 'show'])->name('liquidacion-empleado.show');
 
     Route::get('/liquidacion-empleado/{id}/export', [LiquidacionEmpleadoController::class, 'export'])->name('liquidacion-empleado.export');    
+
+    Route::get('/reportes/descuentos', [ReporteDescuentosController::class, 'index'])->name('reportes.descuentos');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
