@@ -82,6 +82,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/liquidacion-empleados/{liquidacionId}', [LiquidacionEmpleadoController::class, 'index'])->name('liquidacion-empleado.index');
 
     Route::get('/liquidacion-empleado/{id}', [LiquidacionEmpleadoController::class, 'show'])->name('liquidacion-empleado.show');
+
+    Route::get('/liquidacion-empleado/{id}/export', [LiquidacionEmpleadoController::class, 'export'])->name('liquidacion-empleado.export');    
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');

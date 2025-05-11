@@ -41,7 +41,7 @@
     <title>IS2 G5 - @yield('title', 'Administrativo')</title>
 </head>
 
-<body>
+<body class="min-h-screen bg-gradient-to-br from-blue-100 via-blue-50 to-blue-200 overflow-x-hidden">
 
     <div id="app">
 

@@ -3,71 +3,62 @@
 
 @section('content')
 
-<div class="container mx-auto p-10">
-    <h1 class="text-3xl font-medium uppercase">Lista de Departamentos</h1>
-    @if (session('success'))
-        <p>{{ session('success') }}</p>
-    @endif
-
-    <div class="mt-10 not-prose overflow-auto rounded-lg bg-gray-100 outline outline-white/5">
-        <div class="my-8 overflow-hidden">
-            <table class="w-full table-auto border-collapse text-sm">
-                <thead>
-
-                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">ID</th>
-                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Nombre</th>
-                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Descripción</th>
-                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Estado</th>                    
-                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Acciones</th>
-
-                </thead>
-                @foreach ($departamentos as $departamento)
+<div class="min-h-screen flex items-center justify-center py-8">
+    <div class="w-full max-w-5xl bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-10 border border-white/20">
+        <div class="flex justify-end mb-4">
+            <a href="{{route('departamentos.create')}}" class="inline-block py-3 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-400 text-white font-semibold shadow-lg hover:from-blue-700 hover:to-blue-500 transition">Crear nuevo departamento</a>
+        </div>
+        <h1 class="text-3xl font-bold uppercase text-center mb-4 bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">Lista de Departamentos</h1>
+        @if (session('success'))
+            <div class="rounded-xl bg-blue-50/80 backdrop-blur-sm p-4 border border-blue-100 mb-6 text-blue-700 text-center font-semibold">
+                {{ session('success') }}
+            </div>
+        @endif
+        <div class="mt-10 overflow-auto rounded-2xl bg-white/60 backdrop-blur-md shadow-lg">
+            <table class="min-w-full table-auto border-collapse text-sm">
+                <thead class="bg-blue-100/60">
                     <tr>
-                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $departamento->id }}</td>
-                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $departamento->nombre }}</td>
-                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
-                            {{ $departamento->descripcion}}
-                        </td>
-
-                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
+                        <th class="border-b border-blue-200 p-4 pt-0 pb-3 text-left font-semibold text-blue-700">ID</th>
+                        <th class="border-b border-blue-200 p-4 pt-0 pb-3 text-left font-semibold text-blue-700">Nombre</th>
+                        <th class="border-b border-blue-200 p-4 pt-0 pb-3 text-left font-semibold text-blue-700">Descripción</th>
+                        <th class="border-b border-blue-200 p-4 pt-0 pb-3 text-left font-semibold text-blue-700">Estado</th>
+                        <th class="border-b border-blue-200 p-4 pt-0 pb-3 text-left font-semibold text-blue-700">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach ($departamentos as $departamento)
+                    <tr class="hover:bg-blue-50/50 transition">
+                        <td class="border-b border-blue-100 p-4 text-blue-900">{{ $departamento->id }}</td>
+                        <td class="border-b border-blue-100 p-4 text-blue-900 font-semibold">{{ $departamento->nombre }}</td>
+                        <td class="border-b border-blue-100 p-4 text-blue-900">{{ $departamento->descripcion}}</td>
+                        <td class="border-b border-blue-100 p-4">
                             @if ($departamento->estado == 1)
-                                <span class="rounded-lg bg-green-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-700 ">Activo</span>
+                                <span class="rounded-lg bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">Activo</span>
                             @else
-                                <span class="rounded-lg bg-red-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-red-700 ">Inactivo</span>
+                                <span class="rounded-lg bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">Inactivo</span>
                             @endif
                         </td>
-
-                        <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-500">
+                        <td class="border-b border-blue-100 p-4 flex gap-2">
                             @can('departamento editar')
-
-                            <a href="{{route('departamentos.edit', $departamento->id)}}" class="hover:text-gray-700 cursor-pointer">
-                                <i class="material-symbols-outlined">edit</i>
-
-                            </a>
+                                <a href="{{route('departamentos.edit', $departamento->id)}}" class="hover:text-blue-600 cursor-pointer transition">
+                                    <i class="material-symbols-outlined">edit</i>
+                                </a>
                             @endcan
-
                             @can('departamento eliminar')
-
-                            <form action="{{ route('departamentos.destroy', $departamento->id) }}" method="POST" onsubmit="return confirm('¿Está seguro de que desea dar de baja a este departamento?');">
-                                @csrf
-                                @method('DELETE')
-                                <button title="Eliminar" type="submit" class=" hover:text-red-500 block text-left cursor-pointer">
-                                    <i class="material-symbols-outlined">delete</i>
-                                </button>
-                            </form>
-                            
+                                <form action="{{ route('departamentos.destroy', $departamento->id) }}" method="POST" onsubmit="return confirm('¿Está seguro de que desea dar de baja a este departamento?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button title="Eliminar" type="submit" class="hover:text-red-500 block text-left cursor-pointer transition">
+                                        <i class="material-symbols-outlined">delete</i>
+                                    </button>
+                                </form>
                             @endcan
-
                         </td>
-
                     </tr>
                 @endforeach
+                </tbody>
             </table>
         </div>
-    </div>
-    <div class="mt-4">
-
-        <a href="{{route('departamentos.create')}}" class="bg-blue-500 p-2 rounded text-white font-medium">Crear nuevo departamento</a>
     </div>
 </div>
 @endsection

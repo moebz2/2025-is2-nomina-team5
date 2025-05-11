@@ -127,7 +127,7 @@
             </div>
             <div class="border border-gray-400 p-4 rounded">
               <p class="text-sm font-medium text-gray-700">Cant. Hijos</p>
-              <h3 class="md:text-2xl text-xl font-medium">{{$user->hijos->count()}}</h3>
+              <h3 class="md:text-2xl text-xl font-medium">{{$user->hijos()->count()}}</h3>
             </div>
           </div>
 
