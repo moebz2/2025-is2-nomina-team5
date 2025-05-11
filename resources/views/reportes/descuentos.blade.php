@@ -15,7 +15,7 @@
                     <option value="">-- Todos --</option>
                     @foreach($empleados as $empleado)
                         <option value="{{ $empleado->id }}" {{ request('empleado_id') == $empleado->id ? 'selected' : '' }}>
-                            {{ $empleado->usuario->name ?? 'Sin nombre' }}
+                            {{ $empleado->nombre ?? 'Sin nombre' }}
                         </option>
                     @endforeach
                 </select>
@@ -34,15 +34,17 @@
                 </select>
             </div>
 
-            {{-- Fechas --}}
-            <div>
-                <label for="fecha_desde" class="block text-sm font-medium text-gray-700 mb-1">Desde</label>
-                <input type="date" name="fecha_desde" id="fecha_desde" value="{{ request('fecha_desde') }}" class="form-input w-full rounded border-gray-300">
-            </div>
+            {{-- Fechas (en una fila) --}}
+            <div class="col-span-1 md:col-span-2 grid grid-cols-2 gap-4">
+                <div>
+                    <label for="fecha_desde" class="block text-sm font-medium text-gray-700 mb-1">Desde</label>
+                    <input type="date" name="fecha_desde" id="fecha_desde" value="{{ request('fecha_desde') }}" class="form-input w-full rounded border-gray-300">
+                </div>
 
-            <div>
-                <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
-                <input type="date" name="fecha_hasta" id="fecha_hasta" value="{{ request('fecha_hasta') }}" class="form-input w-full rounded border-gray-300">
+                <div>
+                    <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
+                    <input type="date" name="fecha_hasta" id="fecha_hasta" value="{{ request('fecha_hasta') }}" class="form-input w-full rounded border-gray-300">
+                </div>
             </div>
 
             <div class="flex items-end">
@@ -51,20 +53,6 @@
                 </button>
             </div>
         </form>
-    </div>
-
-    {{-- DEBUG TEMPORAL --}}
-    <div class="mt-6 bg-yellow-100 p-4 text-sm text-gray-800 rounded">
-        <h4 class="font-semibold mb-2">DEBUG: Empleados cargados</h4>
-        <ul class="list-disc pl-4">
-            @foreach($empleados as $empleado)
-                <li>
-                    ID: {{ $empleado->id }} |
-                    usuario_id: {{ $empleado->usuario_id ?? 'N/A' }} |
-                    usuario: {{ $empleado->usuario->name ?? 'NO NAME' }}
-                </li>
-            @endforeach
-        </ul>
     </div>
 
     {{-- Resultados --}}
@@ -84,7 +72,7 @@
                     <tbody class="divide-y divide-gray-100">
                         @foreach($resultados as $item)
                             <tr class="hover:bg-gray-50">
-                                <td class="px-4 py-2">{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</td>
+                                <td class="px-4 py-2">{{ \Carbon\Carbon::parse($item->movimiento->validez_fecha)->format('d/m/Y') }}</td>
                                 <td class="px-4 py-2">{{ $item->movimiento->empleado->usuario->name ?? '-' }}</td>
                                 <td class="px-4 py-2">{{ $item->movimiento->concepto->nombre ?? '-' }}</td>
                                 <td class="px-4 py-2 text-right">{{ number_format($item->movimiento->monto, 0, ',', '.') }}</td>

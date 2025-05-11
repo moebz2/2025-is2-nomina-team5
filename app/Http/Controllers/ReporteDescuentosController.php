@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Empleado;
+use App\Models\User;
 use App\Models\Concepto;
 use App\Models\LiquidacionEmpleadoDetalle;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ class ReporteDescuentosController extends Controller
     public function index(Request $request)
     {
         // Trae todos los usuarios que podrían tener movimientos
-        $empleados = Empleado::with('usuario')->get();
+        $empleados = User::all();
 
         // Solo conceptos de tipo débito
         $conceptos = Concepto::where('es_debito', true)->get();
@@ -37,13 +37,16 @@ class ReporteDescuentosController extends Controller
             });
         }
 
-        // Filtro por fechas
-        if ($request->filled('fecha_desde')) {
-            $query->whereDate('created_at', '>=', $request->fecha_desde);
-        }
-
-        if ($request->filled('fecha_hasta')) {
-            $query->whereDate('created_at', '<=', $request->fecha_hasta);
+        // ✅ Filtro por fechas (validez_fecha de la relación movimiento)
+        if ($request->filled('fecha_desde') || $request->filled('fecha_hasta')) {
+            $query->whereHas('movimiento', function ($q) use ($request) {
+                if ($request->filled('fecha_desde')) {
+                    $q->whereDate('validez_fecha', '>=', $request->fecha_desde);
+                }
+                if ($request->filled('fecha_hasta')) {
+                    $q->whereDate('validez_fecha', '<=', $request->fecha_hasta);
+                }
+            });
         }
 
         // Ejecutar consulta
