@@ -43,4 +43,15 @@ class LiquidacionEmpleadoDetalle extends Model
     {
         return $this->belongsTo(Movimiento::class, 'movimiento_id');
     }
+
+    public function concepto()
+    {
+        return $this->movimiento?->concepto; // acceso directo
+    }
+
+    public function empleado()
+    {
+        return $this->cabecera?->empleado; // acceso directo
+    }
+
 }
