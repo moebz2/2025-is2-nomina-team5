@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Empleado;
 use App\Models\Concepto;
 use App\Models\LiquidacionEmpleadoDetalle;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ class ReporteDescuentosController extends Controller
     public function index(Request $request)
     {
         // Trae todos los usuarios que podrían tener movimientos
-        $empleados = User::all();
+        $empleados = Empleado::with('usuario')->get();
 
         // Solo conceptos de tipo débito
         $conceptos = Concepto::where('es_debito', true)->get();

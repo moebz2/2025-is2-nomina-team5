@@ -1,30 +1,30 @@
 @extends('layouts.admin-layout')
 
-@section('title', 'Generar Reporte')
-
 @section('content')
-<div class="container">
-    <h2 class="mb-4">Reporte de Descuentos por Concepto</h2>
+<div class="container mx-auto mt-6">
+
+    <h2 class="text-2xl font-bold mb-6">Reporte de Descuentos por Concepto</h2>
 
     {{-- Filtros --}}
-    <form method="GET" class="mb-4">
-        <div class="row g-3">
-            <div class="col-md-3">
-                <label for="empleado_id" class="form-label">Empleado</label>
-                <select name="empleado_id" id="empleado_id" class="form-select">
+    <div class="bg-white rounded shadow p-6 mb-6">
+        <form method="GET" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            {{-- Empleado --}}
+            <div class="col-span-1 md:col-span-2">
+                <label for="empleado_id" class="block text-sm font-medium text-gray-700 mb-1">Empleado</label>
+                <select name="empleado_id" id="empleado_id" class="form-select w-full rounded border-gray-300">
                     <option value="">-- Todos --</option>
                     @foreach($empleados as $empleado)
                         <option value="{{ $empleado->id }}" {{ request('empleado_id') == $empleado->id ? 'selected' : '' }}>
-                            {{ $empleado->name }}
+                            {{ $empleado->usuario->name ?? 'Sin nombre' }}
                         </option>
-
                     @endforeach
                 </select>
             </div>
 
-            <div class="col-md-3">
-                <label for="concepto_id" class="form-label">Concepto</label>
-                <select name="concepto_id" id="concepto_id" class="form-select">
+            {{-- Concepto --}}
+            <div class="col-span-1 md:col-span-2">
+                <label for="concepto_id" class="block text-sm font-medium text-gray-700 mb-1">Concepto</label>
+                <select name="concepto_id" id="concepto_id" class="form-select w-full rounded border-gray-300">
                     <option value="">-- Todos --</option>
                     @foreach($conceptos as $concepto)
                         <option value="{{ $concepto->id }}" {{ request('concepto_id') == $concepto->id ? 'selected' : '' }}>
@@ -34,52 +34,71 @@
                 </select>
             </div>
 
-            <div class="col-md-2">
-                <label for="fecha_desde" class="form-label">Desde</label>
-                <input type="date" name="fecha_desde" id="fecha_desde" class="form-control" value="{{ request('fecha_desde') }}">
+            {{-- Fechas --}}
+            <div>
+                <label for="fecha_desde" class="block text-sm font-medium text-gray-700 mb-1">Desde</label>
+                <input type="date" name="fecha_desde" id="fecha_desde" value="{{ request('fecha_desde') }}" class="form-input w-full rounded border-gray-300">
             </div>
 
-            <div class="col-md-2">
-                <label for="fecha_hasta" class="form-label">Hasta</label>
-                <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control" value="{{ request('fecha_hasta') }}">
+            <div>
+                <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 mb-1">Hasta</label>
+                <input type="date" name="fecha_hasta" id="fecha_hasta" value="{{ request('fecha_hasta') }}" class="form-input w-full rounded border-gray-300">
             </div>
 
-            <div class="col-md-2 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+            <div class="flex items-end">
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2 px-4 rounded">
+                    Buscar
+                </button>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+
+    {{-- DEBUG TEMPORAL --}}
+    <div class="mt-6 bg-yellow-100 p-4 text-sm text-gray-800 rounded">
+        <h4 class="font-semibold mb-2">DEBUG: Empleados cargados</h4>
+        <ul class="list-disc pl-4">
+            @foreach($empleados as $empleado)
+                <li>
+                    ID: {{ $empleado->id }} |
+                    usuario_id: {{ $empleado->usuario_id ?? 'N/A' }} |
+                    usuario: {{ $empleado->usuario->name ?? 'NO NAME' }}
+                </li>
+            @endforeach
+        </ul>
+    </div>
 
     {{-- Resultados --}}
-    @if($resultados->count())
-        <div class="table-responsive">
-            <table class="table table-striped align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Fecha</th>
-                        <th>Empleado</th>
-                        <th>Concepto</th>
-                        <th class="text-end">Monto</th>
-                        <th>Observación</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($resultados as $item)
+    <div class="bg-white rounded shadow p-6">
+        @if($resultados->count())
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 text-sm">
+                    <thead class="bg-gray-100 text-gray-700 font-semibold">
                         <tr>
-                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</td>
-                            <td>{{ $item->movimiento->empleado->name ?? '-' }}</td>
-                            <td>{{ $item->movimiento->concepto->nombre ?? '-' }}</td>
-                            <td class="text-end">{{ number_format($item->movimiento->monto, 0, ',', '.') }}</td>
-                            <td>-</td>
+                            <th class="px-4 py-2 text-left">Fecha</th>
+                            <th class="px-4 py-2 text-left">Empleado</th>
+                            <th class="px-4 py-2 text-left">Concepto</th>
+                            <th class="px-4 py-2 text-right">Monto</th>
+                            <th class="px-4 py-2 text-left">Observación</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    @else
-        <div class="alert alert-info">
-            No se encontraron resultados para los filtros seleccionados.
-        </div>
-    @endif
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        @foreach($resultados as $item)
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-4 py-2">{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</td>
+                                <td class="px-4 py-2">{{ $item->movimiento->empleado->usuario->name ?? '-' }}</td>
+                                <td class="px-4 py-2">{{ $item->movimiento->concepto->nombre ?? '-' }}</td>
+                                <td class="px-4 py-2 text-right">{{ number_format($item->movimiento->monto, 0, ',', '.') }}</td>
+                                <td class="px-4 py-2">-</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="text-gray-600 text-center py-4">
+                No se encontraron resultados para los filtros seleccionados.
+            </div>
+        @endif
+    </div>
 </div>
 @endsection

@@ -12,6 +12,8 @@
     <a class="text-sm/6 text-gray-950" href="{{route('liquidacion.index')}}">Liquidaciones</a>
     @endcan
 
+    <a class="text-sm/6 text-gray-950" href="{{ route('reportes.descuentos') }}">Reporte de Descuentos</a>
+    
     @can('cargo ver')
         <a href="" class="text-sm/6 text-gray-950">Cargos</a>
     @endcan
