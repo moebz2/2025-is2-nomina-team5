@@ -21,7 +21,9 @@ class ReporteDescuentosController extends Controller
         $query = LiquidacionEmpleadoDetalle::with([
             'movimiento.concepto',
             'movimiento.empleado',
-        ]);
+        ])->whereHas('movimiento.concepto', function ($q) {
+            $q->where('es_debito', true);
+        });
 
         // Filtro por empleado
         if ($request->filled('empleado_id')) {
