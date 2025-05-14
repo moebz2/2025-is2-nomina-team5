@@ -64,8 +64,6 @@ class LiquidacionController extends Controller
             'periodo' => 'required|date',
         ]);
 
-
-
         $periodo = Carbon::parse($request->input('periodo'))->format('Y-m');
 
         DB::transaction(function () use ($periodo) {
@@ -98,7 +96,7 @@ class LiquidacionController extends Controller
 
     public function eliminarTodos(Request $request)
     {
-        try{
+        try {
 
             $liquidaciones = LiquidacionCabecera::all();
 
@@ -107,8 +105,7 @@ class LiquidacionController extends Controller
             }
 
             return redirect()->route('liquidacion.index')->with('success', 'Todos los registros eliminados correctamente.');
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
 
             dd($e->getMessage());
             // return redirect()->route('liquidacion.index')->with('error', $e->getMessage());

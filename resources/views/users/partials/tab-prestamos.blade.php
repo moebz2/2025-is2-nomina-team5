@@ -7,6 +7,8 @@
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400">ID</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500">Monto
                     </th>
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500">Cuotas
+                    </th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500">Estado
                     </th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500">Fecha de
@@ -21,6 +23,7 @@
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
                             Gs. {{ number_format($prestamo->monto, 0, ',', '.') }}
                         </td>
+                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">{{ $prestamo->cuotas }}</td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">{{ $prestamo->estado }}</td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">{{ $prestamo->generacion_fecha }}
                         </td>
@@ -61,6 +64,12 @@
                 <div class="sm:col-span-3">
                     <label for="monto" class="block text-sm font-medium text-gray-700">Monto</label>
                     <input type="number" name="monto" id="monto" class="form-input" required>
+                </div>
+            </div>
+            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div class="sm:col-span-3">
+                    <label for="cuotas" class="block text-sm font-medium text-gray-700">Cuotas</label>
+                    <input type="number" name="cuotas" id="cuotas" class="form-input" required>
                 </div>
             </div>
             <div class="mt-10 flex gap-4">

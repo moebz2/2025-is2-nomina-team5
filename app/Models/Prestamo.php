@@ -14,6 +14,7 @@ class Prestamo extends Model
     protected $fillable = [
         'empleado_id',
         'monto',
+        'cuotas',
         'estado',
         'generacion_fecha',
     ];
@@ -21,5 +22,15 @@ class Prestamo extends Model
     public function empleado()
     {
         return $this->belongsTo(User::class, 'empleado_id');
+    }
+
+    public function movimientos()
+    {
+        return $this->hasMany(Movimiento::class, 'prestamo_id');
+    }
+
+    public function liquidacionEmpleadoDetalle()
+    {
+        return $this->hasOne(LiquidacionEmpleadoDetalle::class, 'movimiento_id');
     }
 }

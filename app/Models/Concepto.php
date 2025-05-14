@@ -12,6 +12,7 @@ class Concepto extends Model
     const TIPO_BONIFICACION = 'bonificacion';
     const TIPO_IPS = 'ips';
     const TIPO_GENERAL = 'general';
+    const TIPO_PRESTAMO = 'prestamo';
 
     // TODO: Configurable en tabla parámetro
     const IPS_PORCENTAJE = 0.09;

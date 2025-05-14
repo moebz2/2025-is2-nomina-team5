@@ -28,12 +28,14 @@ class PrestamoController extends Controller
             $request->validate([
                 'empleado_id' => 'required|exists:users,id',
                 'monto' => 'required|numeric|min:1',
+                'cuotas' => 'required|integer|min:1',
             ]);
 
             Prestamo::create([
                 'empleado_id' => $request->empleado_id,
                 'monto' => $request->monto,
                 'estado' => 'vigente',
+                'cuotas' => $request->cuotas,
                 'generacion_fecha' => now(),
             ]);
 

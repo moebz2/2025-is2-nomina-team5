@@ -31,7 +31,7 @@ return new class extends Migration
             // Diferenciamos salario, bonificacion de otros tipos
             // de conceptos. Conviene incluir como atributos estaticos
             // en el modelo de concepto para acceder de forma directa
-            $table->enum('tipo_concepto', ['salario', 'bonificacion', 'ips', 'general'])->default('general');
+            $table->enum('tipo_concepto', ['salario', 'bonificacion', 'ips', 'general', 'prestamo'])->default('general');
 
             // Se indica como true cuando un concepto es debito (resta) todo lo demas es credito (suma)
             $table->boolean('es_debito')->default(false);

@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('empleado_id')->references('id')->on('users');
             $table->integer('monto');
+            $table->integer('cuotas');
             $table->string('estado');
             $table->timestamp('generacion_fecha');
         });
