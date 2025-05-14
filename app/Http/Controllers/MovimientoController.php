@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmpleadoConcepto;
 use App\Models\Movimiento;
 use App\Models\Concepto;
+use App\Models\Prestamo;
 use App\Models\User;
 use App\Services\LiquidacionService;
 use Carbon\Carbon;
@@ -30,7 +31,7 @@ class MovimientoController extends Controller
         $fecha = $request->input('fecha', Carbon::now()->format('Y-m-d'));
         $fechaCb = Carbon::parse($fecha)->startOfMonth();
 
-        // Movimientos normales desde conceptos asociados a empleados
+        // Generar movimientos en base a conceptos asociados a empleados
 
         $empleadoConceptos = EmpleadoConcepto::whereDate('fecha_inicio', '<=', $fechaCb)
             ->where(function ($query) use ($fechaCb) {
@@ -99,6 +100,11 @@ class MovimientoController extends Controller
                 }
             }
         }
+
+        // Generar cuota de préstamos si corresponde
+
+        $prestamoService = new \App\Services\PrestamoService();
+        $prestamoService->generarCuotas($fechaCb);
 
         error_log('generarMovimientos.end');
 

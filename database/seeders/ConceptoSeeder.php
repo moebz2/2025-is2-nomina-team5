@@ -46,5 +46,16 @@ class ConceptoSeeder extends Seeder
             'estado' => true,
             'es_modificable' => false,
         ]);
+
+        // Concepto de préstamo no modificable
+        Concepto::create([
+            'nombre' => 'Préstamo',
+            'ips_incluye' => false,
+            'aguinaldo_incluye' => false,
+            'tipo_concepto' => Concepto::TIPO_PRESTAMO,
+            'es_debito' => true,
+            'estado' => true,
+            'es_modificable' => false,
+        ]);
     }
 }
