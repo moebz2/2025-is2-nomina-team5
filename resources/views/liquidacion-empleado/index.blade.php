@@ -22,8 +22,6 @@
                             </th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Periodo
                             </th>
-                            <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">
-                                Verificación Fecha</th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-400">Acciones
                             </th>
                         </tr>
@@ -38,9 +36,6 @@
                                 </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-500">
                                     {{ $liquidacionEmpleado->periodo->format('Y-m') }}</td>
-                                <td class="border-b border-gray-100 p-4 text-gray-500">
-                                    {{ $liquidacionEmpleado->verificacion_fecha ? $liquidacionEmpleado->verificacion_fecha->format('Y-m-d') : 'N/A' }}
-                                </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-500">
                                     <a href="{{ route('liquidacion-empleado.show', $liquidacionEmpleado->id) }}"
                                         title="Ver Detalles" class="hover:text-blue-500 block cursor-pointer">
