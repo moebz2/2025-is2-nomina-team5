@@ -138,4 +138,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(LiquidacionEmpleadoCabecera::class, 'empleado_id');
     }
+
+    public function prestamos()
+    {
+        return $this->hasMany(Prestamo::class, 'empleado_id');
+    }
 }

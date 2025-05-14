@@ -7,8 +7,7 @@
         <div class="my-8 overflow-hidden">
             <table class="w-full table-auto border-collapse text-sm">
                 <thead>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">
                         ID</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Nombre
@@ -48,9 +47,8 @@
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
 
-                            Desde {{ $concepto->pivot->fecha_inicio }}  @if ($concepto->pivot->fecha_fin)
-                               al {{ $concepto->pivot->fecha_fin }}
-
+                            Desde {{ $concepto->pivot->fecha_inicio }} @if ($concepto->pivot->fecha_fin)
+                                al {{ $concepto->pivot->fecha_fin }}
                             @endif
 
 
@@ -66,7 +64,9 @@
                             @endcan
 
                             @can('concepto eliminar')
-                                <form action="{{route('users.eliminarConcepto', ['user' => $user->id, 'concepto' => $concepto->id] )}}" method="POST"
+                                <form
+                                    action="{{ route('users.eliminarConcepto', ['user' => $user->id, 'concepto' => $concepto->id]) }}"
+                                    method="POST"
                                     onsubmit="return confirm('¿Está seguro de que desea dar de baja este concepto?');">
                                     @csrf
                                     @method('DELETE')
@@ -154,10 +154,6 @@
                     <p class="mt-1 text-sm/6 text-gray-600">Deje sin fecha de finalizar para calcular mensualmente el
                         concepto</p>
                 </div>
-
-
-
-
             </div>
             <div class="mt-10 flex gap-4">
                 <button type="submit"

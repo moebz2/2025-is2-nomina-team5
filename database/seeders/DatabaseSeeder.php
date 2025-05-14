@@ -3,16 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Cargo;
-use App\Models\Concepto;
 use App\Models\Departamento;
 use App\Models\Parametro;
 use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
 {
@@ -39,6 +36,10 @@ class DatabaseSeeder extends Seeder
             'liquidacion editar',
             'liquidacion eliminar',
             'liquidacion ver',
+            'prestamo crear',
+            'prestamo editar',
+            'prestamo eliminar',
+            'prestamo ver',
         ];
 
         // 2. Crear roles y asignar permisos

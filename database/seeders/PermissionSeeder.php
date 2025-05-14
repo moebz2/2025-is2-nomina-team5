@@ -68,15 +68,21 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'concepto ver']);
 
         // Hijos
-        Permission::firstOrCreate(['name' => 'hijos crear']);
-        Permission::firstOrCreate(['name' => 'hijos editar']);
-        Permission::firstOrCreate(['name' => 'hijos eliminar']);
-        Permission::firstOrCreate(['name' => 'hijos ver']);
+        Permission::firstOrCreate(['name' => 'hijo crear']);
+        Permission::firstOrCreate(['name' => 'hijo editar']);
+        Permission::firstOrCreate(['name' => 'hijo eliminar']);
+        Permission::firstOrCreate(['name' => 'hijo ver']);
 
         // Parametros
-        Permission::firstOrCreate(['name' => 'parametros crear']);
-        Permission::firstOrCreate(['name' => 'parametros editar']);
-        Permission::firstOrCreate(['name' => 'parametros eliminar']);
-        Permission::firstOrCreate(['name' => 'parametros ver']);
+        Permission::firstOrCreate(['name' => 'parametro crear']);
+        Permission::firstOrCreate(['name' => 'parametro editar']);
+        Permission::firstOrCreate(['name' => 'parametro eliminar']);
+        Permission::firstOrCreate(['name' => 'parametro ver']);
+
+        // Préstamos
+        Permission::firstOrCreate(['name' => 'prestamo crear']);
+        Permission::firstOrCreate(['name' => 'prestamo editar']);
+        Permission::firstOrCreate(['name' => 'prestamo eliminar']);
+        Permission::firstOrCreate(['name' => 'prestamo ver']);
     }
 }
