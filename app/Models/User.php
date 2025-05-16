@@ -27,6 +27,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    const ESTADO_CONTRATADO = 'contratado';
+    const ESTADO_DESPEDIDO = 'baja';
+    const ESTADO_INACTIVO = 'inactivo';
+
+
+
     /**
      * Get the attributes that should be cast.
      *

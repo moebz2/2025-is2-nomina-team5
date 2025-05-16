@@ -8,6 +8,8 @@
 
     <h3 class="text-3xl font-bold mb-4 ">Panel de nomina</h3>
 
+
+
 </div>
 
 

@@ -16,6 +16,7 @@ use Exception;
 use Spatie\Permission\Models\Role;
 use App\Models\Hijo;
 use App\Models\Parametro;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -355,5 +356,32 @@ class UserController extends Controller
 
             return back()->withErrors(['error' => $e->getMessage()]);
         }
+    }
+
+    public function cambiarEstado (Request $request, $id){
+
+
+        $request->validate([
+            'empleado_id' => 'required|exists:users,id',
+            'estado' => Rule::in(['contratado', 'baja', 'inactivo']),
+
+        ]);
+
+        try{
+
+            $usuario = User::findOrFail($id);
+            $usuario->update(['estado' => $request->estado]);
+
+            return redirect()->route('users.index')->with('success', 'Estado actualizado exitosamente');
+
+
+
+
+        }catch(Exception $e){
+
+            return redirect()->back()->with(['error' => $e->getMessage()]);
+
+        }
+
     }
 }

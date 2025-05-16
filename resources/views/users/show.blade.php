@@ -10,7 +10,7 @@
 
 
 
-    <div x-data="{ tab: 'conceptos', conceptoForm: false, prestamoForm: false, movimientoForm: false, hijoForm: false, salarioForm: false }" class="container mx-auto p-10">
+    <div x-data="{ tab: 'conceptos', conceptoForm: false, prestamoForm: false, movimientoForm: false, hijoForm: false, salarioForm: false, estadoForm: false }" class="container mx-auto p-10">
 
         @if (session('success'))
             <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
@@ -70,7 +70,7 @@
                         <p class="text-sm text-gray-700">Estado</p>
                         <h4 class="font-semibold text-lg uppercase">{{ $user->estado }}</h4>
                     </div>
-                    <button
+                    <button x-on:click="estadoForm = !estadoForm"
                         class="bg-white p-2 hover:bg-indigo-600 text-gray-700 hover:text-white cursor-pointer flex items-center rounded-xl"><i
                             class="material-symbols-outlined">edit</i></button>
                 </div>
@@ -114,7 +114,7 @@
                     </h3>
 
                 </div>
-                <button x-on:click="salarioForm = true"
+                <button x-on:click="salarioForm = !salarioForm"
                     class="bg-gray-100 p-2 ml-auto hover:bg-indigo-600 text-gray-700 hover:text-white cursor-pointer flex items-center rounded-xl"><i
                         class="material-symbols-outlined">edit</i></button>
             </div>
@@ -136,6 +136,8 @@
 
 
         @include('users.partials.salario-form')
+        @include('users.partials.estado-form')
+
 
         <div class="mt-4 w- border border-gray-300 rounded p-4">
             <ul class="flex text-gray-700">

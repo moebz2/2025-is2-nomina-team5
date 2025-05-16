@@ -27,6 +27,10 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
+Route::get('vacaciones', function () {
+    return view('vacaciones');
+})->name('vacaciones.index');
+
 Route::post('/authenticate', [LoginController::class, 'authenticate'])->name('authenticate');
 
 Route::middleware(['auth'])->prefix('admin')->group(function () {
@@ -47,6 +51,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('/users/{user}/hijos', [UserController::class, 'agregarHijo'])->name('users.agregarHijo');
 
+    Route::patch('/users/{id}/estado', [UserController::class, 'cambiarEstado'])->name('users.cambiarEstado');
 
 
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');

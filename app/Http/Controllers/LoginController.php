@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,11 +30,17 @@ class LoginController extends Controller
 
             $user = Auth::user();
 
-            if ($user->estado !== 'contratado') {
+            if ($user->estado == User::ESTADO_DESPEDIDO) {
                 Auth::logout();
                 return back()->withErrors([
                     'email' => 'Ocurrió un error al intentar iniciar sesión.',
                 ])->onlyInput('email');
+            }
+
+            if($user->estado == User::ESTADO_INACTIVO){
+                Auth::logout();
+                return redirect()->route('vacaciones.index');
+
             }
 
             // dd("Sesin iniciada!");

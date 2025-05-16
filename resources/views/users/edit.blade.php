@@ -64,7 +64,7 @@
 
                         <div class="sm:col-span-3">
                             <label for="role" class="input-label">Rol del empleado</label>
-                            <p class="text-sm text-gray-700">Presione CTL para seleccionar mas de una opción</p>
+                            <p class="text-sm text-gray-700">Presione CTL para seleccionar más de una opción</p>
                             <div class="mt-2">
 
 
@@ -83,9 +83,12 @@
                                     @endforeach
                                 </select>
                                 @can('rol crear')
-                                    <a class="text-blue-500 hover:text-blue-700 text-sm"
-                                        href="{{ route('roles.create') }}">Crear
-                                        rol</a>
+                                    <p class="text-sm text-gray-700 mt-1">
+                                        Si no existe el rol, puedes
+                                        <a class="text-blue-500 hover:text-blue-700 text-sm" href="{{ route('roles.create') }}">
+                                            crear el
+                                            rol aquí</a>
+                                    </p>
                                 @endcan
                             </div>
 
@@ -135,6 +138,35 @@
                                     required>
                             </div>
                         </div>
+
+                        <div class="sm:col-span-4">
+                            <label for="domicilio" class="input-label">Domicilio:</label>
+                            <div class="mt-2">
+                                <input type="text" id="domicilio" class="form-input" name="domicilio"
+                                    value="{{ old('domicilio', $user->domicilio) }}">
+                            </div>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="cargo_id" class="input-label">Cargo:</label>
+                            <div class="mt-2">
+                                <select id="cargo_id" class="form-select" name="cargo_id" required>
+                                    @foreach ($cargos as $cargo)
+                                        <option value="{{ $cargo->id }}">
+                                            {{ $cargo->nombre }} - DTO: {{ $cargo->departamento->nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @can('cargo crear')
+                                    <p class="text-sm text-gray-700 mt-1">
+                                        Si no existe el cargo, puedes
+                                        <a class="text-blue-500 hover:text-blue-700 text-sm"
+                                            href="{{ route('cargos.create') }}"> crear un cargo aqui</a>
+                                    </p>
+                                @endcan
+                            </div>
+                        </div>
+
                         <div class="sm:col-span-3">
                             <label for="ingreso_fecha" class="input-label">Fecha de Ingreso:</label>
                             <div class="mt-2">
@@ -142,72 +174,23 @@
                                 <input type="date" id="ingreso_fecha" class="form-input" name="ingreso_fecha"
                                     value="{{ optional($user->currentCargo())?->pivot?->fecha_inicio }}">
                             </div>
-                            <div class="sm:col-span-3">
-                                <label for="domicilio" class="input-label">Domicilio:</label>
-                                <div class="mt-2">
-                                    <input type="text" id="domicilio" class="form-input" name="domicilio"
-                                        value="{{ old('domicilio', $user->domicilio) }}">
-                                </div>
-                            </div>
 
-                            <div class="sm:col-span-3">
-                                <label for="cargo_id" class="input-label">Cargo:</label>
-                                <div class="mt-2">
-                                    <select id="cargo_id" class="form-select" name="cargo_id" required>
-                                        @foreach ($cargos as $cargo)
-                                            <option value="{{ $cargo->id }}">
-                                                {{ $cargo->nombre }} - DTO: {{ $cargo->departamento->nombre }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @can('cargo crear')
-                                        <a class="text-blue-500 hover:text-blue-700 text-sm" href="">Crear cargo</a>
-                                    @endcan
-                                </div>
-                            </div>
-                            <div class="form-group mt-3">
-                                <label>
-                                    <input type="checkbox" name="aplica_bonificacion_familiar" value="1"
-                                        {{ old('aplica_bonificacion_familiar', $user->aplica_bonificacion_familiar) ? 'checked' : '' }}>
-                                    ¿Aplica Bonificación Familiar?
-                                </label>
-                            </div>
-                            <div id="hijos-section" class="mt-3"
-                                style="{{ $user->aplica_bonificacion_familiar ? '' : 'display:none' }}">
-                                <h5 class="text-base/7 font-semibold text-gray-900">Hijos</h5>
-                                <button type="button" class="p-1 bg-gray-100 font-medium text-black rounded"
-                                    onclick="agregarHijo()">Agregar
-                                    hijo</button>
-                                <div id="hijos-wrapper">
-                                    @foreach (is_iterable($user->hijos) ? $user->hijos : [] as $index => $hijo)
-                                        <div class="form-row mb-2">
-                                            <div class="col">
-                                                <input type="text" class="form-control"
-                                                    name="hijos[{{ $index }}][nombre]"
-                                                    value="{{ $hijo->nombre }}" placeholder="Nombre del hijo" required>
-                                            </div>
-                                            <div class="col">
-                                                <input type="date" class="form-control"
-                                                    name="hijos[{{ $index }}][fecha_nacimiento]"
-                                                    value="{{ \Carbon\Carbon::parse($hijo->fecha_nacimiento)->format('Y-m-d') }}">
 
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
 
 
                         </div>
 
+
+
+
+
                     </div>
 
-                    <button type="button" id="fill-test-data" class="p-2 bg-gray-500 font-medium text-white rounded">
-                        Rellenar datos de prueba
-                    </button>
+
 
                     <div class="mt-4">
                         <button class="p-2 bg-blue-500 font-medium text-white rounded" type="submit">Actualizar</button>
+
                     </div>
 
                 </div>
@@ -217,54 +200,7 @@
 
     </div>
 
-    <script>
-        document.getElementById('fill-test-data').addEventListener('click', function() {
 
-            const plus = 12;
-
-            // Fill text inputs
-            document.getElementById('email').value = `test${plus}@example.com`;
-            document.getElementById('password').value = 'password123';
-            document.getElementById('password_confirmation').value = 'password123';
-            document.getElementById('nombre').value = 'Juan PerezZZ';
-            document.getElementById('cedula').value = 90000000 + plus;
-            document.getElementById('domicilio').value = 'Asuncion, Paraguay';
-
-            // Fill select inputs
-            document.getElementById('sexo').value = 'M';
-
-            document.getElementById('role').value = 'asistenteRRHH';
-
-            // Fill date inputs
-            document.getElementById('nacimiento_fecha').value = '1990-01-01';
-            document.getElementById('ingreso_fecha').value = '2025-01-01';
-        });
-    </script>
-    <script>
-        const checkbox = document.querySelector('input[name="aplica_bonificacion_familiar"]');
-        const hijosSection = document.getElementById('hijos-section');
-        const hijosWrapper = document.getElementById('hijos-wrapper');
-        let hijoIndex = {{ count($user->hijos) }};
-
-        checkbox?.addEventListener('change', function() {
-            hijosSection.style.display = this.checked ? 'block' : 'none';
-        });
-
-        function agregarHijo() {
-            const div = document.createElement('div');
-            div.classList.add('form-row', 'mb-2');
-            div.innerHTML = `
-            <div class="col">
-                <input type="text" class="form-control" name="hijos[${hijoIndex}][nombre]" placeholder="Nombre del hijo" required>
-            </div>
-            <div class="col">
-                <input type="date" class="form-control" name="hijos[${hijoIndex}][fecha_nacimiento]" required>
-            </div>
-        `;
-            hijosWrapper.appendChild(div);
-            hijoIndex++;
-        }
-    </script>
 
 
 @endsection
