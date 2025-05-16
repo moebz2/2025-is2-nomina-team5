@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\CargoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConceptoController;
 use App\Http\Controllers\ConfiguracionController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepartamentoController;
@@ -45,11 +47,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('/users/{user}/hijos', [UserController::class, 'agregarHijo'])->name('users.agregarHijo');
 
-    Route::resource('/departamentos', DepartamentoController::class);
 
-    Route::resource('/roles', RoleController::class);
-
-    Route::resource('/conceptos', ConceptoController::class);
 
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 
@@ -57,9 +55,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::patch('/users/{id}/inactive', [UserController::class, 'setInactive'])->name('users.setInactive');
 
-    Route::get('', function () {
-        return view('admin-index');
-    });
+    Route::get('', [DashboardController::class, 'index'])->name('admin.index');
 
     Route::get('/usuarios', function () {
         echo "Vista de Usuarios";
@@ -69,7 +65,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/liquidacion', [LiquidacionController::class, 'index'])->name('liquidacion.index');
 
-    Route::get('/liquidacion/generar', [LiquidacionController::class, 'showFormGenerar'])->name('liquidacion.generarForm');
+
 
     Route::post('/liquidacion/generar', [LiquidacionController::class, 'generar'])->name('liquidacion.generar');
 
@@ -85,9 +81,33 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     // Otros
 
-    Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
+    // Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
+
+    Route::prefix('configuracion')->group(function () {
+
+        Route::get('', function () {
+            return redirect()->route('conceptos.index');
+        })->name('configuracion.index');
+
+
+
+        Route::resource('/departamentos', DepartamentoController::class);
+
+        Route::resource('/roles', RoleController::class);
+
+        Route::resource('/conceptos', ConceptoController::class);
+
+        Route::resource('/cargos', CargoController::class);
+
+        Route::get('/liquidacion/generar', [LiquidacionController::class, 'showFormGenerar'])->name('liquidacion.generarForm');
+        Route::get('/movimientos/generar', function () {
+            $view = view('configuracion.movimientos.generar');
+            return view('configuracion.index2', ['content' => $view]);
+        })->name('movimientos.generarForm');
+    });
 
     Route::post('/movimientos/generar', [MovimientoController::class, 'generarMovimientos'])->name('movimientos.generar');
+
 
     Route::resource('/prestamos', PrestamoController::class);
 

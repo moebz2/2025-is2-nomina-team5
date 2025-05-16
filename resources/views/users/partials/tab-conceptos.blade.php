@@ -24,7 +24,7 @@
                         Acciones</th>
                 </thead>
 
-                @foreach ($user->conceptos()->where('es_modificable', true)->get() as $concepto)
+                @foreach ($user->conceptos as $concepto)
                     <tr>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $concepto->id }}</td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $concepto->nombre }}
@@ -57,25 +57,27 @@
 
                         <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-700">
 
-                            @can('concepto editar')
-                                <a href="" class="hover:text-gray-700 cursor-pointer">
-                                    <i class="material-symbols-outlined">edit</i>
-                                </a>
-                            @endcan
+                            @if ($concepto->es_modificable)
+                                @can('concepto editar')
+                                    <a href="" class="hover:text-gray-700 cursor-pointer">
+                                        <i class="material-symbols-outlined">edit</i>
+                                    </a>
+                                @endcan
 
-                            @can('concepto eliminar')
-                                <form
-                                    action="{{ route('users.eliminarConcepto', ['user' => $user->id, 'concepto' => $concepto->id]) }}"
-                                    method="POST"
-                                    onsubmit="return confirm('¿Está seguro de que desea dar de baja este concepto?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button title="Eliminar" type="submit"
-                                        class="hover:text-red-500 block text-left cursor-pointer">
-                                        <i class="material-symbols-outlined">delete</i>
-                                    </button>
-                                </form>
-                            @endcan
+                                @can('concepto eliminar')
+                                    <form
+                                        action="{{ route('users.eliminarConcepto', ['user' => $user->id, 'concepto' => $concepto->id]) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('¿Está seguro de que desea dar de baja este concepto?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button title="Eliminar" type="submit"
+                                            class="hover:text-red-500 block text-left cursor-pointer">
+                                            <i class="material-symbols-outlined">delete</i>
+                                        </button>
+                                    </form>
+                                @endcan
+                            @endif
 
 
 

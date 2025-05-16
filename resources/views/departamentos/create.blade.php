@@ -1,8 +1,7 @@
-@extends('layouts.admin-layout')
 
 @section('title', 'Crear departamentos')
 
-@section('content')
+
 
 <div class="container mx-auto p-10">
 
@@ -46,4 +45,3 @@
 </div>
 
 
-@endsection

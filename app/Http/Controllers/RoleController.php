@@ -23,12 +23,11 @@ class RoleController extends Controller
     public function index()
     {
 
-
-
         $roles = Role::with('permissions')->get();
 
+        $view = view('roles.roles-index', compact('roles'));
 
-        return view('roles.roles-index', compact('roles'));
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function create(Request $request)
@@ -56,7 +55,8 @@ class RoleController extends Controller
             }
         }
 
-        return view('roles.create', compact('groupedPermissions', 'availableActions',));
+        $view = view('roles.create', compact('groupedPermissions', 'availableActions',));
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function store(Request $request)
@@ -127,7 +127,9 @@ class RoleController extends Controller
             }
         }
 
-        return view('roles.edit', compact('role', 'groupedPermissions', 'availableActions', 'userGroupedPermissions'));
+        $view = view('roles.edit', compact('role', 'groupedPermissions', 'availableActions', 'userGroupedPermissions'));
+        return view('configuracion.index2', ['content' => $view]);
+
     }
 
     public function update(Request $request, $id)

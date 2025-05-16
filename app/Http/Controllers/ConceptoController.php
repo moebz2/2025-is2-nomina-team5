@@ -17,14 +17,16 @@ class ConceptoController extends Controller
 
     public function index()
     {
-        return view('conceptos.index', [
+        $view =  view('conceptos.index', [
             'conceptos' => Concepto::all(),
         ]);
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function create()
     {
-        return view('conceptos.create');
+        $view = view('conceptos.create');
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function store(Request $request)
@@ -46,7 +48,8 @@ class ConceptoController extends Controller
     public function edit($id)
     {
         $concepto = Concepto::findOrFail($id);
-        return view('conceptos.edit', compact('concepto'));
+        $view =  view('conceptos.edit', compact('concepto'));
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function update(Request $request, $id)

@@ -11,7 +11,7 @@
                 <span class="font-medium">Error!</span> {{ session('error') }}
             </div>
         @endif
-        <h1 class="text-3xl font-medium uppercase">Lista de Conceptos</h1>
+        <h1 class="text-3xl font-medium uppercase">Lista de Cargos</h1>
 
         <div class="mt-10 not-prose overflow-auto rounded-lg bg-gray-100 outline outline-white/5">
             <div class="my-8 overflow-hidden">
@@ -20,40 +20,24 @@
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">ID</th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Nombre
                         </th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">IPS
+                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Descripción
                         </th>
-                        <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">
-                            Aguinaldo</th>
+
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Estado
                         </th>
                         <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">
                             Acciones</th>
                     </thead>
-                    @foreach ($conceptos as $concepto)
+                    @foreach ($cargos as $cargo)
                         <tr>
-                            <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $concepto->id }}</td>
-                            <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $concepto->nombre }}</td>
+                            <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $cargo->id }}</td>
+                            <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $cargo->nombre }}</td>
                             <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
-                                @if ($concepto->ips_incluye)
-                                    <span
-                                        class="rounded-lg bg-purple-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-purple-700 ">Sí</span>
-                                @else
-                                    <span
-                                        class="rounded-lg bg-yellow-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-yellow-700 ">No</span>
-                                @endif
+                               {{ $cargo->descripcion }}
                             </td>
 
                             <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
-                                @if ($concepto->aguinaldo_incluye)
-                                    <span
-                                        class="rounded-lg bg-indigo-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-indigo-700 ">Sí</span>
-                                @else
-                                    <span
-                                        class="rounded-lg bg-amber-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-amber-700 ">No</span>
-                                @endif
-                            </td>
-                            <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">
-                                @if ($concepto->estado)
+                                @if ($cargo->estado)
                                     <span
                                         class="rounded-lg bg-green-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-700 ">Activo</span>
                                 @else
@@ -63,17 +47,17 @@
                             </td>
 
                             <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-500">
-                                @if ($concepto->es_modificable)
-                                    @can('concepto editar')
-                                        <a href="{{ route('conceptos.edit', $concepto->id) }}"
+
+                                    @can('cargo editar')
+                                        <a href="{{ route('cargos.edit', $cargo->id) }}"
                                             class="hover:text-gray-700 cursor-pointer">
                                             <i class="material-symbols-outlined">edit</i>
                                         </a>
                                     @endcan
 
-                                    @can('concepto eliminar')
-                                        <form action="{{ route('conceptos.destroy', $concepto->id) }}" method="POST"
-                                            onsubmit="return confirm('¿Está seguro de que desea dar de baja este concepto?');">
+                                    @can('cargo eliminar')
+                                        <form action="{{ route('cargos.destroy', $cargo->id) }}" method="POST"
+                                            onsubmit="return confirm('¿Está seguro de que desea dar de baja este cargo?');">
                                             @csrf
                                             @method('DELETE')
                                             <button title="Eliminar" type="submit"
@@ -82,9 +66,6 @@
                                             </button>
                                         </form>
                                     @endcan
-                                @else
-                                    Estaticos
-                                @endif
 
 
                             </td>
@@ -94,7 +75,7 @@
             </div>
         </div>
         <div class="mt-4">
-            <a href="{{ route('conceptos.create') }}" class="bg-blue-500 p-2 rounded text-white font-medium">Crear nuevo
-                concepto</a>
+            <a href="{{ route('cargos.create') }}" class="bg-blue-500 p-2 rounded text-white font-medium">Crear nuevo
+                cargo</a>
         </div>
     </div>

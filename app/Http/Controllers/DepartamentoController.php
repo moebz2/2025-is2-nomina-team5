@@ -17,14 +17,16 @@ class DepartamentoController extends Controller
 
     public function index()
     {
-        return view('departamentos.index', [
+        $view = view('departamentos.index', [
             'departamentos' => Departamento::all(),
         ]);
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function create()
     {
-        return view('departamentos.create');
+        $view = view('departamentos.create');
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function store(Request $request)
@@ -45,7 +47,8 @@ class DepartamentoController extends Controller
     public function edit($id)
     {
         $departamento = Departamento::findOrFail($id);
-        return view('departamentos.edit', compact('departamento'));
+        $view = view('departamentos.edit', compact('departamento'));
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function update(Request $request, $id)

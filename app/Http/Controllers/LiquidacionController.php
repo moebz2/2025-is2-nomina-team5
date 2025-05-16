@@ -35,7 +35,9 @@ class LiquidacionController extends Controller
 
     public function showFormGenerar()
     {
-        return view('liquidacion.generar-liquidacion');
+        $view = view('liquidacion.generar-liquidacion');
+
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function generar(Request $request)
