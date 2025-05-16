@@ -27,6 +27,12 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    const ESTADO_CONTRATADO = 'contratado';
+    const ESTADO_DESPEDIDO = 'baja';
+    const ESTADO_INACTIVO = 'inactivo';
+
+
+
     /**
      * Get the attributes that should be cast.
      *
@@ -137,5 +143,10 @@ class User extends Authenticatable
     public function liquidaciones()
     {
         return $this->hasMany(LiquidacionEmpleadoCabecera::class, 'empleado_id');
+    }
+
+    public function prestamos()
+    {
+        return $this->hasMany(Prestamo::class, 'empleado_id');
     }
 }

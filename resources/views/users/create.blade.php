@@ -146,7 +146,10 @@
                                     @endforeach
                                 </select>
                                 @can('cargo crear')
-                                    <a class="text-blue-500 hover:text-blue-700 text-sm" href="">Crear cargo</a>
+                                <p class="mt-1 text-sm/6 text-gray-600">
+                                    Si no aparece en la lista, puedes
+                                    <a class="text-blue-500 hover:text-blue-700" href="{{ route('cargos.create') }}">crear cargo aquí</a>
+                                </p>
                                 @endcan
                             </div>
                         </div>
@@ -157,19 +160,7 @@
                                     value="{{ old('ingreso_fecha') }}">
                             </div>
                         </div>
-                        <div class="form-check mb-3">
-                            <input type="checkbox" class="form-check-input" id="aplica_bonificacion_familiar"
-                                name="aplica_bonificacion_familiar">
-                            <label class="form-check-label" for="aplica_bonificacion_familiar">Aplica bonificación
-                                familiar</label>
-                        </div>
-                        <div id="hijos-section" style="display: none;" class="sm:col-span-6">
-                            <h5 class="text-lg font-semibold mt-4">Hijos</h5>
-                            <button type="button"
-                                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                onclick="agregarHijo()">Agregar hijo</button>
-                            <div id="hijos-wrapper"></div>
-                        </div>
+
 
                     </div>
 
@@ -190,57 +181,7 @@
 
     </div>
 
-    <script>
-        document.getElementById('fill-test-data').addEventListener('click', function() {
 
-            const plus = 5;
-
-            // Fill text inputs
-            document.getElementById('email').value = `test${plus}@example.com`;
-            document.getElementById('password').value = 'password123';
-            document.getElementById('password_confirmation').value = 'password123';
-            document.getElementById('nombre').value = 'Juan Perez';
-            document.getElementById('cedula').value = 90000000 + plus;
-            document.getElementById('domicilio').value = 'Asuncion, Paraguay';
-
-            // Fill select inputs
-            document.getElementById('sexo').value = 'M';
-            document.getElementById('cargo_id').value = 1; // Replace with a valid cargo ID
-
-            document.getElementById('role').value = 'asistenteRRHH';
-
-            // Fill date inputs
-            document.getElementById('nacimiento_fecha').value = '1990-01-01';
-            document.getElementById('ingreso_fecha').value = '2025-01-01';
-        });
-    </script>
-    <script>
-        const bonifCheckbox = document.getElementById('aplica_bonificacion_familiar');
-        const hijosSection = document.getElementById('hijos-section');
-        let hijoIndex = 0;
-
-        bonifCheckbox.addEventListener('change', function() {
-            hijosSection.style.display = this.checked ? 'block' : 'none';
-        });
-
-        function agregarHijo() {
-            const wrapper = document.getElementById('hijos-wrapper');
-            const div = document.createElement('div');
-            div.classList.add('mb-2');
-            div.innerHTML = `
-            <div class="form-row grid grid-cols-2 gap-4">
-                <div>
-                    <input type="text" class="form-input" name="hijos[${hijoIndex}][nombre]" placeholder="Nombre del hijo" required>
-                </div>
-                <div>
-                    <input type="date" class="form-input" name="hijos[${hijoIndex}][fecha_nacimiento]" required>
-                </div>
-            </div>
-        `;
-            wrapper.appendChild(div);
-            hijoIndex++;
-        }
-    </script>
 
 
 @endsection

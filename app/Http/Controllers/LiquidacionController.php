@@ -35,7 +35,9 @@ class LiquidacionController extends Controller
 
     public function showFormGenerar()
     {
-        return view('liquidacion.generar-liquidacion');
+        $view = view('liquidacion.generar-liquidacion');
+
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function generar(Request $request)
@@ -63,8 +65,6 @@ class LiquidacionController extends Controller
         $request->validate([
             'periodo' => 'required|date',
         ]);
-
-
 
         $periodo = Carbon::parse($request->input('periodo'))->format('Y-m');
 
@@ -98,7 +98,7 @@ class LiquidacionController extends Controller
 
     public function eliminarTodos(Request $request)
     {
-        try{
+        try {
 
             $liquidaciones = LiquidacionCabecera::all();
 
@@ -107,8 +107,7 @@ class LiquidacionController extends Controller
             }
 
             return redirect()->route('liquidacion.index')->with('success', 'Todos los registros eliminados correctamente.');
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
 
             dd($e->getMessage());
             // return redirect()->route('liquidacion.index')->with('error', $e->getMessage());

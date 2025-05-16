@@ -1,10 +1,7 @@
-@extends('layouts.admin-layout')
 
-@section('sidebar')
-    @include('roles.partials.sidebar')
-@endsection
 
-@section('content')
+
+
 
 <div class="container mx-auto p-10">
     <h1 class="text-3xl font-medium uppercase">Lista de Roles</h1>
@@ -61,4 +58,4 @@
         <a href="{{route('roles.create')}}" class="bg-blue-500 p-2 rounded text-white font-medium">Registrar nuevo rol</a>
     </div>
 </div>
-@endsection
+

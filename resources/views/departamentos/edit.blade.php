@@ -1,8 +1,8 @@
-@extends('layouts.admin-layout')
+
 
 @section('title', 'Editar departamento')
 
-@section('content')
+
 
 <div class="container mx-auto p-10">
     <h1 class="text-3xl font-bold uppercase">Editar Departamento</h1>
@@ -46,4 +46,3 @@
     </form>
 </div>
 
-@endsection

@@ -25,28 +25,17 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'usuario ver']);
         Permission::firstOrCreate(['name' => 'usuario asignar rol']);
 
-
         // PERMISOS ROL
         Permission::firstOrCreate(['name' => 'rol crear']); // Crear rol implica asignarle el permiso
         Permission::firstOrCreate(['name' => 'rol editar']);
         Permission::firstOrCreate(['name' => 'rol eliminar']);
         Permission::firstOrCreate(['name' => 'rol ver']);
 
-
         // PERMISOS LIQUIDACION
         Permission::firstOrCreate(['name' => 'liquidacion crear']);
         Permission::firstOrCreate(['name' => 'liquidacion editar']);
         Permission::firstOrCreate(['name' => 'liquidacion eliminar']);
         Permission::firstOrCreate(['name' => 'liquidacion ver']);
-        Permission::firstOrCreate(['name' => 'liquidacion liquidar']); //Liquidar incluye rechazar la liquidacion
-
-
-
-        // PERMISOS EMPLEADO
-        Permission::firstOrCreate(['name' => 'empleado crear']);
-        Permission::firstOrCreate(['name' => 'empleado editar']);
-        Permission::firstOrCreate(['name' => 'empleado eliminar']);
-        Permission::firstOrCreate(['name' => 'empleado ver']);
 
         // PERMISOS MOVIMIENTO
         Permission::firstOrCreate(['name' => 'movimiento crear']);
@@ -66,12 +55,6 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'departamento eliminar']);
         Permission::firstOrCreate(['name' => 'departamento ver']);
 
-        // PERMISOS PAGO
-        Permission::firstOrCreate(['name' => 'pago crear']);
-        Permission::firstOrCreate(['name' => 'pago editar']);
-        Permission::firstOrCreate(['name' => 'pago eliminar']);
-        Permission::firstOrCreate(['name' => 'pago ver']);
-
         // PERMISOS SALARIO
         Permission::firstOrCreate(['name' => 'salario crear']);
         Permission::firstOrCreate(['name' => 'salario editar']);
@@ -85,17 +68,21 @@ class PermissionSeeder extends Seeder
         Permission::firstOrCreate(['name' => 'concepto ver']);
 
         // Hijos
-        Permission::firstOrCreate(['name' => 'hijos crear']);
-        Permission::firstOrCreate(['name' => 'hijos editar']);
-        Permission::firstOrCreate(['name' => 'hijos eliminar']);
-        Permission::firstOrCreate(['name' => 'hijos ver']);
+        Permission::firstOrCreate(['name' => 'hijo crear']);
+        Permission::firstOrCreate(['name' => 'hijo editar']);
+        Permission::firstOrCreate(['name' => 'hijo eliminar']);
+        Permission::firstOrCreate(['name' => 'hijo ver']);
 
         // Parametros
-        Permission::firstOrCreate(['name' => 'parametros crear']);
-        Permission::firstOrCreate(['name' => 'parametros editar']);
-        Permission::firstOrCreate(['name' => 'parametros eliminar']);
-        Permission::firstOrCreate(['name' => 'parametros ver']);
+        Permission::firstOrCreate(['name' => 'parametro crear']);
+        Permission::firstOrCreate(['name' => 'parametro editar']);
+        Permission::firstOrCreate(['name' => 'parametro eliminar']);
+        Permission::firstOrCreate(['name' => 'parametro ver']);
 
-
+        // Préstamos
+        Permission::firstOrCreate(['name' => 'prestamo crear']);
+        Permission::firstOrCreate(['name' => 'prestamo editar']);
+        Permission::firstOrCreate(['name' => 'prestamo eliminar']);
+        Permission::firstOrCreate(['name' => 'prestamo ver']);
     }
 }

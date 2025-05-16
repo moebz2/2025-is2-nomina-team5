@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmpleadoConcepto;
 use App\Models\Movimiento;
 use App\Models\Concepto;
+use App\Models\Prestamo;
 use App\Models\User;
 use App\Services\LiquidacionService;
 use Carbon\Carbon;
@@ -24,28 +25,26 @@ class MovimientoController extends Controller
         error_log('generarMovimientos.request: ' . json_encode($request->all()));
 
         $request->validate([
-            'periodo' => 'nullable|date_format:Y-m',
+            'fecha' => 'nullable|date_format:Y-m-d',
         ]);
 
-        $periodo = $request->input('periodo', Carbon::now()->format('Y-m'));
-        [$year, $month] = explode('-', $periodo);
+        $fecha = $request->input('fecha', Carbon::now()->format('Y-m-d'));
+        $fechaCb = Carbon::parse($fecha)->startOfMonth();
 
-        // Movimientos normales desde conceptos asociados a empleados
+        // Generar movimientos en base a conceptos asociados a empleados
 
-        $empleadoConceptos = EmpleadoConcepto::where(function ($query) use ($year, $month) {
-            $query->whereYear('fecha_inicio', $year)
-                ->whereMonth('fecha_inicio', $month);
-        })->orWhere(function ($query) use ($year, $month) {
-            $query->whereYear('fecha_fin', $year)
-                ->whereMonth('fecha_fin', $month);
-        })->get();
+        $empleadoConceptos = EmpleadoConcepto::whereDate('fecha_inicio', '<=', $fechaCb)
+            ->where(function ($query) use ($fechaCb) {
+                $query->whereNull('fecha_fin')
+                    ->orWhereDate('fecha_fin', '>=', $fechaCb);
+            })->get();
 
         foreach ($empleadoConceptos as $empleadoConcepto) {
             Movimiento::create([
                 'empleado_id' => $empleadoConcepto->empleado_id,
                 'concepto_id' => $empleadoConcepto->concepto_id,
-                'monto' => intval($empleadoConcepto->valor) ,
-                'validez_fecha' => Carbon::createFromDate($year, $month, 1),
+                'monto' => intval($empleadoConcepto->valor),
+                'validez_fecha' => $fechaCb,
                 'generacion_fecha' => now(),
             ]);
         }
@@ -62,18 +61,12 @@ class MovimientoController extends Controller
 
             $empleados = User::with(['hijos', 'conceptos'])->where('estado', 'contratado')->orderBy('id', 'desc')->get();
 
-
-
-
             foreach ($empleados as $empleado) {
 
                 $hijosMenores = $empleado->hijosMenores;
 
-                if($hijosMenores->count() == 0)
-                {
-
+                if ($hijosMenores->count() == 0) {
                     continue;
-
                 }
 
                 error_log('generarMovimientos.empleadoId: ' . $empleado->id);
@@ -85,6 +78,8 @@ class MovimientoController extends Controller
                     error_log('No se encontró el salario para el empleado: ' . $empleado->id);
                     continue;
                 }
+
+                error_log('generarMovimientos.conceptoSalario: ' . var_export($concepto_salario, true));
 
                 $salario = $concepto_salario->pivot->valor;
 
@@ -99,12 +94,17 @@ class MovimientoController extends Controller
                         'empleado_id' => $empleado->id,
                         'concepto_id' => $bonificacionConcepto->id,
                         'monto' => $bono,
-                        'validez_fecha' => Carbon::createFromDate($year, $month, 1),
+                        'validez_fecha' => $fechaCb,
                         'generacion_fecha' => now(),
                     ]);
                 }
             }
         }
+
+        // Generar cuota de préstamos si corresponde
+
+        $prestamoService = new \App\Services\PrestamoService();
+        $prestamoService->generarCuotas($fechaCb);
 
         error_log('generarMovimientos.end');
 

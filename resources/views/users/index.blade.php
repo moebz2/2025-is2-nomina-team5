@@ -60,11 +60,13 @@
                                     @if (strcmp($user->estado, 'baja') == 0)
 
                                     <span
-                                    class="ml-3 rounded-lg bg-yellow-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-yellow-700 ">De baja</span>
-                                    @else
+                                    class="ml-3 rounded-lg border-red-500 bg-red-100 px-2 border py-0.5 text-xs/6 font-semibold whitespace-nowrap text-red-500 ">De baja</span>
+                                    @elseif (strcmp($user->estado, 'inactivo') == 0)
                                     <span
-                                    class="ml-3 rounded-lg bg-indigo-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-indigo-700 ">{{ $user->estado }}</span>
-
+                                    class="ml-3 rounded-lg bg-yellow-100 border-yellow-500 border px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-yellow-500 ">{{ $user->estado }}</span>
+                                    @else
+                                        <span
+                                    class="ml-3 rounded-lg bg-green-100 border-green-500 border px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-500 ">{{ $user->estado }}</span>
                                     @endif
                                 </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">

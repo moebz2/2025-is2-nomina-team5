@@ -10,11 +10,10 @@
 
 
 
-    <div x-data="{ tab: 'conceptos', conceptoForm: false, movimientoForm: false, hijoForm : false, salarioForm: false }" class="container mx-auto p-10">
+    <div x-data="{ tab: 'conceptos', conceptoForm: false, prestamoForm: false, movimientoForm: false, hijoForm: false, salarioForm: false, estadoForm: false }" class="container mx-auto p-10">
 
         @if (session('success'))
-            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50"
-                role="alert">
+            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
                 <span class="font-medium">Exito!</span> {{ session('success') }}
             </div>
         @endif
@@ -71,7 +70,9 @@
                         <p class="text-sm text-gray-700">Estado</p>
                         <h4 class="font-semibold text-lg uppercase">{{ $user->estado }}</h4>
                     </div>
-                    <button class="bg-white p-2 hover:bg-indigo-600 text-gray-700 hover:text-white cursor-pointer flex items-center rounded-xl"><i class="material-symbols-outlined">edit</i></button>
+                    <button x-on:click="estadoForm = !estadoForm"
+                        class="bg-white p-2 hover:bg-indigo-600 text-gray-700 hover:text-white cursor-pointer flex items-center rounded-xl"><i
+                            class="material-symbols-outlined">edit</i></button>
                 </div>
                 <div>
                     <p class="text-sm text-gray-700">Fecha ingreso</p>
@@ -92,55 +93,64 @@
 
         <div class="grid grid-cols-4 mt-4 gap-4">
             <div class="border border-gray-400 p-4 rounded">
-              <p class="text-sm font-medium text-gray-700">IPS</p>
-              <h3 class="md:text-2xl text-xl font-medium">
-                @if($salario)
-                {{intval($salario->pivot->valor * $ips)}} Gs.
-                @else
-                No calculable
-                @endif
-              </h3>
+                <p class="text-sm font-medium text-gray-700">IPS</p>
+                <h3 class="md:text-2xl text-xl font-medium">
+                    @if ($salario)
+                        {{ intval($salario->pivot->valor * $ips) }} Gs.
+                    @else
+                        No calculable
+                    @endif
+                </h3>
             </div>
             <div class="border border-gray-400 p-4 rounded flex items-center">
                 <div>
                     <p class="text-sm font-medium text-gray-700">Salario</p>
                     <h3 class="md:text-2xl text-xl font-medium">
-                      @if ($salario)
-                          {{$salario->pivot->valor}} Gs
-                      @else
-                          No asignado
-                      @endif
+                        @if ($salario)
+                            {{ $salario->pivot->valor }} Gs
+                        @else
+                            No asignado
+                        @endif
                     </h3>
 
                 </div>
-                <button x-on:click="salarioForm = true" class="bg-gray-100 p-2 ml-auto hover:bg-indigo-600 text-gray-700 hover:text-white cursor-pointer flex items-center rounded-xl"><i class="material-symbols-outlined">edit</i></button>
+                <button x-on:click="salarioForm = !salarioForm"
+                    class="bg-gray-100 p-2 ml-auto hover:bg-indigo-600 text-gray-700 hover:text-white cursor-pointer flex items-center rounded-xl"><i
+                        class="material-symbols-outlined">edit</i></button>
             </div>
             <div class="border border-gray-400 p-4 rounded">
-              <p class="text-sm font-medium text-gray-700">Bonif. Familiar</p>
-              <h3 class="md:text-2xl text-xl font-medium">
-                @if ($user->hijosMenores->count() > 0)
-                    Aplica
-                @else
-                    No aplica
-                @endif
-              </h3>
+                <p class="text-sm font-medium text-gray-700">Bonif. Familiar</p>
+                <h3 class="md:text-2xl text-xl font-medium">
+                    @if ($user->hijosMenores->count() > 0)
+                        Aplica
+                    @else
+                        No aplica
+                    @endif
+                </h3>
             </div>
             <div class="border border-gray-400 p-4 rounded">
-              <p class="text-sm font-medium text-gray-700">Cant. Hijos</p>
-              <h3 class="md:text-2xl text-xl font-medium">{{$user->hijos->count()}}</h3>
+                <p class="text-sm font-medium text-gray-700">Cant. Hijos</p>
+                <h3 class="md:text-2xl text-xl font-medium">{{ $user->hijos()->count() }}</h3>
             </div>
-          </div>
+        </div>
 
 
-          @include('users.partials.salario-form')
+        @include('users.partials.salario-form')
+        @include('users.partials.estado-form')
 
-          <div  class="mt-4 w- border border-gray-300 rounded p-4">
+
+        <div class="mt-4 w- border border-gray-300 rounded p-4">
             <ul class="flex text-gray-700">
 
                 <li>
                     <button x-on:click="tab = 'conceptos'"
                         :class="{ 'font-medium border-b-2 text-black': tab == 'conceptos' }"
                         class="py-2 px-6 hover:text-black hover:font-medium">Conceptos</button>
+                </li>
+                <li>
+                    <button x-on:click="tab = 'prestamos'"
+                        :class="{ 'font-medium border-b-2 text-black': tab == 'prestamos' }"
+                        class="py-2 px-6 hover:text-black hover:font-medium">Préstamos</button>
                 </li>
                 <li>
                     <button x-on:click="tab = 'movimientos'"
@@ -153,8 +163,7 @@
                         class="py-2 px-6 hover:text-black hover:font-medium">Liquidaciones</button>
                 </li>
                 <li>
-                    <button x-on:click="tab = 'hijos'"
-                        :class="{ 'font-medium border-b-2 text-black': tab == 'hijos' }"
+                    <button x-on:click="tab = 'hijos'" :class="{ 'font-medium border-b-2 text-black': tab == 'hijos' }"
                         class="py-2 px-6 hover:text-black hover:font-medium">Hijos</button>
                 </li>
 
@@ -165,6 +174,7 @@
 
 
                 @include('users.partials.tab-conceptos')
+                @include('users.partials.tab-prestamos')
                 @include('users.partials.tab-movimientos')
                 @include('users.partials.tab-hijos')
                 @include('users.partials.tab-liquidaciones')

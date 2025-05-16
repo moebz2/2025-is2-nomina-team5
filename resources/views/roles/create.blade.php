@@ -1,13 +1,4 @@
-@extends('layouts.admin-layout')
 
-@section('title', 'Crear rol')
-
-@section('sidebar')
-    @include('roles.partials.sidebar')
-@endsection
-
-
-@section('content')
 
     <div class="container p-10 mx-auto">
 
@@ -132,4 +123,4 @@
 
 
 
-@endsection
+

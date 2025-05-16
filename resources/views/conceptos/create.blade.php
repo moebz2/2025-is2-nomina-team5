@@ -1,9 +1,7 @@
-@extends('layouts.admin-layout')
-
-@section('title', 'Crear conceptos')
 
 
-@section('content')
+
+
 
     <div class="container mx-auto p-10">
         <h1 class="text-3xl font-bold uppercase">Crear concepto</h1>
@@ -207,6 +205,3 @@
         }
     </script> --}}
 
-
-
-@endsection

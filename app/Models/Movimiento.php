@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Empleado;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,6 +31,7 @@ class Movimiento extends Model
         'validez_fecha',
         'generacion_fecha',
         'eliminacion_fecha',
+        'prestamo_id'
     ];
 
     /**
@@ -57,5 +59,15 @@ class Movimiento extends Model
     public function concepto()
     {
         return $this->belongsTo(Concepto::class, 'concepto_id');
+    }
+
+    public function prestamo()
+    {
+        return $this->belongsTo(Prestamo::class, 'prestamo_id');
+    }
+
+    public function liquidacionEmpleadoDetalle()
+    {
+        return $this->hasOne(LiquidacionEmpleadoDetalle::class, 'movimiento_id');
     }
 }

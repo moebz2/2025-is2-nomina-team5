@@ -179,6 +179,25 @@ class LiquidacionService
                 'cabecera_id' => $liquidacionEmpleadoCabecera->id,
                 'movimiento_id' => $movimiento->id,
             ]);
+
+            // si el movimiento tiene prestamo_id, verificar si la cuota cubre lo faltante a pagar
+            // y si es así, marcar el préstamo como pagado
+
+            if ($movimiento->prestamo_id) {
+                $prestamo = $movimiento->prestamo;
+
+                $montoPagado = $prestamo->movimientos()
+                    ->whereHas('liquidacionEmpleadoDetalle')
+                    ->sum('monto');
+
+                $montoRestante = $prestamo->monto - $montoPagado;
+
+                if ($montoRestante <= 0) {
+                    // marcar préstamo como pagado
+                    $prestamo->estado = 'pagado';
+                    $prestamo->save();
+                }
+            }
         }
     }
 }

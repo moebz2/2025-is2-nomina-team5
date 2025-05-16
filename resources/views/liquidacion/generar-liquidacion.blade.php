@@ -1,8 +1,7 @@
-@extends('layouts.admin-layout')
+
 
 @section('title', 'Generar Liquidación')
 
-@section('content')
 
 <div class="container mx-auto p-10">
     <h1 class="text-3xl font-bold uppercase">Generar Liquidación</h1>
@@ -55,4 +54,4 @@
     </form>
 </div>
 
-@endsection
+

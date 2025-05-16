@@ -1,8 +1,4 @@
-@extends('layouts.admin-layout')
 
-@section('title', 'Editar concepto')
-
-@section('content')
 
 <div class="container mx-auto p-10">
     <h1 class="text-3xl font-bold uppercase">Editar Concepto</h1>
@@ -49,5 +45,3 @@
         </div>
     </form>
 </div>
-
-@endsection

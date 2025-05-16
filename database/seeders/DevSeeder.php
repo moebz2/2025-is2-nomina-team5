@@ -41,7 +41,6 @@ class DevSeeder extends Seeder
                 // Menor a 3 salarios mínimos para que genere bonificación familiar
                 'salario' => 6000000,
                 'domicilio' => 'Calle Falsa 123',
-                // 'aplica_bonificacion_familiar' => true,
                 'hijos' => [
                     ['nombre' => 'Pedro Jr.', 'fecha_nacimiento' => '2010-06-15'],
                     ['nombre' => 'Martina', 'fecha_nacimiento' => '2012-03-20'],
@@ -56,7 +55,6 @@ class DevSeeder extends Seeder
                 'password' => 'password123',
                 'salario' => 15700000,
                 'domicilio' => 'Avenida Siempre Viva 456',
-                // 'aplica_bonificacion_familiar' => false,
                 'hijos' => [],
             ],
             [
@@ -68,7 +66,6 @@ class DevSeeder extends Seeder
                 'password' => 'password123',
                 'salario' => 22400000,
                 'domicilio' => 'Calle Principal 789',
-                // 'aplica_bonificacion_familiar' => true,
                 'hijos' => [
                     ['nombre' => 'Lucas', 'fecha_nacimiento' => '2011-01-10'],
                 ],
@@ -97,7 +94,6 @@ class DevSeeder extends Seeder
                     'nacimiento_fecha' => date_create($userData['nacimiento_fecha']),
                     'password' => Hash::make($userData['password']),
                     'domicilio' => $userData['domicilio'],
-                    // 'aplica_bonificacion_familiar' => $userData['aplica_bonificacion_familiar'] ?? false,
                 ]
             );
 
@@ -117,7 +113,7 @@ class DevSeeder extends Seeder
                 'empleado_id' => $user->id,
                 'concepto_id' => $salarioConcepto->id,
                 'valor' => $userData['salario'],
-                'fecha_inicio' => now(),
+                'fecha_inicio' => '2025-01-01',
                 'estado' => true,
             ]);
 
@@ -125,7 +121,7 @@ class DevSeeder extends Seeder
                 'empleado_id' => $user->id,
                 'concepto_id' => $conceptoPrueba->id,
                 'valor' => 250000,
-                'fecha_inicio' => now(),
+                'fecha_inicio' => '2025-01-01',
                 'estado' => true,
             ]);
         }

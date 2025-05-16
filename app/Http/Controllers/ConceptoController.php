@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Concepto;
+use Exception;
 
 class ConceptoController extends Controller
 {
@@ -17,14 +18,16 @@ class ConceptoController extends Controller
 
     public function index()
     {
-        return view('conceptos.index', [
+        $view =  view('conceptos.index', [
             'conceptos' => Concepto::all(),
         ]);
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function create()
     {
-        return view('conceptos.create');
+        $view = view('conceptos.create');
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function store(Request $request)
@@ -38,15 +41,26 @@ class ConceptoController extends Controller
 
         ]);
 
-        Concepto::create($request->all());
+        try {
+            Concepto::create($request->all());
 
-        return redirect()->route('conceptos.index')->with('success', 'Concepto creado exitosamente');
+            return redirect()->route('conceptos.index')->with('success', 'Concepto creado exitosamente');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with(['error' => $th->getMessage()]);
+        }
     }
 
     public function edit($id)
     {
         $concepto = Concepto::findOrFail($id);
-        return view('conceptos.edit', compact('concepto'));
+
+        if (!$concepto->es_modificable) {
+
+            return redirect()->back()->with(['error' => 'Este concepto no puede ser modificado']);
+        }
+
+        $view =  view('conceptos.edit', compact('concepto'));
+        return view('configuracion.index2', ['content' => $view]);
     }
 
     public function update(Request $request, $id)
@@ -56,13 +70,18 @@ class ConceptoController extends Controller
             'ips_incluye' => 'required|boolean',
         ]);
 
-        $concepto = Concepto::findOrFail($id);
-        $concepto->update([
-            'nombre' => $request->nombre,
-            'ips_incluye' => $request->ips_incluye,
-        ]);
+        try {
 
-        return redirect()->route('conceptos.index')->with('success', 'Concepto actualizado exitosamente');
+            $concepto = Concepto::findOrFail($id);
+            $concepto->update([
+                'nombre' => $request->nombre,
+                'ips_incluye' => $request->ips_incluye,
+            ]);
+
+            return redirect()->route('conceptos.index')->with('success', 'Concepto actualizado exitosamente');
+        } catch (Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     public function destroy($id)

@@ -1,8 +1,4 @@
-@extends('layouts.admin-layout')
-
-
-@section('content')
-
+@section('title', 'Departamentos')
 <div class="container mx-auto p-10">
     <h1 class="text-3xl font-medium uppercase">Lista de Departamentos</h1>
     @if (session('success'))
@@ -17,7 +13,7 @@
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">ID</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Nombre</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Descripción</th>
-                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Estado</th>                    
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Estado</th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">Acciones</th>
 
                 </thead>
@@ -55,7 +51,7 @@
                                     <i class="material-symbols-outlined">delete</i>
                                 </button>
                             </form>
-                            
+
                             @endcan
 
                         </td>
@@ -70,4 +66,4 @@
         <a href="{{route('departamentos.create')}}" class="bg-blue-500 p-2 rounded text-white font-medium">Crear nuevo departamento</a>
     </div>
 </div>
-@endsection
+
