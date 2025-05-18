@@ -14,6 +14,7 @@ use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReporteDescuentosController;
+use App\Http\Controllers\ReporteLiqEmpleadoController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -112,6 +113,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('/prestamos', PrestamoController::class);
 
     Route::get('/reportes/descuentos', [ReporteDescuentosController::class, 'index'])->name('reportes.descuentos');
+
+    Route::get('/reportes/liq-empleado', [ReporteLiqEmpleadoController::class, 'index'])->name('reportes.liq-empleado');
+    Route::get('/reportes/liq-empleado/export', [ReporteLiqEmpleadoController::class, 'export'])->name('reportes.liq-empleado.export');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
