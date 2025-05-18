@@ -7,9 +7,10 @@
                     <h3 class="font-mono text-sm/6 font-medium tracking-widest text-gray-500 uppercase sm:text-xs/6">
                         Conceptos</h3>
 
-                        <ul class="flex flex-col gap-2 border-l border-[color-mix(in_oklab,var(--color-gray-950),white_90%)]">
+                    <ul
+                        class="flex flex-col gap-2 border-l border-[color-mix(in_oklab,var(--color-gray-950),white_90%)]">
 
-                            @can('concepto ver')
+                        @can('concepto ver')
                             <li>
                                 <a @if (request()->is('admin/configuracion/conceptos')) aria-current="true" @endif
                                     class="inline-block border-l border-transparent pl-5 text-base/8 text-gray-600 hover:border-gray-950/25 hover:text-gray-950 aria-[current]:border-gray-950 aria-[current]:font-semibold aria-[current]:text-gray-950 sm:pl-4 sm:text-sm/6"
@@ -18,9 +19,9 @@
                                     Listar
                                 </a>
                             </li>
-                            @endcan
+                        @endcan
 
-                            @can('concepto crear')
+                        @can('concepto crear')
                             <li>
                                 <a @if (request()->is('admin/configuracion/conceptos/create')) aria-current="true" @endif
                                     class="inline-block border-l border-transparent pl-5 text-base/8 text-gray-600 hover:border-gray-950/25 hover:text-gray-950 aria-[current]:border-gray-950 aria-[current]:font-semibold aria-[current]:text-gray-950 sm:pl-4 sm:text-sm/6"
@@ -28,8 +29,8 @@
                                     Crear
                                 </a>
                             </li>
-                            @endcan
-                        </ul>
+                        @endcan
+                    </ul>
 
                 </ul>
             </li>
@@ -142,6 +143,7 @@
                                 </a>
                             </li>
                         @endcan
+
                         @can('liquidacion crear')
                             <li class="-ml-px flex flex-col items-start gap-2">
                                 <a @if (request()->is('admin/configuracion/liquidacion/generar')) aria-current="true" @endif

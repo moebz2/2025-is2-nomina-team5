@@ -4,7 +4,6 @@ use App\Http\Controllers\CargoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConceptoController;
-use App\Http\Controllers\ConfiguracionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
@@ -70,8 +69,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/liquidacion', [LiquidacionController::class, 'index'])->name('liquidacion.index');
 
-
-
     Route::post('/liquidacion/generar', [LiquidacionController::class, 'generar'])->name('liquidacion.generar');
 
     Route::delete('/liquidacion/eliminar-generados', [LiquidacionController::class, 'eliminarGenerados'])->name('liquidacion.eliminarGenerados');
@@ -85,8 +82,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/liquidacion-empleado/{id}/export', [LiquidacionEmpleadoController::class, 'export'])->name('liquidacion-empleado.export');
 
     // Otros
-
-    // Route::get('/configuracion', [ConfiguracionController::class, 'index'])->name('configuracion.index');
 
     Route::prefix('configuracion')->group(function () {
 
@@ -105,6 +100,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::resource('/cargos', CargoController::class);
 
         Route::get('/liquidacion/generar', [LiquidacionController::class, 'showFormGenerar'])->name('liquidacion.generarForm');
+
         Route::get('/movimientos/generar', function () {
             $view = view('configuracion.movimientos.generar');
             return view('configuracion.index2', ['content' => $view]);
@@ -113,18 +109,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('/movimientos/generar', [MovimientoController::class, 'generarMovimientos'])->name('movimientos.generar');
 
-
     Route::resource('/prestamos', PrestamoController::class);
 
     Route::get('/reportes/descuentos', [ReporteDescuentosController::class, 'index'])->name('reportes.descuentos');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
-/*
-Route::middleware([EnsureUserIsAuthenticated::class])->prefix('admin')->group(function(){
-
-    Route::get('/sesion', function(){
-        echo "Sesion iniciada";
-    });
-
-}); */

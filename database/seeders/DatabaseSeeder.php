@@ -50,6 +50,10 @@ class DatabaseSeeder extends Seeder
             'concepto editar',
             'concepto eliminar',
             'concepto ver',
+            'movimiento crear',
+            'movimiento editar',
+            'movimiento eliminar',
+            'movimiento ver',
         ]));
 
         $asistRole = Role::firstOrCreate(['name' => 'asistenteRRHH']);
