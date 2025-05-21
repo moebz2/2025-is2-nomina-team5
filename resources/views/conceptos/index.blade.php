@@ -1,18 +1,8 @@
 
     <div class="container mx-auto p-10">
-        @if (session('success'))
-            <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50"
-                role="alert">
-                <span class="font-medium">Exito!</span> {{ session('success') }}
-            </div>
-        @endif
-        @if (session('error'))
 
+        @include('layouts.partials.banner-message')
 
-            <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 " role="alert">
-                <span class="font-medium">Error!</span> {{ session('error') }}
-            </div>
-        @endif
         <h1 class="text-3xl font-medium uppercase">Lista de Conceptos</h1>
 
         <div class="mt-10 not-prose overflow-auto rounded-lg bg-gray-100 outline outline-white/5">

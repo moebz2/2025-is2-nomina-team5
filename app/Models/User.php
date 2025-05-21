@@ -4,8 +4,6 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
@@ -47,9 +45,7 @@ class User extends Authenticatable
         ];
     }
 
-    protected $appends = [
-        'cargoActual'
-    ];
+
 
     public function cargos()
     {
@@ -58,15 +54,11 @@ class User extends Authenticatable
             ->wherePivot('fecha_fin', null); // Only active cargos
     }
 
-    public function addCargoActualAttribute()
+    public function cargosEmpleado()
     {
-        if ($this->cargos) {
-            return $this->cargos()->where('es_actual', true)->first();
-        }
-
-
-        return null;
+        return $this->hasMany(CargoEmpleado::class, 'empleado_id', 'id');
     }
+
 
     /**
      * Assign a cargo to the user.
@@ -77,7 +69,7 @@ class User extends Authenticatable
     public function asignarCargo(int $cargoId, $fecha_inicio): void
     {
 
-        // TODO: poner fecha de baja al cargo anterior
+
 
         $this->cargos()->attach($cargoId, ['fecha_inicio' => $fecha_inicio]);
     }

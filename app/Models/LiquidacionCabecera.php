@@ -49,4 +49,10 @@ class LiquidacionCabecera extends Model
     {
         return $this->belongsTo(User::class, 'aprobacion_usuario_id');
     }
+
+    public function liquidacionEmpleados() {
+
+        return $this->hasMany(LiquidacionEmpleadoCabecera::class, 'liquidacion_cabecera_id');
+
+    }
 }

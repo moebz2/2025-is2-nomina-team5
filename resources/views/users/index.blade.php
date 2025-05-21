@@ -10,9 +10,8 @@
 
     <div class="container mx-auto p-10">
         <h1 class="text-3xl font-medium uppercase">Lista de Usuarios</h1>
-        @if (session('success'))
-            <p>{{ session('success') }}</p>
-        @endif
+
+        @include('layouts.partials.banner-message')
 
         <div class="mt-10 not-prose overflow-auto rounded-lg bg-gray-100 outline outline-white/5">
             <div class="my-8 overflow-x-auto">

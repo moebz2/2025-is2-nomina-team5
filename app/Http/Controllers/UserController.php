@@ -120,7 +120,7 @@ class UserController extends Controller
             }
         });
 
-        return redirect()->route('users.index')->with('success', 'Usuario creado exitosamente');
+        return redirect()->route('users.index')->with('success', 'Usuario creado correctamente');
     }
 
     public function edit($id)
@@ -130,6 +130,8 @@ class UserController extends Controller
 
         $fecha_nacimiento = Carbon::parse($user->nacimiento_fecha)->format('Y-m-d');
         $cargos = Cargo::all();
+
+
 
         return view('users.edit', compact('user', 'cargos', 'roles'));
     }
@@ -169,31 +171,27 @@ class UserController extends Controller
 
             $cargo = Cargo::findOrFail($request->cargo_id);
 
+            $cargo_actual = $user->currentCargo();
+
             // Solamente intentar asignar cargo si el cargo es diferente al actual
-            if (!$user->cargos()->where('cargo_id', $cargo->id)->exists()) {
+            if ($cargo_actual && $cargo_actual->id != $cargo->id) {
+
                 $user->asignarCargo($cargo->id, $request->ingreso_fecha);
+
+                $cargo_actual->update(['fecha_fin' => $request->ingreso_fecha]);
+
             }
 
-            // Eliminar y guardar hijos solo si aplica bonificación familiar
-          /*   if ($request->has('aplica_bonificacion_familiar')) {
-                // Eliminar hijos actuales
-                $user->hijos()->delete();
+            if(!$cargo_actual){
 
-                // Guardar hijos nuevos
-                if ($request->has('hijos') && is_array($request->hijos)) {
-                    foreach ($request->hijos as $hijoData) {
-                        if (!empty($hijoData['nombre']) && !empty($hijoData['fecha_nacimiento'])) {
-                            $user->hijos()->create($hijoData);
-                        }
-                    }
-                }
-            } else {
-                // Si no aplica bonificación, asegurarse de borrar todos los hijos
-                $user->hijos()->delete();
-            } */
+                $user->asignarCargo($cargo->id, $request->ingreso_fecha);
+
+            }
+
+
         });
 
-        return redirect()->route('users.index')->with('success', 'Usuario actualizado exitosamente');
+        return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
     }
 
     public function destroy($id)
@@ -204,7 +202,7 @@ class UserController extends Controller
             // TODO: setear fecha de baja en cargo_empleado
         });
 
-        return redirect()->route('users.index')->with('success', 'Usuario dado de baja exitosamente');
+        return redirect()->route('users.index')->with('success', 'Usuario dado de baja correctamente');
     }
 
     public function setInactive($id)
@@ -212,7 +210,7 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->update(['estado' => 'inactivo']);
 
-        return redirect()->route('users.index')->with('success', 'Usuario marcado como inactivo exitosamente');
+        return redirect()->route('users.index')->with('success', 'Usuario marcado como inactivo correctamente');
     }
 
     public function asignarConcepto(Request $request, $id)
@@ -239,7 +237,7 @@ class UserController extends Controller
 
             EmpleadoConcepto::create($request->all());
 
-            return redirect()->route('users.show', $id)->with('success', 'Concepto asignado exitosamente');
+            return redirect()->route('users.show', $id)->with('success', 'Concepto asignado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -270,7 +268,7 @@ class UserController extends Controller
 
             Movimiento::create($data);
 
-            return redirect()->route('users.show', $id)->with('success', 'Movimiento registrado exitosamente');
+            return redirect()->route('users.show', $id)->with('success', 'Movimiento registrado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -287,7 +285,7 @@ class UserController extends Controller
 
 
 
-            return redirect()->route('users.show', $user->id)->with('success', 'Concepto eliminado exitosamente');
+            return redirect()->route('users.show', $user->id)->with('success', 'Concepto eliminado correctamente');
         } catch (Exception $e) {
 
             dd($e->getMessage());
@@ -310,7 +308,7 @@ class UserController extends Controller
 
             $user->hijos()->create($request->all());
 
-            return redirect()->route('users.show', $id)->with('success', 'Hijo creado exitosamente');
+            return redirect()->route('users.show', $id)->with('success', 'Hijo creado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -350,7 +348,7 @@ class UserController extends Controller
                 'estado' => true,
             ]);
 
-            return redirect()->route('users.show', $id)->with('success', 'Salario asignado exitosamente');
+            return redirect()->route('users.show', $id)->with('success', 'Salario asignado correctamente');
 
         } catch (Exception $e) {
 
@@ -372,7 +370,7 @@ class UserController extends Controller
             $usuario = User::findOrFail($id);
             $usuario->update(['estado' => $request->estado]);
 
-            return redirect()->route('users.index')->with('success', 'Estado actualizado exitosamente');
+            return redirect()->route('users.index')->with('success', 'Estado actualizado correctamente');
 
 
 
