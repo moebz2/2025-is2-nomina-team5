@@ -11,7 +11,6 @@ use App\Models\Parametro;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class LiquidacionService
 {
@@ -116,7 +115,7 @@ class LiquidacionService
         Movimiento::create([
             'empleado_id' => $empleado->id,
             'concepto_id' => 3,
-            'monto' => $ipsDescuento,
+            'monto' => intval($ipsDescuento),
             'validez_fecha' => date_create($periodo . '-01'),
             'generacion_fecha' => now(),
         ]);

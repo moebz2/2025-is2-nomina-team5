@@ -14,6 +14,12 @@
             href="{{ route('liquidacion.index') }}">Liquidaciones</a>
         @endcan
 
+        @can('movimiento ver')
+            <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
+            @if (request()->is('admin/movimientos')) aria-current="true" @endif
+            href="{{ route('movimientos.index') }}">Movimientos</a>
+        @endcan
+
         <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
         @if (request()->is('admin/reportes/descuentos')) aria-current="true" @endif
         href="{{ route('reportes.descuentos') }}">Reporte de Descuentos</a>
