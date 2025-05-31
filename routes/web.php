@@ -119,6 +119,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/reportes/liq-empleado/export', [ReporteLiqEmpleadoController::class, 'export'])->name('reportes.liq-empleado.export');
 
     Route::get('/reportes/sum-conceptos', [ReporteSumConceptosController::class, 'index'])->name('reportes.sum-conceptos');
+
+    Route::get('/reportes/sum-conceptos/export', [ReporteSumConceptosController::class, 'export'])->name('reportes.sum-conceptos.export');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
