@@ -15,6 +15,7 @@ use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReporteDescuentosController;
 use App\Http\Controllers\ReporteLiqEmpleadoController;
+use App\Http\Controllers\ReporteSumConceptosController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -116,6 +117,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/reportes/liq-empleado', [ReporteLiqEmpleadoController::class, 'index'])->name('reportes.liq-empleado');
     Route::get('/reportes/liq-empleado/export', [ReporteLiqEmpleadoController::class, 'export'])->name('reportes.liq-empleado.export');
+
+    Route::get('/reportes/sum-conceptos', [ReporteSumConceptosController::class, 'index'])->name('reportes.sum-conceptos');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
