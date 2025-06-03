@@ -83,6 +83,12 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/liquidacion-empleado/{id}/export', [LiquidacionEmpleadoController::class, 'export'])->name('liquidacion-empleado.export');
 
+    // Recursos de movimientos
+
+    Route::resource('/movimientos', MovimientoController::class);
+
+
+
     // Otros
 
     Route::prefix('configuracion')->group(function () {
