@@ -1,4 +1,4 @@
-<div x-show="salarioForm == true" class="rounded border-5 border-dashed border-gray-300 mt-4 p-10 w-1/2 mx-auto">
+<div x-show="salarioForm == true" class="rounded border-5 border-dashed border-gray-300 mt-4 p-10 w-1/2 mx-auto" style="display:none">
 
     <h3 class="text-base font-semibold text-gray-900" id="modal-title">Agregar o actualizar salario</h3>
 

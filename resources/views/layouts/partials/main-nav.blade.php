@@ -21,12 +21,10 @@
         @endcan
 
         <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
-        @if (request()->is('admin/reportes/descuentos')) aria-current="true" @endif
-        href="{{ route('reportes.descuentos') }}">Reporte de Descuentos</a>
+        @if (request()->is('admin/reportes/*')) aria-current="true" @endif
+        href="{{ route('reportes.index') }}">Reportes</a>
 
-        <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
-        @if (request()->is('admin/reportes/liq-empleado')) aria-current="true" @endif
-        href="{{ route('reportes.liq-empleado') }}">Reporte de Liq. Empleados</a>
+
     </div>
     <div class="flex items-center gap-5 max-md:hidden lg:gap-6">
 

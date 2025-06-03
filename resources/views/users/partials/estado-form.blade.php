@@ -1,4 +1,4 @@
-<div x-show="estadoForm == true" class="rounded border-5 border-dashed border-gray-300 mt-4 p-10 w-1/2 mx-auto">
+<div x-show="estadoForm == true" class="rounded border-5 border-dashed border-gray-300 mt-4 p-10 w-1/2 mx-auto" style="display: none">
 
     <h3 class="text-base font-semibold text-gray-900" id="modal-title">Cambia el estado del empleado</h3>
 

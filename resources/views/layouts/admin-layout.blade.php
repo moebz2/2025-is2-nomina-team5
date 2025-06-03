@@ -58,6 +58,7 @@
             <div
                 class="isolate grid flex-1 grid-rows-[1fr_auto] overflow-clip grid-cols-[var(--sidebar-width)_var(--gutter-width)_auto_var(--gutter-width)] [--sidebar-width:0] 2xl:[--sidebar-width:--spacing(72)] [--gutter-width:--spacing(6)] 2xl:[--gutter-width:--spacing(10)]">
                 {{-- SIDEBAR --}}
+
                 <div class="col-start-1 row-span-2 row-start-1 max-2xl:hidden">
                     @section('sidebar')
                     @show

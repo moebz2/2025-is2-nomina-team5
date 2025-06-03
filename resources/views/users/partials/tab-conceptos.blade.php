@@ -97,7 +97,7 @@
 
     </div>
 
-    <div x-show="conceptoForm" class="p-4 bg-gray-100 rounded">
+    <div x-show="conceptoForm" class="p-4 bg-gray-100 rounded" style="display: none">
 
         <h3 class="text-xl font-medium">Asignar nuevo concepto</h3>
 

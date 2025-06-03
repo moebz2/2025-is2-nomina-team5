@@ -1,9 +1,20 @@
 <div x-show="tab == 'movimientos'">
 
 
+    <div class="flex gap-4 mt-4 p-4">
+
+        @foreach ($monthMap as $month => $value)
+            <a href="{{route('users.show',[$user->id, 'pestana' => 'movimientos', 'periodo' => $month])}}" class="font-semibold hover:text-blue-500 @if(strcmp($month, $periodoNombreMes)==0) text-blue-500 @else text-gray-700 @endif  capitalize text-sm">{{$month}}</a>
+
+        @endforeach
+
+
+    </div>
 
 
     <div class="mt-10 not-prose overflow-auto rounded-lg bg-gray-100 outline outline-white/5">
+
+
         <div class="my-8 overflow-hidden">
             <table class="w-full table-auto border-collapse text-sm">
                 <thead>
@@ -83,7 +94,7 @@
 
     </div>
 
-    <div x-show="movimientoForm" class="p-4 bg-gray-100 rounded">
+    <div x-show="movimientoForm" class="p-4 bg-gray-100 rounded" style="display: none">
 
         <h3 class="text-xl font-medium">Registrar movimiento</h3>
 

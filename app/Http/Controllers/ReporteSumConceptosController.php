@@ -13,7 +13,8 @@ class ReporteSumConceptosController extends Controller
     public function index(Request $request)
     {
         $data = $this->getData($request);
-        return view('reportes.sum-conceptos', $data);
+        $vista =  view('reportes.sum-conceptos', $data);
+        return view('reportes.index', ['content' => $vista]);
     }
 
     public function export(Request $request)
