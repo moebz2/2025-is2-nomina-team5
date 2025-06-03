@@ -1,6 +1,4 @@
-@extends('layouts.admin-layout')
 
-@section('content')
     <div class="container mx-auto mt-6">
 
         <h2 class="text-2xl font-bold mb-6">Reporte de Descuentos por Concepto</h2>
@@ -64,7 +62,7 @@
         <div class="bg-white rounded shadow p-6">
             @if ($resultados->count())
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                    <table id="reporte" class="min-w-full divide-y divide-gray-200 text-sm">
                         <thead class="bg-gray-100 text-gray-700 font-semibold">
                             <tr>
                                 <th class="px-4 py-2 text-left">Fecha</th>
@@ -87,6 +85,13 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="mt-4">
+                     <button type="button" onclick="exportToExcel('reporte', 'reporte_descuento')"
+                        class=" bg-green-600 hover:bg-green-500 text-white font-medium py-2 px-4 rounded">
+                        Exportar Excel
+                    </button>
+                </div>
             @else
                 <div class="text-gray-600 text-center py-4">
                     No se encontraron resultados para los filtros seleccionados.
@@ -94,4 +99,4 @@
             @endif
         </div>
     </div>
-@endsection
+

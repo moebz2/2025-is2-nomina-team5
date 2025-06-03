@@ -16,7 +16,7 @@ class MovimientoController extends Controller
 {
     protected $liquidacionService;
 
-    
+
 
     public function __construct(LiquidacionService $liquidacionService)
     {
@@ -128,7 +128,7 @@ class MovimientoController extends Controller
 
         $conceptos_create = Concepto::where('es_modificable', true)->get();
 
-       
+
 
 
         $query = Movimiento::with(['empleado', 'concepto']);
@@ -166,13 +166,13 @@ class MovimientoController extends Controller
 
         }
 
-        $movimientos = $query->paginate(perPage: $request->input('paginate', 10));
+        $movimientos = $query->orderBy('generacion_fecha', 'desc')->paginate(perPage: $request->input('paginate', 10));
 
         return view('movimientos.index', compact('movimientos', 'empleados', 'conceptos', 'conceptos_create'));
 
     }
 
-    public function store(Request $request) 
+    public function store(Request $request)
     {
 
         try {
@@ -201,7 +201,7 @@ class MovimientoController extends Controller
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
-        
+
     }
 
 }

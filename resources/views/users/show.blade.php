@@ -10,7 +10,7 @@
 
 
 
-    <div x-data="{ tab: 'conceptos', conceptoForm: false, prestamoForm: false, movimientoForm: false, hijoForm: false, salarioForm: false, estadoForm: false }" class="container mx-auto p-10">
+    <div x-data="{ tab: '{{ $tab }}', conceptoForm: false, prestamoForm: false, movimientoForm: false, hijoForm: false, salarioForm: false, estadoForm: false }" class="container mx-auto p-10">
 
         @if (session('success'))
             <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
@@ -139,45 +139,54 @@
         @include('users.partials.estado-form')
 
 
-        <div class="mt-4 w- border border-gray-300 rounded p-4">
-            <ul class="flex text-gray-700">
+        <div class="mt-4 border border-gray-300 rounded p-4">
+            <ul class="flex text-gray-700 ">
+                <li>
+                    <a href="?pestana=liquidaciones"
+                        :class="{ 'font-medium border-b-2 text-black': tab == 'liquidaciones' }"
+                        class="py-2 px-6 hover:text-black hover:font-medium">Liquidaciones</a>
+                </li>
+                <li>
+                    <a href="?pestana=movimientos" :class="{ 'font-medium border-b-2 text-black': tab == 'movimientos' }"
+                        class="py-2 px-6 hover:text-black hover:font-medium">Movimientos</a>
+                </li>
 
                 <li>
-                    <button x-on:click="tab = 'conceptos'"
-                        :class="{ 'font-medium border-b-2 text-black': tab == 'conceptos' }"
-                        class="py-2 px-6 hover:text-black hover:font-medium">Conceptos</button>
+                    <a href="?pestana=conceptos" :class="{ 'font-medium border-b-2 text-black': tab == 'conceptos' }"
+                        class="py-2 px-6 hover:text-black hover:font-medium">Conceptos</a>
                 </li>
                 <li>
-                    <button x-on:click="tab = 'prestamos'"
-                        :class="{ 'font-medium border-b-2 text-black': tab == 'prestamos' }"
-                        class="py-2 px-6 hover:text-black hover:font-medium">Préstamos</button>
+                    <a href="?pestana=prestamos" :class="{ 'font-medium border-b-2 text-black': tab == 'prestamos' }"
+                        class="py-2 px-6 hover:text-black hover:font-medium">Préstamos</a>
                 </li>
+
+
                 <li>
-                    <button x-on:click="tab = 'movimientos'"
-                        :class="{ 'font-medium border-b-2 text-black': tab == 'movimientos' }"
-                        class="py-2 px-6 hover:text-black hover:font-medium">Movimientos</button>
-                </li>
-                <li>
-                    <button x-on:click="tab = 'liquidaciones'"
-                        :class="{ 'font-medium border-b-2 text-black': tab == 'liquidaciones' }"
-                        class="py-2 px-6 hover:text-black hover:font-medium">Liquidaciones</button>
-                </li>
-                <li>
-                    <button x-on:click="tab = 'hijos'" :class="{ 'font-medium border-b-2 text-black': tab == 'hijos' }"
-                        class="py-2 px-6 hover:text-black hover:font-medium">Hijos</button>
+                    <a href="?pestana=hijos" :class="{ 'font-medium border-b-2 text-black': tab == 'hijos' }"
+                        class="py-2 px-6 hover:text-black hover:font-medium">Hijos</a>
                 </li>
 
             </ul>
             <div>
 
 
+                @if (strcmp($tab, 'liquidaciones') == 0)
+                    @include('users.partials.tab-liquidaciones')
+                @endif
 
+                @if (strcmp($tab, 'conceptos') == 0)
+                    @include('users.partials.tab-conceptos')
+                @endif
+                @if (strcmp($tab, 'prestamos') == 0)
+                    @include('users.partials.tab-prestamos')
+                @endif
+                @if (strcmp($tab, 'movimientos') == 0)
+                    @include('users.partials.tab-movimientos')
+                @endif
+                @if (strcmp($tab, 'hijos') == 0)
+                    @include('users.partials.tab-hijos')
+                @endif
 
-                @include('users.partials.tab-conceptos')
-                @include('users.partials.tab-prestamos')
-                @include('users.partials.tab-movimientos')
-                @include('users.partials.tab-hijos')
-                @include('users.partials.tab-liquidaciones')
             </div>
         </div>
 

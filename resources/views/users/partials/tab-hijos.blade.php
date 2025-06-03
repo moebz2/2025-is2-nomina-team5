@@ -86,7 +86,7 @@
 
     </div>
 
-    <div x-show="hijoForm" class="p-4 bg-gray-100 rounded">
+    <div x-show="hijoForm" class="p-4 bg-gray-100 rounded" style="display: none">
 
         <h3 class="text-xl font-medium">Agregar hijo</h3>
 

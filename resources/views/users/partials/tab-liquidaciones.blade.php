@@ -1,4 +1,4 @@
-<div x-show="tab == 'liquidaciones'">
+<div>
 
 
 

@@ -87,9 +87,18 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::resource('/movimientos', MovimientoController::class);
 
+    Route::prefix('reportes')->group(function () {
 
+        Route::get('', function () {
+            return redirect()->route('reportes.descuentos');
+        })->name('reportes.index');
 
-    // Otros
+        Route::get('/descuentos', [ReporteDescuentosController::class, 'index'])->name('reportes.descuentos');
+        Route::get('/sum-conceptos', [ReporteSumConceptosController::class, 'index'])->name('reportes.sum-conceptos');
+        Route::get('/liq-empleado', [ReporteLiqEmpleadoController::class, 'index'])->name('reportes.liq-empleado');
+    });
+
+    // CONFIGURACION
 
     Route::prefix('configuracion')->group(function () {
 
@@ -119,12 +128,10 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::resource('/prestamos', PrestamoController::class);
 
-    Route::get('/reportes/descuentos', [ReporteDescuentosController::class, 'index'])->name('reportes.descuentos');
 
-    Route::get('/reportes/liq-empleado', [ReporteLiqEmpleadoController::class, 'index'])->name('reportes.liq-empleado');
+
     Route::get('/reportes/liq-empleado/export', [ReporteLiqEmpleadoController::class, 'export'])->name('reportes.liq-empleado.export');
 
-    Route::get('/reportes/sum-conceptos', [ReporteSumConceptosController::class, 'index'])->name('reportes.sum-conceptos');
 
     Route::get('/reportes/sum-conceptos/export', [ReporteSumConceptosController::class, 'export'])->name('reportes.sum-conceptos.export');
 });

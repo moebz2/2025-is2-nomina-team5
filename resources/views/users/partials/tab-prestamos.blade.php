@@ -55,7 +55,7 @@
         </button>
     </div>
 
-    <div x-show="prestamoForm" class="p-4 bg-gray-100 rounded">
+    <div x-show="prestamoForm" class="p-4 bg-gray-100 rounded" style="display: none">
         <h3 class="text-xl font-medium">Registrar nuevo préstamo</h3>
         <form action="{{ route('prestamos.store') }}" method="POST">
             @csrf

@@ -12,7 +12,8 @@ class ReporteLiqEmpleadoController extends Controller
     public function index(Request $request)
     {
         $report = $this->getReport($request);
-        return view('reportes.liq-empleado', compact('report'));
+        $vista =  view('reportes.liq-empleado', compact('report'));
+        return view('reportes.index', ['content' => $vista]);
     }
 
     public function export(Request $request)

@@ -49,11 +49,65 @@ class UserController extends Controller
         return view('users.create', compact('cargos', 'roles'));
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $user = User::findOrFail($id);
+
+        $tab = $request->query('pestana') ??  'liquidaciones';
+
+
+        // 2. Obtener el parámetro 'periodo' de la URL (si existe)
+        $monthName = ['', 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+        $periodoNombreMes = $request->query('periodo') ?? $monthName[Carbon::now()->month];
+        $mesFiltro = null;
+        $anoFiltro = Carbon::now()->year;
+
+
+        $monthMap = [
+            'enero'      => 1, 'febrero' => 2, 'marzo'   => 3, 'abril'   => 4,
+            'mayo'       => 5, 'junio'   => 6, 'julio'   => 7, 'agosto'  => 8,
+            'septiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12
+        ];
+
+
+        // 3. Determinar el mes y año para el filtro
+        if ($periodoNombreMes) {
+            // Intentar parsear como nombre de mes
+            $lowerCasePeriodo = mb_strtolower($periodoNombreMes);
+            if (isset($monthMap[$lowerCasePeriodo])) {
+                $mesFiltro = $monthMap[$lowerCasePeriodo];
+            } elseif (is_numeric($periodoNombreMes) && $periodoNombreMes >= 1 && $periodoNombreMes <= 12) {
+                // Si el 'periodo' viene como número de mes (ej: /?periodo=5)
+                $mesFiltro = (int)$periodoNombreMes;
+
+            }
+            // Opcional: parámetro de año (ej: /?periodo=5&anio=2024)
+            // $anoParam = $request->query('anio');
+            // if ($anoParam && is_numeric($anoParam)) {
+            //     $anoFiltro = (int)$anoParam;
+            // }
+        }
+
+
+        $movimientosQuery = $user->movimientos(); // Esto asume que tienes una relación 'movimientos' en tu modelo User
+
+        // Aplicar el filtro de mes y año si se especificó
+        if ($mesFiltro) {
+            // Ahora podemos filtrar directamente por la columna 'validez_fecha' de la tabla 'movimientos'
+            $movimientosQuery->whereYear('validez_fecha', $anoFiltro)
+                             ->whereMonth('validez_fecha', $mesFiltro);
+        }
+
+        // 5. Obtener los movimientos finales (puedes añadir paginación si hay muchos)
+        $movimientos = $movimientosQuery
+                            ->whereNull('eliminacion_fecha')
+                            ->orderBy('validez_fecha', 'desc')
+                            ->get();
+
+
+
+
         $cargo = $user->currentCargo();
-        $movimientos = $user->movimientos;
         $conceptos = Concepto::where('es_modificable', true)->get();
         $liquidaciones = $user->liquidaciones;
         $salario = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
@@ -63,7 +117,7 @@ class UserController extends Controller
         $salario_minimo = Parametro::where('nombre', Parametro::SALARIO_MINIMO)->first();
 
 
-        return view('users.show', compact('user', 'cargo', 'conceptos', 'movimientos', 'liquidaciones', 'ips', 'salario', 'bonificacion', 'salario_minimo'));
+        return view('users.show', compact('user', 'cargo', 'conceptos', 'movimientos', 'liquidaciones', 'ips', 'salario', 'bonificacion', 'salario_minimo', 'tab', 'monthMap', 'periodoNombreMes'));
     }
 
     public function store(Request $request)
@@ -237,7 +291,7 @@ class UserController extends Controller
 
             EmpleadoConcepto::create($request->all());
 
-            return redirect()->route('users.show', $id)->with('success', 'Concepto asignado correctamente');
+            return redirect()->route('users.show', [$id, 'pestana' => 'conceptos'])->with('success', 'Concepto asignado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -268,7 +322,7 @@ class UserController extends Controller
 
             Movimiento::create($data);
 
-            return redirect()->route('users.show', $id)->with('success', 'Movimiento registrado correctamente');
+            return redirect()->route('users.show', [$id, 'pestana' => 'movimientos'])->with('success', 'Movimiento registrado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -308,7 +362,7 @@ class UserController extends Controller
 
             $user->hijos()->create($request->all());
 
-            return redirect()->route('users.show', $id)->with('success', 'Hijo creado correctamente');
+            return redirect()->route('users.show', [$id, 'pestana' => 'hijos'])->with('success', 'Hijo creado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
