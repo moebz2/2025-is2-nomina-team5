@@ -291,7 +291,7 @@ class UserController extends Controller
 
             EmpleadoConcepto::create($request->all());
 
-            return redirect()->route('users.show', $id)->with('success', 'Concepto asignado correctamente');
+            return redirect()->route('users.show', [$id, 'pestana' => 'conceptos'])->with('success', 'Concepto asignado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -322,7 +322,7 @@ class UserController extends Controller
 
             Movimiento::create($data);
 
-            return redirect()->route('users.show', $id)->with('success', 'Movimiento registrado correctamente');
+            return redirect()->route('users.show', [$id, 'pestana' => 'movimientos'])->with('success', 'Movimiento registrado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
@@ -362,7 +362,7 @@ class UserController extends Controller
 
             $user->hijos()->create($request->all());
 
-            return redirect()->route('users.show', $id)->with('success', 'Hijo creado correctamente');
+            return redirect()->route('users.show', [$id, 'pestana' => 'hijos'])->with('success', 'Hijo creado correctamente');
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }

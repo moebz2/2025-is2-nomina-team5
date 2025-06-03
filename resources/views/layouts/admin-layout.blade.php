@@ -56,21 +56,31 @@
 
         <main class="flex min-h-dvh flex-col pt-14">
             <div
-                class="isolate grid flex-1 grid-rows-[1fr_auto] overflow-clip grid-cols-[var(--sidebar-width)_var(--gutter-width)_auto_var(--gutter-width)] [--sidebar-width:0] 2xl:[--sidebar-width:--spacing(72)] [--gutter-width:--spacing(6)] 2xl:[--gutter-width:--spacing(10)]">
+            class="isolate grid flex-1 grid-rows-[1fr_auto] overflow-clip
+            [--gutter-width:theme('spacing.6')] 2xl:[--gutter-width:theme('spacing.10')]
+            @hasSection('sidebar')
+                grid-cols-[var(--sidebar-width)_var(--gutter-width)_auto_var(--gutter-width)] [--sidebar-width:theme('spacing.0')] 2xl:[--sidebar-width:theme('spacing.72')]
+            @else
+                grid-cols-[auto_var(--gutter-width)] [--sidebar-width:theme('spacing.0')]
+            @endif ">
                 {{-- SIDEBAR --}}
 
-                <div class="col-start-1 row-span-2 row-start-1 max-2xl:hidden">
-                    @section('sidebar')
-                    @show
-
-                </div>
+                @hasSection ('sidebar') 
+                    
+                    <div class="col-start-1 row-span-2 row-start-1 max-2xl:hidden">
+                        @section('sidebar')
+                        @show
+                        
+                    </div>
+                @endif
                 {{-- MAIN CONTENT --}}
-                <div class="col-start-3 row-start-1 max-sm:col-span-full max-sm:col-start-1">
+                <div class="@hasSection('sidebar') col-start-3 @endif  row-start-1 max-sm:col-span-full max-sm:col-start-1">
                     @section('content')
                     @show
                 </div>
                 <footer
-                    class="col-start-3 row-start-2 max-sm:col-span-full max-sm:col-start-1 @container mb-16 grid w-full px-4 sm:px-2">
+                class="@hasSection('sidebar') col-start-3 @else col-start-1 @endif
+                row-start-2 max-sm:col-span-full max-sm:col-start-1 @container mb-16 grid w-full px-4 sm:px-2">
                     @section('footer')
                     @show
                 </footer>

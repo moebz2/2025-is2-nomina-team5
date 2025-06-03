@@ -211,6 +211,9 @@
         function graficoBarras() {
             var data = google.visualization.arrayToDataTable(@json($graficoBarras));
 
+            console.log(@json($graficoBarras));
+            
+
             var options = {
                 title: 'Top 10 Conceptos de Débito',
                 height: '400',
