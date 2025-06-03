@@ -17,19 +17,39 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-10">
 
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <div class="grid grid-cols-2 lg:grid-cols-4 col-span-2 gap-4 items-start">
 
                 <div class="bg-white rounded shadow p-4">
                     <h3 class="font-medium text-lg">Usuarios</h3>
-                    <h2 class="mt-4 font-bold text-4xl">{{ $usuarios->count() }}</h2>
+                    <div class="flex">
+                        <h2 class="mt-4 font-bold text-4xl">{{ $usuarios->count() }}</h2>
+                        <i class="ml-auto material-symbols-outlined text-gray-500" style="font-size: 3rem">groups</i>
+
+                    </div>
                 </div>
                 <div class="bg-white rounded shadow p-4">
                     <h3 class="font-medium text-lg">Vacaciones</h3>
-                    <h2 class="mt-4 font-bold text-4xl">{{ $vacaciones->count() }}</h2>
+                    <div class="flex">
+                        <h2 class="mt-4 font-bold text-4xl">{{ $vacaciones->count() }}</h2>
+                        <i class="ml-auto material-symbols-outlined text-gray-500" style="font-size: 3rem">weekend</i>
+
+                    </div>
                 </div>
                 <div class="bg-white rounded shadow p-4">
                     <h3 class="font-medium text-lg">Despedidos</h3>
-                    <h2 class="mt-4 font-bold text-4xl">{{ $despedidos->count() }}</h2>
+                    <div class="flex">
+                        <h2 class="mt-4 font-bold text-4xl">{{ $despedidos->count() }}</h2>
+                        <i class="ml-auto material-symbols-outlined text-gray-500" style="font-size: 3rem">no_accounts</i>
+
+                    </div>
+                </div>
+                 <div class="bg-white rounded shadow p-4">
+                    <h3 class="font-medium text-lg">Departamentos</h3>
+                    <div class="flex">
+                        <h2 class="mt-4 font-bold text-4xl">{{ $departamentos->count() }}</h2>
+                        <i class="ml-auto material-symbols-outlined text-gray-500" style="font-size: 3rem">workspaces</i>
+
+                    </div>
                 </div>
 
             </div>
@@ -66,23 +86,13 @@
 
             </div>
 
+            <div id="departamentos_chart"></div>
+
         </div>
 
         <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-            <div class="">
-
-                {{-- Agui puede ir una torta de usuarios por departamentos --}}
-
-                <div id="chart_columna" class="w-full">
-
-                </div>
-
-
-            </div>
-
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 col-span-2 items-start">
 
 
                 <div class="bg-white rounded shadow p-4">
@@ -103,6 +113,26 @@
                 </div>
 
             </div>
+
+            <div class="">
+
+                {{-- Agui puede ir una torta de usuarios por departamentos --}}
+
+                <div id="chart_columna" class="w-full">
+
+                </div>
+
+
+            </div>
+
+            <div>
+                <div id="grafico_conceptos"></div>
+
+            </div>
+
+
+
+
 
 
         </div>
@@ -134,107 +164,79 @@
         // draws it.
         function drawChart() {
 
-            //this.drawChart1();
-            this.drawChart2();
+            this.drawChart1();
+            this.drawChart3();
+
+            this.graficoBarras();
 
         }
 
         function drawChart1() {
 
             // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            data.addRows([
-                ['Mushrooms', 3],
-                ['Onions', 1],
-                ['Olives', 1],
-                ['Zucchini', 1],
-                ['Pepperoni', 2]
-            ]);
+           var data = google.visualization.arrayToDataTable(@json($departamentosChart));
 
-            // Set chart options
+            // Opciones del gráfico. pieHole es lo que lo convierte en un donut chart.
             var options = {
-                'title': 'How Much Pizza I Ate Last Night',
-                'width': 400,
-                'height': 300
+                height: '300',
+                title: 'Empleados por Departamento',
+                pieHole: 0.4, // Un valor entre 0 y 1. 0.4 es un buen punto de partida para un donut.
+                // legend: { position: 'labeled' } // Podrías querer esta opción para etiquetas directas en el gráfico
             };
 
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            // Crea una instancia del PieChart (que se convierte en donut con pieHole)
+            var chart = new google.visualization.PieChart(document.getElementById('departamentos_chart'));
             chart.draw(data, options);
         }
 
-        function drawChart2() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('timeofday', 'Time of Day');
-            data.addColumn('number', 'Motivation Level');
 
-            data.addRows([
-                [{
-                    v: [8, 0, 0],
-                    f: '8 am'
-                }, 1],
-                [{
-                    v: [9, 0, 0],
-                    f: '9 am'
-                }, 5],
-                [{
-                    v: [10, 0, 0],
-                    f: '10 am'
-                }, 3],
-                [{
-                    v: [11, 0, 0],
-                    f: '11 am'
-                }, 0],
-                [{
-                    v: [12, 0, 0],
-                    f: '12 pm'
-                }, 1],
-                [{
-                    v: [13, 0, 0],
-                    f: '1 pm'
-                }, 6],
-                [{
-                    v: [14, 0, 0],
-                    f: '2 pm'
-                }, 7],
-                [{
-                    v: [15, 0, 0],
-                    f: '3 pm'
-                }, 8],
-                [{
-                    v: [16, 0, 0],
-                    f: '4 pm'
-                }, 9],
-                [{
-                    v: [17, 0, 0],
-                    f: '5 pm'
-                }, 10],
-            ]);
+        function drawChart3() {
+            // Convierte los datos de Laravel (JSON) a un DataTable de Google Charts
+            var data = google.visualization.arrayToDataTable(@json($googleChartsData));
 
+            // Opciones del gráfico
             var options = {
-                title: 'Motivation Level Throughout the Day',
-                hAxis: {
-                    title: 'Time of Day',
-                    format: 'h:mm a',
-                    viewWindow: {
-                        min: [7, 30, 0],
-                        max: [17, 30, 0]
-                    }
-                },
-                vAxis: {
-                    title: 'Rating (scale of 1-10)'
-                }
+                height: '400',
+                title: 'Monto de Liquidación por Mes ({{ $currentYear }})', // Título del gráfico
+                hAxis: {title: 'Mes',  titleTextStyle: {color: '#333'}}, // Eje horizontal
+                vAxis: {minValue: 0}, // Eje vertical, comienza en 0
+                legend: { position: 'none' } // No mostrar leyenda (ya que solo hay una serie)
             };
 
-            var materialChart = new google.charts.Bar(document.getElementById('chart_columna'));
-            materialChart.draw(data, options);
+            // Crea una instancia del ColumnChart y lo dibuja en el div con id 'chart_div'
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_columna'));
+            chart.draw(data, options);
+        }
 
-            /* var chart = new google.visualization.ColumnChart(
-                document.getElementById('chart_columna'));
+        function graficoBarras() {
+            var data = google.visualization.arrayToDataTable(@json($graficoBarras));
 
-            chart.draw(data, options); */
+            var options = {
+                title: 'Top 10 Conceptos de Débito',
+                height: '400',
+                subtitle: 'Comparativa de montos entre el mes actual y el mes anterior',
+                bars: 'horizontal', // Esto hace que las barras sean horizontales
+                hAxis: {
+                    format: 'decimal', // Asegura el formato decimal en el eje de montos
+                    title: 'Monto'
+                },
+                vAxis: {
+                    title: 'Concepto' // Eje vertical para los conceptos
+                },
+                colors: ['#1A73E8', '#E67B25'], // Azul para Mes Actual, Naranja/Rojo para Mes Anterior
+                series: {
+                    0: { targetAxisIndex: 0 }, // Primera serie (Mes Actual)
+                    1: { targetAxisIndex: 0 }  // Segunda serie (Mes Anterior)
+                },
+                legend: { position: 'top' }, // Posiciona la leyenda en la parte inferior
+                // Para hacer barras apiladas (si lo prefieres):
+                // isStacked: true,
+            };
+
+            // Para gráficos de Material Design (paquete 'bar'), se usa google.charts.Bar
+            // y se debe convertir las opciones.
+            var chart = new google.visualization.BarChart(document.getElementById('grafico_conceptos'));
+            chart.draw(data, options);
         }
     </script>
 @endpush
