@@ -16,6 +16,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReporteDescuentosController;
 use App\Http\Controllers\ReporteLiqEmpleadoController;
 use App\Http\Controllers\ReporteSumConceptosController;
+use App\Http\Controllers\ReporteTotalLiquidacionController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -94,8 +95,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         })->name('reportes.index');
 
         Route::get('/descuentos', [ReporteDescuentosController::class, 'index'])->name('reportes.descuentos');
+
         Route::get('/sum-conceptos', [ReporteSumConceptosController::class, 'index'])->name('reportes.sum-conceptos');
+        Route::get('/sum-conceptos/export', [ReporteSumConceptosController::class, 'export'])->name('reportes.sum-conceptos.export');
+
         Route::get('/liq-empleado', [ReporteLiqEmpleadoController::class, 'index'])->name('reportes.liq-empleado');
+        Route::get('/liq-empleado/export', [ReporteLiqEmpleadoController::class, 'export'])->name('reportes.liq-empleado.export');
+
+        Route::get('/total-liquidacion', [ReporteTotalLiquidacionController::class, 'index'])->name('reportes.total-liquidacion');
+        Route::get('/total-liquidacion/export', [ReporteTotalLiquidacionController::class, 'export'])->name('reportes.total-liquidacion.export');
     });
 
     // CONFIGURACION
@@ -127,13 +135,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/movimientos/generar', [MovimientoController::class, 'generarMovimientos'])->name('movimientos.generar');
 
     Route::resource('/prestamos', PrestamoController::class);
-
-
-
-    Route::get('/reportes/liq-empleado/export', [ReporteLiqEmpleadoController::class, 'export'])->name('reportes.liq-empleado.export');
-
-
-    Route::get('/reportes/sum-conceptos/export', [ReporteSumConceptosController::class, 'export'])->name('reportes.sum-conceptos.export');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
