@@ -28,7 +28,7 @@ class ReporteTotalLiquidacionController extends Controller
         $report = $this->getReport($request);
 
         return Pdf::view(
-            'reportes.liq-empleado',
+            'reportes.total-liquidacion',
             [
                 'report' => $report,
                 'isExport' => true,
@@ -46,7 +46,15 @@ class ReporteTotalLiquidacionController extends Controller
 
     private function getReport($request)
     {
-        $liquidaciones = LiquidacionCabecera::with(['empleados.detalles.movimiento.concepto', 'empleados.empleado'])->get();
+        $query = \App\Models\LiquidacionCabecera::with(['empleados.detalles.movimiento.concepto', 'empleados.empleado']);
+
+        if ($request->filled('fecha_desde') || $request->filled('fecha_hasta')) {
+            $desde = $request->input('fecha_desde', '1900-01-01');
+            $hasta = $request->input('fecha_hasta', now()->format('Y-m-d'));
+            $query->whereBetween('periodo', [$desde, $hasta]);
+        }
+
+        $liquidaciones = $query->get();
 
         $report = $liquidaciones->map(function ($cabecera) {
             $total = 0;
