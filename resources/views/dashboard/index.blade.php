@@ -4,7 +4,6 @@
 
 @push('pushjs')
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 @endpush
 
 @section('content')
@@ -43,7 +42,7 @@
 
                     </div>
                 </div>
-                 <div class="bg-white rounded shadow p-4">
+                <div class="bg-white rounded shadow p-4">
                     <h3 class="font-medium text-lg">Departamentos</h3>
                     <div class="flex">
                         <h2 class="mt-4 font-bold text-4xl">{{ $departamentos->count() }}</h2>
@@ -117,7 +116,6 @@
             <div class="">
 
                 {{-- Agui puede ir una torta de usuarios por departamentos --}}
-
                 <div id="chart_columna" class="w-full">
 
                 </div>
@@ -126,6 +124,11 @@
             </div>
 
             <div>
+                <div class="mb-4 flex gap-2">
+                    <input type="month" id="month1" value="{{ now()->format('Y-m') }}">
+                    <input type="month" id="month2" value="{{ now()->subMonth()->format('Y-m') }}">
+                    <button onclick="graficoBarras()" class="bg-blue-500 text-white px-4 py-2 rounded">Comparar</button>
+                </div>
                 <div id="grafico_conceptos"></div>
 
             </div>
@@ -174,7 +177,7 @@
         function drawChart1() {
 
             // Create the data table.
-           var data = google.visualization.arrayToDataTable(@json($departamentosChart));
+            var data = google.visualization.arrayToDataTable(@json($departamentosChart));
 
             // Opciones del gráfico. pieHole es lo que lo convierte en un donut chart.
             var options = {
@@ -198,9 +201,18 @@
             var options = {
                 height: '400',
                 title: 'Monto de Liquidación por Mes ({{ $currentYear }})', // Título del gráfico
-                hAxis: {title: 'Mes',  titleTextStyle: {color: '#333'}}, // Eje horizontal
-                vAxis: {minValue: 0}, // Eje vertical, comienza en 0
-                legend: { position: 'none' } // No mostrar leyenda (ya que solo hay una serie)
+                hAxis: {
+                    title: 'Mes',
+                    titleTextStyle: {
+                        color: '#333'
+                    }
+                }, // Eje horizontal
+                vAxis: {
+                    minValue: 0
+                }, // Eje vertical, comienza en 0
+                legend: {
+                    position: 'none'
+                } // No mostrar leyenda (ya que solo hay una serie)
             };
 
             // Crea una instancia del ColumnChart y lo dibuja en el div con id 'chart_div'
@@ -209,35 +221,40 @@
         }
 
         function graficoBarras() {
-            var data = google.visualization.arrayToDataTable(@json($graficoBarras));
-
-            
-            var options = {
-                title: 'Top 10 Conceptos de Débito',
-                height: '400',
-                subtitle: 'Comparativa de montos entre el mes actual y el mes anterior',
-                bars: 'horizontal', // Esto hace que las barras sean horizontales
-                hAxis: {
-                    format: 'decimal', // Asegura el formato decimal en el eje de montos
-                    title: 'Monto'
-                },
-                vAxis: {
-                    title: 'Concepto' // Eje vertical para los conceptos
-                },
-                colors: ['#1A73E8', '#E67B25'], // Azul para Mes Actual, Naranja/Rojo para Mes Anterior
-                series: {
-                    0: { targetAxisIndex: 0 }, // Primera serie (Mes Actual)
-                    1: { targetAxisIndex: 0 }  // Segunda serie (Mes Anterior)
-                },
-                legend: { position: 'top' }, // Posiciona la leyenda en la parte inferior
-                // Para hacer barras apiladas (si lo prefieres):
-                // isStacked: true,
-            };
-
-            // Para gráficos de Material Design (paquete 'bar'), se usa google.charts.Bar
-            // y se debe convertir las opciones.
-            var chart = new google.visualization.BarChart(document.getElementById('grafico_conceptos'));
-            chart.draw(data, options);
+            let m1 = document.getElementById('month1').value;
+            let m2 = document.getElementById('month2').value;
+            let url = '{{ route('dashboard.grafico-barras') }}' + '?month1=' + m1 + '&month2=' + m2;
+            fetch(url).then(response => response.json())
+                .then(data => {
+                    var chartData = google.visualization.arrayToDataTable(data);
+                    var options = {
+                        title: 'Top 10 Conceptos de Débito',
+                        height: '400',
+                        subtitle: 'Comparativa de montos entre dos meses',
+                        bars: 'horizontal',
+                        hAxis: {
+                            format: 'decimal',
+                            title: 'Monto'
+                        },
+                        vAxis: {
+                            title: 'Concepto'
+                        },
+                        colors: ['#1A73E8', '#E67B25'],
+                        series: {
+                            0: {
+                                targetAxisIndex: 0
+                            },
+                            1: {
+                                targetAxisIndex: 0
+                            }
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    };
+                    var chart = new google.visualization.BarChart(document.getElementById('grafico_conceptos'));
+                    chart.draw(chartData, options);
+                });
         }
     </script>
 @endpush

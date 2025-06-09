@@ -64,6 +64,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('', [DashboardController::class, 'index'])->name('admin.index');
 
+    Route::get('/dashboard/grafico-barras', [\App\Http\Controllers\GraficoBarrasController::class, 'index'])->name('dashboard.grafico-barras');
+
     Route::get('/usuarios', function () {
         echo "Vista de Usuarios";
     });

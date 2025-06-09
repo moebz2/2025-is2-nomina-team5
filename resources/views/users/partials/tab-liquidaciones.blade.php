@@ -18,16 +18,14 @@
                     {{--  <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Calculos</th> --}}
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
-                        Fecha verificación
-                    </th>
-                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Acciones</th>
                 </thead>
 
                 @foreach ($user->liquidaciones as $liquidacion)
                     <tr>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $liquidacion->id }}</td>
-                        <td class="border-b border-gray-100 p-4 pl-8 text-black">{{ $liquidacion->periodo }}
+                        <td class="border-b border-gray-100 p-4 pl-8 text-black">
+                            {{ \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::parse($liquidacion->periodo)->locale('es')->translatedFormat('F/Y')) }}
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
                             @if (strcmp($liquidacion->estado, 'pendiente') == 0)
@@ -38,11 +36,6 @@
                                     class="rounded-lg bg-green-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-700 ">Aceptado</span>
                             @endif
                         </td>
-
-                        <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            {{ $liquidacion->verificacion_fecha }}
-                        </td>
-
 
                         <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-700">
 

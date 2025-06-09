@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <div class="container mx-auto ">
+    <div class="container ml-10 mr-10">
 
         @if (empty($isExport))
             <a href="{{ route('liquidacion-empleado.export', ['id' => $liquidacionEmpleadoId] + request()->query()) }}"
