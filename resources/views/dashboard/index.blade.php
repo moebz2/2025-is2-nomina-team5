@@ -4,12 +4,11 @@
 
 @push('pushjs')
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 @endpush
 
 @section('content')
 
-    <div class="container mx-auto p-10 bg-gray-100">
+    <div class="container mx-auto p-10">
 
         <h3 class="text-4xl font-medium">Panel de nomina</h3>
 
@@ -17,9 +16,9 @@
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-10">
 
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 col-span-2 gap-4 items-start">
+            <div class="grid grid-cols-2 lg:grid-cols-4 col-span-2 gap-4 items-start bg-gradient-to-r from-teal-400 to-yellow-200 rounded-xl p-4">
 
-                <div class="bg-white rounded shadow p-4">
+                <div class="bg-white rounded  p-4">
                     <h3 class="font-medium text-lg">Usuarios</h3>
                     <div class="flex">
                         <h2 class="mt-4 font-bold text-4xl">{{ $usuarios->count() }}</h2>
@@ -27,7 +26,7 @@
 
                     </div>
                 </div>
-                <div class="bg-white rounded shadow p-4">
+                <div class="bg-white rounded  p-4">
                     <h3 class="font-medium text-lg">Vacaciones</h3>
                     <div class="flex">
                         <h2 class="mt-4 font-bold text-4xl">{{ $vacaciones->count() }}</h2>
@@ -35,7 +34,7 @@
 
                     </div>
                 </div>
-                <div class="bg-white rounded shadow p-4">
+                <div class="bg-white rounded  p-4">
                     <h3 class="font-medium text-lg">Despedidos</h3>
                     <div class="flex">
                         <h2 class="mt-4 font-bold text-4xl">{{ $despedidos->count() }}</h2>
@@ -43,7 +42,7 @@
 
                     </div>
                 </div>
-                 <div class="bg-white rounded shadow p-4">
+                <div class="bg-white rounded  p-4">
                     <h3 class="font-medium text-lg">Departamentos</h3>
                     <div class="flex">
                         <h2 class="mt-4 font-bold text-4xl">{{ $departamentos->count() }}</h2>
@@ -54,7 +53,7 @@
 
             </div>
 
-            <div class="">
+            <div class="p-5 border border-gray-200 rounded-xl">
 
                 {{-- Agui puede ir una torta de usuarios por departamentos --}}
 
@@ -86,26 +85,37 @@
 
             </div>
 
-            <div id="departamentos_chart"></div>
+            <div id="departamentos_chart" class="p-5 border border-gray-200 rounded-xl">
+                <div class="flex items-center justify-center"><button type="button"
+                        class="inline-flex cursor-not-allowed items-center rounded-md bg-indigo-500 px-4 py-2 text-sm leading-6 font-semibold text-white transition duration-150 ease-in-out hover:bg-indigo-400"
+                        disabled=""><svg class="mr-3 -ml-1 size-5 animate-spin text-white"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>Processing…</button></div>
+            </div>
 
         </div>
 
-        <div class="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 col-span-2 items-start">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 col-span-2 items-start bg-gradient-to-r from-violet-200 to-pink-200 p-4 rounded-xl">
 
 
-                <div class="bg-white rounded shadow p-4">
+                <div class="bg-white rounded  p-4">
                     <h3 class="font-medium text-lg">Liquidaciones</h3>
                     <h2 class="mt-4 font-bold text-4xl">{{ $liquidaciones->count() }} Total</h2>
                 </div>
-                <div class="bg-white rounded shadow p-4">
+                <div class="bg-white rounded  p-4">
                     <h3 class="font-medium text-lg">Pago de nomina - Este mes</h3>
                     <h2 class="mt-4 font-bold text-4xl">
                         {{ number_format($liquidacion_monto_mes, 0, ',', '.') }} Gs
                     </h2>
                 </div>
-                <div class="bg-white rounded shadow p-4">
+                <div class="bg-white rounded  p-4">
                     <h3 class="font-medium text-lg">Pago de nomina - Año</h3>
                     <h2 class="mt-4 font-bold text-4xl">
                         {{ number_format($liquidacion_monto_ano, 0, ',', '.') }} Gs
@@ -114,24 +124,95 @@
 
             </div>
 
-            <div class="">
+            <div class="p-5 border border-gray-200 rounded-xl">
 
-                {{-- Agui puede ir una torta de usuarios por departamentos --}}
+                <div class="flex items-center">
+                    <div class="flex-auto">
+                        <h3 class="text-xl font-medium">Liquidaciones</h3>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        {{-- <label for="country" class="block text-sm/6 font-medium text-gray-900">Año</label> --}}
+                        <div class="mt-2 grid grid-cols-1">
+                            <select id="country" name="country" autocomplete="country-name" onchange="actualizarPeriodoLiquidacion(this)"
+                                class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                            </select>
+                            <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                                viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                <path fill-rule="evenodd"
+                                    d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
 
-                <div id="chart_columna" class="w-full">
+                </div>
 
+                <div id="grafico_liquidacion" class="w-full mt-4">
+                    <div id="concepto_carga"
+                        class="flex items-center justify-center min-h-96 rounded border-5 border-dashed border-gray-400">
+                        <div
+                            class="inline-flex cursor-not-allowed items-center rounded-md bg-gray-300 px-4 py-2 text-sm leading-6 font-semibold text-indigo-500 transition duration-150 ease-in-out">
+                            <svg class="mr-3 -ml-1 size-5 animate-spin text-indigo-500" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>Cargando...
+                        </div>
+                    </div>
                 </div>
 
 
             </div>
 
-            <div>
-                <div id="grafico_conceptos"></div>
+            <div  class="p-5 border border-gray-200 rounded-xl">
+                <div class="flex items-center">
+                    <div class="flex-auto">
+                        <h3 class="text-xl font-medium">Conceptos</h3>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        {{-- <label for="country" class="block text-sm/6 font-medium text-gray-900">Comparar con</label> --}}
+                        <div class="mt-2 grid grid-cols-1">
+                            <select id="country" name="country" autocomplete="country-name" onchange="actualizarPeriodoConcepto(this)"
+                                class="col-start-1 row-start-1 w-full appearance-none capitalize rounded-md bg-white py-1.5 pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                                @foreach ($periodos_conceptos as $periodo => $mes)
+                                    <option value="{{$periodo}}">{{$mes}}</option>
+                                @endforeach
+                            </select>
+                            <svg class="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                                viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" data-slot="icon">
+                                <path fill-rule="evenodd"
+                                    d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="grafico_conceptos" class="mt-2">
+                    <div class="flex items-center justify-center min-h-96">
+                        <div
+                            class="inline-flex cursor-not-allowed items-center rounded-md px-4 py-2 leading-6 font-semibold transition duration-150 ease-in-out">
+                            <svg class="mr-3 -ml-1 size-5 animate-spin text-blue-700" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>Cargando...
+                        </div>
+                    </div>
+                </div>
 
             </div>
-
-
-
 
 
 
@@ -147,9 +228,63 @@
 
 @push('scripts')
     <script type="text/javascript">
-        let usuarios = {!! json_encode($departamentos) !!}
+        let liquidacionesChartData = null;
+        let conceptosChartData = null;
+        let departamentosChartData = null;
+        let chartApiLoaded = false;
 
-        console.log(usuarios);
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            console.log('Contenido DOM cargada');
+
+
+            dashboard.getDepartamentoChartData().then((res) => {
+
+                departamentosChartData = res.data.datos;
+
+                departamentosChart(departamentosChartData);
+
+            });
+
+            dashboard.getLiquidacionesChartData().then((res) => {
+
+                liquidacionesChartData = res.data.datos;
+
+                liquidacionesChart(liquidacionesChartData);
+
+
+            });
+
+            dashboard.getConceptosChartData().then((res) => {
+
+                conceptosChartData = res.data.datos;
+
+                conceptosChart(conceptosChartData);
+
+
+            });
+
+        });
+
+        function actualizarPeriodoConcepto(event){
+
+            dashboard.getConceptosChartData(event.value).then((res) => {
+
+                conceptosChart(res.data.datos);
+
+            });
+
+
+        }
+        function actualizarPeriodoLiquidacion(event){
+            dashboard.getLiquidacionesChartData(event.value).then((res)=> {
+
+                liquidacionesChart(res.data.datos);
+
+            });
+        }
+
 
         // Load the Visualization API and the corechart package.
         google.charts.load('current', {
@@ -164,78 +299,91 @@
         // draws it.
         function drawChart() {
 
-            this.drawChart1();
-            this.drawChart3();
+            this.chartApiLoaded = true;
 
-            this.graficoBarras();
+            console.log('API de graficas cargada');
+
 
         }
 
-        function drawChart1() {
+        function departamentosChart(data) {
 
-            // Create the data table.
-           var data = google.visualization.arrayToDataTable(@json($departamentosChart));
 
-            // Opciones del gráfico. pieHole es lo que lo convierte en un donut chart.
+            var data = google.visualization.arrayToDataTable(data);
+
+
             var options = {
                 height: '300',
                 title: 'Empleados por Departamento',
-                pieHole: 0.4, // Un valor entre 0 y 1. 0.4 es un buen punto de partida para un donut.
-                // legend: { position: 'labeled' } // Podrías querer esta opción para etiquetas directas en el gráfico
+                pieHole: 0.4,
+
             };
 
-            // Crea una instancia del PieChart (que se convierte en donut con pieHole)
             var chart = new google.visualization.PieChart(document.getElementById('departamentos_chart'));
             chart.draw(data, options);
         }
 
 
-        function drawChart3() {
-            // Convierte los datos de Laravel (JSON) a un DataTable de Google Charts
-            var data = google.visualization.arrayToDataTable(@json($googleChartsData));
+        function liquidacionesChart(data) {
 
-            // Opciones del gráfico
+
+            var data = google.visualization.arrayToDataTable(data);
+
+
+
+
             var options = {
                 height: '400',
-                title: 'Monto de Liquidación por Mes ({{ $currentYear }})', // Título del gráfico
-                hAxis: {title: 'Mes',  titleTextStyle: {color: '#333'}}, // Eje horizontal
-                vAxis: {minValue: 0}, // Eje vertical, comienza en 0
-                legend: { position: 'none' } // No mostrar leyenda (ya que solo hay una serie)
+                title: 'Monto de Liquidación por Mes',
+                hAxis: {
+                    title: 'Mes',
+                    titleTextStyle: {
+                        color: '#333'
+                    }
+                },
+                vAxis: {
+                    minValue: 0
+                },
+                legend: {
+                    position: 'none'
+                }
             };
 
-            // Crea una instancia del ColumnChart y lo dibuja en el div con id 'chart_div'
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart_columna'));
+
+            var chart = new google.visualization.ColumnChart(document.getElementById('grafico_liquidacion'));
             chart.draw(data, options);
         }
 
-        function graficoBarras() {
-            var data = google.visualization.arrayToDataTable(@json($graficoBarras));
+        function conceptosChart(data) {
 
-            
+            var data = google.visualization.arrayToDataTable(data);
+
             var options = {
-                title: 'Top 10 Conceptos de Débito',
+                //title: 'Top 10 Conceptos de Débito',
                 height: '400',
-                subtitle: 'Comparativa de montos entre el mes actual y el mes anterior',
-                bars: 'horizontal', // Esto hace que las barras sean horizontales
+                //subtitle: 'Comparativa de montos entre el mes actual y el mes anterior',
+                bars: 'horizontal',
                 hAxis: {
-                    format: 'decimal', // Asegura el formato decimal en el eje de montos
+                    format: 'decimal',
                     title: 'Monto'
                 },
                 vAxis: {
-                    title: 'Concepto' // Eje vertical para los conceptos
+                    title: 'Concepto'
                 },
-                colors: ['#1A73E8', '#E67B25'], // Azul para Mes Actual, Naranja/Rojo para Mes Anterior
+                colors: ['#1A73E8', '#E67B25'],
                 series: {
-                    0: { targetAxisIndex: 0 }, // Primera serie (Mes Actual)
-                    1: { targetAxisIndex: 0 }  // Segunda serie (Mes Anterior)
+                    0: {
+                        targetAxisIndex: 0
+                    },
+                    1: {
+                        targetAxisIndex: 0
+                    }
                 },
-                legend: { position: 'top' }, // Posiciona la leyenda en la parte inferior
-                // Para hacer barras apiladas (si lo prefieres):
-                // isStacked: true,
+                legend: {
+                    position: 'top'
+                },
             };
 
-            // Para gráficos de Material Design (paquete 'bar'), se usa google.charts.Bar
-            // y se debe convertir las opciones.
             var chart = new google.visualization.BarChart(document.getElementById('grafico_conceptos'));
             chart.draw(data, options);
         }

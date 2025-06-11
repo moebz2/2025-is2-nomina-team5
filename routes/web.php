@@ -16,6 +16,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReporteDescuentosController;
 use App\Http\Controllers\ReporteLiqEmpleadoController;
 use App\Http\Controllers\ReporteSumConceptosController;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -62,6 +63,24 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::patch('/users/{id}/inactive', [UserController::class, 'setInactive'])->name('users.setInactive');
 
     Route::get('', [DashboardController::class, 'index'])->name('admin.index');
+
+
+
+    Route::get('api/test', function (Request $request) {
+
+        $user = $request->user();
+
+        return response()->json([
+            'message' => 'Hola '. $user->nombre,
+            '0' => 'Este es un mensaje de prueba',
+            '1' => 'No conteste por favor'
+        ]);
+
+    });
+
+    Route::get('api/dashboard/departamentos',  [DashboardController::class, 'departamentosChartInfo']);
+    Route::get('api/dashboard/liquidaciones',  [DashboardController::class, 'liquidacionesMensualesAno']);
+    Route::get('api/dashboard/conceptos',  [DashboardController::class, 'conceptosDebito']);
 
     Route::get('/usuarios', function () {
         echo "Vista de Usuarios";
