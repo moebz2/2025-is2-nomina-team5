@@ -16,6 +16,9 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReporteDescuentosController;
 use App\Http\Controllers\ReporteLiqEmpleadoController;
 use App\Http\Controllers\ReporteSumConceptosController;
+
+use Illuminate\Http\Request;
+
 use App\Http\Controllers\ReporteTotalLiquidacionController;
 
 Route::get('/', function () {
@@ -64,7 +67,24 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('', [DashboardController::class, 'index'])->name('admin.index');
 
-    Route::get('/dashboard/grafico-barras', [\App\Http\Controllers\GraficoBarrasController::class, 'index'])->name('dashboard.grafico-barras');
+
+
+    Route::get('api/test', function (Request $request) {
+
+        $user = $request->user();
+
+        return response()->json([
+            'message' => 'Hola '. $user->nombre,
+            '0' => 'Este es un mensaje de prueba',
+            '1' => 'No conteste por favor'
+        ]);
+
+    });
+
+    Route::get('api/dashboard/departamentos',  [DashboardController::class, 'departamentosChartInfo']);
+    Route::get('api/dashboard/liquidaciones',  [DashboardController::class, 'liquidacionesMensualesAno']);
+    Route::get('api/dashboard/conceptos',  [DashboardController::class, 'conceptosDebito']);
+
 
     Route::get('/usuarios', function () {
         echo "Vista de Usuarios";
