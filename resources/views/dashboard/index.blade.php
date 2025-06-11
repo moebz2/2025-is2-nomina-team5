@@ -43,6 +43,7 @@
                     </div>
                 </div>
                 <div class="bg-white rounded  p-4">
+
                     <h3 class="font-medium text-lg">Departamentos</h3>
                     <div class="flex">
                         <h2 class="mt-4 font-bold text-4xl">{{ $departamentos->count() }}</h2>
@@ -124,6 +125,7 @@
 
             </div>
 
+
             <div class="p-5 border border-gray-200 rounded-xl">
 
                 <div class="flex items-center">
@@ -150,6 +152,7 @@
                         </div>
                     </div>
 
+
                 </div>
 
                 <div id="grafico_liquidacion" class="w-full mt-4">
@@ -168,6 +171,7 @@
                         </div>
                     </div>
                 </div>
+
 
 
             </div>
@@ -312,6 +316,7 @@
             var data = google.visualization.arrayToDataTable(data);
 
 
+
             var options = {
                 height: '300',
                 title: 'Empleados por Departamento',
@@ -334,12 +339,15 @@
 
             var options = {
                 height: '400',
+
                 title: 'Monto de Liquidación por Mes',
+
                 hAxis: {
                     title: 'Mes',
                     titleTextStyle: {
                         color: '#333'
                     }
+
                 },
                 vAxis: {
                     minValue: 0
@@ -347,6 +355,7 @@
                 legend: {
                     position: 'none'
                 }
+
             };
 
 
@@ -386,6 +395,7 @@
 
             var chart = new google.visualization.BarChart(document.getElementById('grafico_conceptos'));
             chart.draw(data, options);
+
         }
     </script>
 @endpush

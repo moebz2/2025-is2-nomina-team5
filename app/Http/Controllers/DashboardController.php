@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Cargo;
 use App\Models\Departamento;
-use App\Models\LiquidacionCabecera;
 use App\Models\LiquidacionEmpleadoCabecera;
-use App\Models\Movimiento;
 use App\Models\User;
 use Carbon\Carbon;
 
+
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Exception;
 use Illuminate\Support\Facades\Exceptions;
@@ -79,6 +79,7 @@ class DashboardController extends Controller
                 if ($detalle->movimiento->concepto->es_debito == 0) {
                     $liquidacion_monto_ano = $liquidacion_monto_ano + $detalle->movimiento->monto;
                 }
+
             }
         }
 
@@ -118,6 +119,7 @@ class DashboardController extends Controller
                     ->count('users.id');
 
                 $departamentosChart[] = [$departamento->nombre, $count];
+
             }
 
             return response()->json([
@@ -206,6 +208,7 @@ class DashboardController extends Controller
                     $monthlyCredits[$monthNumber],
                     $monthlyDebits[$monthNumber]
                 ];
+
             }
 
             return response()->json([
@@ -304,5 +307,6 @@ class DashboardController extends Controller
                 'mensaje' => 'Error: ' . $th->getMessage()
             ], 500);
         }
+
     }
 }

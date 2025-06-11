@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon; // Importar Carbon
 
-class DevSeeder extends Seeder
+class ExtendedDevSeeder extends Seeder
 {
     public function run(): void
     {

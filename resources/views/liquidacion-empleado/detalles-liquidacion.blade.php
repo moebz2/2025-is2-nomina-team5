@@ -4,11 +4,11 @@
 
 @section('content')
 
-    <div class="container mx-auto ">
+    <div class="container ml-10 mr-10">
 
         @if (empty($isExport))
-            <a href="{{ route('liquidacion-empleado.export', ['id' => $liquidacionEmpleadoId]) }}"
-                class="inline-flex mt-5 items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <a href="{{ route('liquidacion-empleado.export', ['id' => $liquidacionEmpleadoId] + request()->query()) }}"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 Exportar a PDF
             </a>
         @endif
@@ -149,7 +149,7 @@
                         </tr>
                         <tr class="bg-gray-700 text-white font-bold">
                             <td class="p-2">Total neto</td>
-                            <td class="p-2">Gs. {{ number_format($totalCredito - $totalDebito, 0, ',', '.') }}<br/>
+                            <td class="p-2">Gs. {{ number_format($totalCredito - $totalDebito, 0, ',', '.') }}<br />
                                 ({{ (new NumberFormatter('es-ES', NumberFormatter::SPELLOUT))->format($totalCredito - $totalDebito) }})
                             </td>
                         </tr>
