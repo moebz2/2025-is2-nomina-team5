@@ -6,6 +6,7 @@ use App\Models\Cargo;
 use App\Models\Departamento;
 use App\Models\LiquidacionEmpleadoCabecera;
 use App\Models\User;
+use App\Models\Movimiento;
 use Carbon\Carbon;
 
 
