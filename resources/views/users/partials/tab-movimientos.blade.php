@@ -4,8 +4,8 @@
     <div class="flex gap-4 mt-4 p-4">
 
         @foreach ($monthMap as $month => $value)
-            <a href="{{route('users.show',[$user->id, 'pestana' => 'movimientos', 'periodo' => $month])}}" class="font-semibold hover:text-blue-500 @if(strcmp($month, $periodoNombreMes)==0) text-blue-500 @else text-gray-700 @endif  capitalize text-sm">{{$month}}</a>
-
+            <a href="{{ route('users.show', [$user->id, 'pestana' => 'movimientos', 'periodo' => $month]) }}"
+                class="font-semibold hover:text-blue-500 @if (strcmp($month, $periodoNombreMes) == 0) text-blue-500 @else text-gray-700 @endif  capitalize text-sm">{{ $month }}</a>
         @endforeach
 
 
@@ -21,23 +21,18 @@
                     {{-- <th
                         class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-400 ">
                         ID</th> --}}
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Concepto
                     </th>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Valor
                     </th>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Fecha validez</th>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Fecha creacion
                     </th>
-                    <th
-                        class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
+                    <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Acciones</th>
                 </thead>
 
@@ -51,29 +46,23 @@
                         </td>
 
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                           {{$movimiento->validez_fecha->format('Y-m')}}
+                            {{ $movimiento->validez_fecha->format('Y-m') }}
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            {{$movimiento->generacion_fecha->format('Y-m-d')}}
+                            {{ $movimiento->generacion_fecha->format('Y-m-d') }}
                         </td>
 
                         <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-700">
 
-                            @can('movmiento editar')
-                                    <a href=""
-                                        class="hover:text-gray-700 cursor-pointer">
-                                        <i class="material-symbols-outlined">edit</i>
-                                    </a>
-                            @endcan
-
                             @can('movimiento eliminar')
-                                <form action=""
-                                    method="POST"
-                                    onsubmit="return confirm('¿Está seguro de que desea dar de baja este concepto?');">
+                                <form action="{{route('users.eliminarMovimiento', [$user->id, $movimiento->id])}}" method="POST"
+                                    onsubmit="return confirm('¿Está seguro de que desea dar de baja este movimiento?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button title="Eliminar" type="submit"
-                                        class="hover:text-red-500 block text-left cursor-pointer">
+                                    <button title="Eliminar" type="submit" @if (!$movimiento->concepto->es_modificable)
+                                        @disabled(true)
+                                    @endif
+                                        class="hover:text-red-500 block text-left cursor-pointer disabled:text-gray-300 disabled:cursor-not-allowed">
                                         <i class="material-symbols-outlined">delete</i>
                                     </button>
                                 </form>
@@ -87,10 +76,13 @@
     </div>
 
     <div class="flex jusitfy-end mt-4">
-        <button x-show="!movimientoForm" x-on:click="movimientoForm = true" class="px-2 py-1 flex items-center bg-blue-500 rounded text-medium hover:bg-blue-700 text-white">
+        <button x-show="!movimientoForm" x-on:click="movimientoForm = true"
+            class="px-2 py-1 flex items-center bg-blue-500 rounded text-medium hover:bg-blue-700 text-white">
             <span class="material-symbols-outlined">add</span>
             Nuevo movimiento
         </button>
+
+
 
     </div>
 
@@ -98,7 +90,7 @@
 
         <h3 class="text-xl font-medium">Registrar movimiento</h3>
 
-        <form action="{{route('users.registrarMovimiento', $user->id)}}" method="POST">
+        <form action="{{ route('users.registrarMovimiento', $user->id) }}" method="POST">
             @csrf
 
 
@@ -107,13 +99,12 @@
                 <input type="text" value="{{ $user->id }}" name="empleado_id" hidden>
 
                 <div class="sm:col-span-3">
-                    <label for="concepto_id"
-                        class="block text-sm font-medium text-gray-700">Concepto</label>
+                    <label for="concepto_id" class="block text-sm font-medium text-gray-700">Concepto</label>
 
 
                     <div class="mt-2 grid grid-cols-1">
-                        <select id="concepto_id" name="concepto_id" autocomplete="concepto_id"
-                            class="form-select" required>
+                        <select id="concepto_id" name="concepto_id" autocomplete="concepto_id" class="form-select"
+                            required>
                             <option value="" disabled selected>-- SELECCIONE EL CONCEPTO --</option>
                             @foreach ($conceptos as $concepto)
                                 <option value="{{ $concepto->id }}">{{ $concepto->nombre }}</option>
@@ -141,8 +132,8 @@
                 <div class="sm:col-span-3">
                     <label for="validez_fecha" class="block text-sm font-medium text-gray-700">Fecha de validez</label>
                     <div class="mt-2">
-                        <input type="date" name="validez_fecha" id="validez_fecha" value="{{ old('validez_fecha') }}" required
-                            class="form-input">
+                        <input type="date" name="validez_fecha" id="validez_fecha"
+                            value="{{ old('validez_fecha') }}" required class="form-input">
                     </div>
                 </div>
 
@@ -156,7 +147,8 @@
                     class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                     Guardar movimiento
                 </button>
-                <button x-show="movimientoForm" x-on:click="movimientoForm = false" class="px-2 py-1 flex items-center bg-red-500 rounded text-medium hover:bg-red-700 text-white">
+                <button x-show="movimientoForm" x-on:click="movimientoForm = false"
+                    class="px-2 py-1 flex items-center bg-red-500 rounded text-medium hover:bg-red-700 text-white">
 
                     Cancelar
                 </button>

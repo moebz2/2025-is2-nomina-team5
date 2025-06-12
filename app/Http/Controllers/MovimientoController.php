@@ -39,13 +39,14 @@ class MovimientoController extends Controller
 
         $fecha = $request->input('fecha', Carbon::now()->format('Y-m-d'));
         $fechaCb = Carbon::parse($fecha)->startOfMonth();
+        $fechaFin = Carbon::parse($fecha)->endOfMonth();
 
         // Generar movimientos en base a conceptos asociados a empleados
 
-        $empleadoConceptos = EmpleadoConcepto::whereDate('fecha_inicio', '<=', $fechaCb)
+        $empleadoConceptos = EmpleadoConcepto::whereDate('fecha_inicio', '<=', $fechaFin)
             ->where(function ($query) use ($fechaCb) {
                 $query->whereNull('fecha_fin')
-                    ->orWhereDate('fecha_fin', '>=', $fechaCb);
+                    ->orWhereDate('fecha_fin', '<=', $fechaCb);
             })->get();
 
         foreach ($empleadoConceptos as $empleadoConcepto) {
@@ -117,7 +118,7 @@ class MovimientoController extends Controller
 
         error_log('generarMovimientos.end');
 
-        return redirect()->back()->with('success', 'Movimientos generados correctamente.');
+        return redirect()->back()->with('success', 'Movimientos generados correctamente');
     }
 
     public function index(Request $request)
@@ -200,6 +201,32 @@ class MovimientoController extends Controller
             return redirect()->route('movimiento.index')->with('success', 'Movimiento registrado correctamente')->with('mode_create', true);
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
+        }
+
+    }
+
+    public function destroy(Request $request, Movimiento $movimiento){
+
+        try {
+
+            if(!$movimiento){
+
+                throw new Exception('No existe el movimiento');
+
+            }
+
+            $movimiento->delete();
+
+
+            return redirect()->route('movimiento.index')->with('success', 'Movimiento eliminado correctamente');
+
+
+
+        } catch (Exception $e) {
+
+            return back()->withErrors(['error' => $e->getMessage()]);
+
+
         }
 
     }
