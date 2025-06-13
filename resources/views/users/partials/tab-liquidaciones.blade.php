@@ -13,7 +13,7 @@
                         Periodo
                     </th>
                     <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
-                        Estado
+                        Monto crédito
                     </th>
                     {{--  <th class="border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left font-medium text-gray-500 ">
                         Calculos</th> --}}
@@ -25,32 +25,17 @@
                     <tr>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-500">{{ $liquidacion->id }}</td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-black">
-                            {{ \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::parse($liquidacion->periodo)->locale('es')->translatedFormat('F/Y')) }}
+                            {{ \Illuminate\Support\Str::ucfirst(\Carbon\Carbon::parse($liquidacion->periodo)->locale('es')->translatedFormat('F Y')) }}
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
-                            @if (strcmp($liquidacion->estado, 'pendiente') == 0)
-                                <span
-                                    class="rounded-lg bg-gray-200 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-gray-700 ">Pendiente</span>
-                            @else
-                                <span
-                                    class="rounded-lg bg-green-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-700 ">Aceptado</span>
-                            @endif
+                            {{ number_format($liquidacion->monto_credito(), 0, ',', '.')  }} Gs
                         </td>
 
                         <td class="border-b flex gap-2 border-gray-100 p-4 pl-8 text-gray-700">
 
-                            @can('liquidacion editar')
-                                <a href="" class="hover:text-gray-700 cursor-pointer">
-                                    <i class="material-symbols-outlined">edit</i>
-                                </a>
-                            @endcan
-
-                            @can('liquidacion eliminar')
-                                <button title="Eliminar" type="submit"
-                                    class="hover:text-red-500 block text-left cursor-pointer">
-                                    <i class="material-symbols-outlined">delete</i>
-                                </button>
-                            @endcan
+                           @can('liquidacion ver')
+                               <a href="{{route('liquidacion-empleado.show', $user->id)}}"></a>
+                           @endcan
 
 
 

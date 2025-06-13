@@ -8,13 +8,8 @@ use App\Models\LiquidacionEmpleadoCabecera;
 use App\Models\User;
 use App\Models\Movimiento;
 use Carbon\Carbon;
-
-
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Exception;
-use Illuminate\Support\Facades\Exceptions;
 
 class DashboardController extends Controller
 
@@ -250,7 +245,7 @@ class DashboardController extends Controller
                 ->join('conceptos', 'movimientos.concepto_id', '=', 'conceptos.id')
                 ->join('liquidacion_empleado_detalles', 'movimientos.id', '=', 'liquidacion_empleado_detalles.movimiento_id')
                 ->join('liquidaciones_empleado_cabecera', 'liquidacion_empleado_detalles.cabecera_id', '=', 'liquidaciones_empleado_cabecera.id')
-                ->where('conceptos.es_debito', true)
+                ->whereNot('conceptos.id', 1)
                 ->whereYear('liquidaciones_empleado_cabecera.periodo', $periodo->year)
                 ->whereMonth('liquidaciones_empleado_cabecera.periodo', $periodo->month)
                 ->groupBy('conceptos.nombre')
@@ -266,7 +261,7 @@ class DashboardController extends Controller
                 ->join('conceptos', 'movimientos.concepto_id', '=', 'conceptos.id')
                 ->join('liquidacion_empleado_detalles', 'movimientos.id', '=', 'liquidacion_empleado_detalles.movimiento_id')
                 ->join('liquidaciones_empleado_cabecera', 'liquidacion_empleado_detalles.cabecera_id', '=', 'liquidaciones_empleado_cabecera.id')
-                ->where('conceptos.es_debito', true)
+                ->whereNot('conceptos.id', 1)
                 ->whereYear('liquidaciones_empleado_cabecera.periodo', $periodo_anterior->year)
                 ->whereMonth('liquidaciones_empleado_cabecera.periodo', $periodo_anterior->month)
                 ->whereIn('conceptos.nombre', $currentMonthDebits->pluck('concepto_nombre')->toArray())

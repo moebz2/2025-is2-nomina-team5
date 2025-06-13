@@ -59,4 +59,21 @@ class LiquidacionEmpleadoCabecera extends Model
     {
         return $this->hasMany(LiquidacionEmpleadoDetalle::class, 'cabecera_id');
     }
+
+    public function monto_credito(){
+
+        $monto = 0;
+
+        foreach ($this->detalles as $detalle) {
+            if($detalle->movimiento->concepto->es_debito){
+                $monto = $monto - $detalle->movimiento->monto;
+            }else{
+                $monto = $monto + $detalle->movimiento->monto;
+            }
+
+        }
+
+        return $monto;
+
+    }
 }

@@ -64,9 +64,18 @@ class UserController extends Controller
 
 
         $monthMap = [
-            'enero'      => 1, 'febrero' => 2, 'marzo'   => 3, 'abril'   => 4,
-            'mayo'       => 5, 'junio'   => 6, 'julio'   => 7, 'agosto'  => 8,
-            'septiembre' => 9, 'octubre' => 10, 'noviembre' => 11, 'diciembre' => 12
+            'enero'      => 1,
+            'febrero' => 2,
+            'marzo'   => 3,
+            'abril'   => 4,
+            'mayo'       => 5,
+            'junio'   => 6,
+            'julio'   => 7,
+            'agosto'  => 8,
+            'septiembre' => 9,
+            'octubre' => 10,
+            'noviembre' => 11,
+            'diciembre' => 12
         ];
 
 
@@ -79,7 +88,6 @@ class UserController extends Controller
             } elseif (is_numeric($periodoNombreMes) && $periodoNombreMes >= 1 && $periodoNombreMes <= 12) {
                 // Si el 'periodo' viene como número de mes (ej: /?periodo=5)
                 $mesFiltro = (int)$periodoNombreMes;
-
             }
             // Opcional: parámetro de año (ej: /?periodo=5&anio=2024)
             // $anoParam = $request->query('anio');
@@ -95,14 +103,14 @@ class UserController extends Controller
         if ($mesFiltro) {
             // Ahora podemos filtrar directamente por la columna 'validez_fecha' de la tabla 'movimientos'
             $movimientosQuery->whereYear('validez_fecha', $anoFiltro)
-                             ->whereMonth('validez_fecha', $mesFiltro);
+                ->whereMonth('validez_fecha', $mesFiltro);
         }
 
         // 5. Obtener los movimientos finales (puedes añadir paginación si hay muchos)
         $movimientos = $movimientosQuery
-                            ->whereNull('eliminacion_fecha')
-                            ->orderBy('validez_fecha', 'desc')
-                            ->get();
+            ->whereNull('eliminacion_fecha')
+            ->orderBy('validez_fecha', 'desc')
+            ->get();
 
 
 
@@ -137,21 +145,21 @@ class UserController extends Controller
             'domicilio' => 'nullable|string|max:255',
         ]);
 
+        try {
+            DB::transaction(function () use ($request) {
+                $usuario = User::create([
+                    'nombre' => strip_tags($request->nombre),
+                    'cedula' => strip_tags($request->cedula),
+                    'sexo' => strip_tags($request->sexo),
+                    'email' => strip_tags($request->email),
+                    'password' => Hash::make($request->password),
+                    'nacimiento_fecha' => $request->nacimiento_fecha,
+                    'domicilio' => strip_tags($request->domicilio),
+                ]);
+                // syncRoles = Reemplazar rol actual, no agregar
+                $usuario->syncRoles($request->role);
 
-        DB::transaction(function () use ($request) {
-            $usuario = User::create([
-                'nombre' => strip_tags($request->nombre),
-                'cedula' => strip_tags($request->cedula),
-                'sexo' => strip_tags($request->sexo),
-                'email' => strip_tags($request->email),
-                'password' => Hash::make($request->password),
-                'nacimiento_fecha' => $request->nacimiento_fecha,
-                'domicilio' => strip_tags($request->domicilio),
-            ]);
-            // syncRoles = Reemplazar rol actual, no agregar
-            $usuario->syncRoles($request->role);
-
-            /*  if ($request->has('aplica_bonificacion_familiar')) {
+                /*  if ($request->has('aplica_bonificacion_familiar')) {
                 if ($request->has('hijos') && is_array($request->hijos)) {
                     foreach ($request->hijos as $hijoData) {
                         if (!empty($hijoData['nombre']) && !empty($hijoData['fecha_nacimiento'])) {
@@ -163,18 +171,21 @@ class UserController extends Controller
                 $usuario->hijos()->delete(); // por si viene algo indebido
             } */
 
-            if (isset($request->cargo_id)) {
-                if (!isset($request->ingreso_fecha)) {
-                    $request->ingreso_fecha = Carbon::now();
+                if (isset($request->cargo_id)) {
+                    if (!isset($request->ingreso_fecha)) {
+                        $request->ingreso_fecha = Carbon::now();
+                    }
+
+                    $cargo = Cargo::findOrFail($request->cargo_id);
+
+                    $usuario->asignarCargo($cargo->id, $request->ingreso_fecha);
                 }
+            });
 
-                $cargo = Cargo::findOrFail($request->cargo_id);
-
-                $usuario->asignarCargo($cargo->id, $request->ingreso_fecha);
-            }
-        });
-
-        return redirect()->route('users.index')->with('success', 'Usuario creado correctamente');
+            return redirect()->route('users.index')->with('success', 'Usuario creado correctamente');
+        } catch (Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     public function edit($id)
@@ -233,16 +244,12 @@ class UserController extends Controller
                 $user->asignarCargo($cargo->id, $request->ingreso_fecha);
 
                 $cargo_actual->update(['fecha_fin' => $request->ingreso_fecha]);
-
             }
 
-            if(!$cargo_actual){
+            if (!$cargo_actual) {
 
                 $user->asignarCargo($cargo->id, $request->ingreso_fecha);
-
             }
-
-
         });
 
         return redirect()->route('users.index')->with('success', 'Usuario actualizado correctamente');
@@ -327,7 +334,7 @@ class UserController extends Controller
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
-
+    //OK
     public function eliminarConcepto(Request $request, User $user,  $concepto)
     {
         try {
@@ -335,14 +342,37 @@ class UserController extends Controller
 
             $user->conceptos()->detach($concepto);
 
-
-
-
-
-            return redirect()->route('users.show', $user->id)->with('success', 'Concepto eliminado correctamente');
+            return redirect()->route('users.show', [$user->id, 'pestana' => 'conceptos'])->with('success', 'Concepto eliminado correctamente');
         } catch (Exception $e) {
 
-            dd($e->getMessage());
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
+
+    //OK
+    public function eliminarMovimiento(Request $request, User $user, Movimiento $movimiento)
+    {
+
+
+
+        try {
+
+
+            if (!$user) {
+                throw new Exception('Usuario no existe');
+            }
+
+            if (!$movimiento) {
+                throw new Exception('El movimiento no existe');
+            }
+
+            $movimiento->delete();
+
+            return redirect()->route('users.show', [$user->id, 'pestana' => 'movimientos'])->with('success', 'Movimiento eliminado correctamente');
+        } catch (Exception $e) {
+
+            return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
@@ -381,6 +411,15 @@ class UserController extends Controller
 
             $user = User::findOrFail($id);
 
+
+            $fecha_inicio = Carbon::now();
+
+            $cargo = $user->currentCargo();
+
+            if (isset($cargo)) {
+                $fecha_inicio = $cargo->pivot->fecha_inicio;
+            }
+
             $salario = $user->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
 
             if (isset($salario)) {
@@ -388,8 +427,6 @@ class UserController extends Controller
                 $salario->estado = false;
                 $salario->fecha_fin = now();
                 $salario->save();
-
-
             }
 
             $concepto_salario = Concepto::where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
@@ -398,19 +435,19 @@ class UserController extends Controller
                 'empleado_id' => $user->id,
                 'concepto_id' => $concepto_salario->id,
                 'valor' => $request->valor,
-                'fecha_inicio' => now(),
+                'fecha_inicio' => $fecha_inicio,
                 'estado' => true,
             ]);
 
             return redirect()->route('users.show', $id)->with('success', 'Salario asignado correctamente');
-
         } catch (Exception $e) {
 
             return back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
-    public function cambiarEstado (Request $request, $id){
+    public function cambiarEstado(Request $request, $id)
+    {
 
 
         $request->validate([
@@ -419,21 +456,15 @@ class UserController extends Controller
 
         ]);
 
-        try{
+        try {
 
             $usuario = User::findOrFail($id);
             $usuario->update(['estado' => $request->estado]);
 
             return redirect()->route('users.index')->with('success', 'Estado actualizado correctamente');
-
-
-
-
-        }catch(Exception $e){
+        } catch (Exception $e) {
 
             return redirect()->back()->with(['error' => $e->getMessage()]);
-
         }
-
     }
 }

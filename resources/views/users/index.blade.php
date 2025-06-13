@@ -33,8 +33,10 @@
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Estado
                             </th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Rol</th>
-                            <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Bonificación Familiar</th>
-                            <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Hijos</th>
+                            <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">
+                                Bonificación Familiar</th>
+                            <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Hijos
+                            </th>
                             <th class="border-b border-gray-200 p-4 pt-0 pb-3 text-left font-medium text-gray-500">Acciones
                             </th>
                         </tr>
@@ -57,15 +59,15 @@
                                 {{-- <td class="border-b border-gray-100 p-4 text-gray-700">{{ $user->fecha_egreso ? $user->fecha_egreso->format('Y-m-d') :'NA' }}</td> --}}
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
                                     @if (strcmp($user->estado, 'baja') == 0)
-
-                                    <span
-                                    class="ml-3 rounded-lg border-red-500 bg-red-100 px-2 border py-0.5 text-xs/6 font-semibold whitespace-nowrap text-red-500 ">De baja</span>
+                                        <span
+                                            class="ml-3 rounded-lg border-red-500 bg-red-100 px-2 border py-0.5 text-xs/6 font-semibold whitespace-nowrap text-red-500 ">De
+                                            baja</span>
                                     @elseif (strcmp($user->estado, 'inactivo') == 0)
-                                    <span
-                                    class="ml-3 rounded-lg bg-yellow-100 border-yellow-500 border px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-yellow-500 ">{{ $user->estado }}</span>
+                                        <span
+                                            class="ml-3 rounded-lg bg-yellow-100 border-yellow-500 border px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-yellow-500 ">{{ $user->estado }}</span>
                                     @else
                                         <span
-                                    class="ml-3 rounded-lg bg-green-100 border-green-500 border px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-500 ">{{ $user->estado }}</span>
+                                            class="ml-3 rounded-lg bg-green-100 border-green-500 border px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-500 ">{{ $user->estado }}</span>
                                     @endif
                                 </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
@@ -78,11 +80,12 @@
                                 </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
                                     @if ($user->hijosMenores->count() > 0)
-                                    <span
-                                    class="ml-3 rounded-lg bg-green-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-700 ">Incluye</span>
+                                        <span
+                                            class="ml-3 rounded-lg bg-green-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-green-700 ">Incluye</span>
                                     @else
-                                    <span
-                                    class="ml-3 rounded-lg bg-red-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-red-700 ">No incluye</span>
+                                        <span
+                                            class="ml-3 rounded-lg bg-red-100 px-2 py-0.5 text-xs/6 font-semibold whitespace-nowrap text-red-700 ">No
+                                            incluye</span>
                                     @endif
                                 </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
@@ -103,7 +106,7 @@
                                         onsubmit="return confirm('¿Está seguro de que desea marcar como inactivo a este usuario?');">
                                         @csrf
                                         @method('PATCH')
-                                        <button title="Dar de baja" type="submit"
+                                        <button title="Inhabilitar" type="submit"
                                             class=" hover:text-yellow-500 block text-left cursor-pointer">
                                             <i class="material-symbols-outlined">block</i>
                                         </button>
@@ -125,6 +128,10 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            <div class="p-4 border-t border-gray-200">
+
+                {{ $users->links() }}
             </div>
         </div>
         <div class="mt-4">

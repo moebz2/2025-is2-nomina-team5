@@ -12,16 +12,10 @@
 
         <h1 class="text-3xl font-bold uppercase">Crear Usuario</h1>
 
-        @if ($errors->any())
-            <div>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
+        @include('layouts.partials.banner-message')
+
+        @include('layouts.partials.validation-message')
         <div class="h-10"></div>
 
         <form action="{{ route('users.store') }}" method="POST">
