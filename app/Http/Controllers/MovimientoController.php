@@ -26,99 +26,104 @@ class MovimientoController extends Controller
         $this->middleware('can:movimiento crear')->only('create', 'store');
         $this->middleware('can:movimiento editar')->only('edit', 'update');
         $this->middleware('can:movimiento eliminar')->only('destroy');
-
     }
 
     public function generarMovimientos(Request $request)
     {
-        error_log('generarMovimientos.request: ' . json_encode($request->all()));
 
-        $request->validate([
-            'fecha' => 'nullable|date_format:Y-m-d',
-        ]);
+        try {
 
-        $fecha = $request->input('fecha', Carbon::now()->format('Y-m-d'));
-        $fechaCb = Carbon::parse($fecha)->startOfMonth();
-        $fechaFin = Carbon::parse($fecha)->endOfMonth();
+            error_log('generarMovimientos.request: ' . json_encode($request->all()));
 
-        // Generar movimientos en base a conceptos asociados a empleados
-
-        $empleadoConceptos = EmpleadoConcepto::whereDate('fecha_inicio', '<=', $fechaFin)
-            ->where(function ($query) use ($fechaCb) {
-                $query->whereNull('fecha_fin')
-                    ->orWhereDate('fecha_fin', '<=', $fechaCb);
-            })->get();
-
-        foreach ($empleadoConceptos as $empleadoConcepto) {
-            Movimiento::create([
-                'empleado_id' => $empleadoConcepto->empleado_id,
-                'concepto_id' => $empleadoConcepto->concepto_id,
-                'monto' => intval($empleadoConcepto->valor),
-                'validez_fecha' => $fechaCb,
-                'generacion_fecha' => now(),
+            $request->validate([
+                'fecha' => 'nullable|date_format:Y-m-d',
             ]);
-        }
 
-        // Generar movimiento de bonificación familiar si corresponde
+            $fecha = $request->input('fecha', Carbon::now()->format('Y-m-d'));
+            $fechaCb = Carbon::parse($fecha)->startOfMonth();
+            $fechaFin = Carbon::parse($fecha)->endOfMonth();
 
-        $salarioMinimo = $this->liquidacionService->obtenerSalarioMinimo();
-        $bonificacionConcepto = Concepto::where('tipo_concepto', Concepto::TIPO_BONIFICACION)->first();
-        $salarioConcepto = Concepto::where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
+            // Generar movimientos en base a conceptos asociados a empleados
 
-        error_log('generarMovimientos.salarioConceptoId: ' . $salarioConcepto->id);
+            $empleadoConceptos = EmpleadoConcepto::whereDate('fecha_inicio', '<=', $fechaFin)
+                ->where(function ($query) use ($fechaCb) {
+                    $query->whereNull('fecha_fin')
+                        ->orWhereDate('fecha_fin', '<=', $fechaCb);
+                })->get();
 
-        if ($bonificacionConcepto) {
+            foreach ($empleadoConceptos as $empleadoConcepto) {
+                Movimiento::create([
+                    'empleado_id' => $empleadoConcepto->empleado_id,
+                    'concepto_id' => $empleadoConcepto->concepto_id,
+                    'monto' => intval($empleadoConcepto->valor),
+                    'validez_fecha' => $fechaCb,
+                    'generacion_fecha' => now(),
+                ]);
+            }
 
-            $empleados = User::with(['hijos', 'conceptos'])->where('estado', 'contratado')->orderBy('id', 'desc')->get();
+            // Generar movimiento de bonificación familiar si corresponde
 
-            foreach ($empleados as $empleado) {
+            $salarioMinimo = $this->liquidacionService->obtenerSalarioMinimo();
+            $bonificacionConcepto = Concepto::where('tipo_concepto', Concepto::TIPO_BONIFICACION)->first();
+            $salarioConcepto = Concepto::where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
 
-                $hijosMenores = $empleado->hijosMenores;
+            error_log('generarMovimientos.salarioConceptoId: ' . $salarioConcepto->id);
 
-                if ($hijosMenores->count() == 0) {
-                    continue;
-                }
+            if ($bonificacionConcepto) {
 
-                error_log('generarMovimientos.empleadoId: ' . $empleado->id);
-                error_log('generarMovimientos.empleadoNombre: ' . $empleado->nombre);
+                $empleados = User::with(['hijos', 'conceptos'])->where('estado', 'contratado')->orderBy('id', 'desc')->get();
 
-                $concepto_salario = $empleado->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
+                foreach ($empleados as $empleado) {
 
-                if (empty($concepto_salario)) {
-                    error_log('No se encontró el salario para el empleado: ' . $empleado->id);
-                    continue;
-                }
+                    $hijosMenores = $empleado->hijosMenores;
 
-                error_log('generarMovimientos.conceptoSalario: ' . var_export($concepto_salario, true));
+                    if ($hijosMenores->count() == 0) {
+                        continue;
+                    }
 
-                $salario = $concepto_salario->pivot->valor;
+                    error_log('generarMovimientos.empleadoId: ' . $empleado->id);
+                    error_log('generarMovimientos.empleadoNombre: ' . $empleado->nombre);
 
-                error_log('generarMovimientos.salario: ' . $salario);
-                error_log('generarMovimientos.salarioPorTres: ' . ($salarioMinimo * 3));
-                error_log('generarMovimientos.hijosMenoresCount: ' . $hijosMenores->count());
+                    $concepto_salario = $empleado->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
 
-                if ($hijosMenores->count() > 0 && $salario < ($salarioMinimo * 3)) {
-                    $bono = $hijosMenores->count() * ($salarioMinimo * 0.05);
+                    if (empty($concepto_salario)) {
+                        error_log('No se encontró el salario para el empleado: ' . $empleado->id);
+                        continue;
+                    }
 
-                    Movimiento::create([
-                        'empleado_id' => $empleado->id,
-                        'concepto_id' => $bonificacionConcepto->id,
-                        'monto' => intval($bono),
-                        'validez_fecha' => $fechaCb,
-                        'generacion_fecha' => now(),
-                    ]);
+                    error_log('generarMovimientos.conceptoSalario: ' . var_export($concepto_salario, true));
+
+                    $salario = $concepto_salario->pivot->valor;
+
+                    error_log('generarMovimientos.salario: ' . $salario);
+                    error_log('generarMovimientos.salarioPorTres: ' . ($salarioMinimo * 3));
+                    error_log('generarMovimientos.hijosMenoresCount: ' . $hijosMenores->count());
+
+                    if ($hijosMenores->count() > 0 && $salario < ($salarioMinimo * 3)) {
+                        $bono = $hijosMenores->count() * ($salarioMinimo * 0.05);
+
+                        Movimiento::create([
+                            'empleado_id' => $empleado->id,
+                            'concepto_id' => $bonificacionConcepto->id,
+                            'monto' => intval($bono),
+                            'validez_fecha' => $fechaCb,
+                            'generacion_fecha' => now(),
+                        ]);
+                    }
                 }
             }
+
+            // Generar cuota de préstamos si corresponde
+
+            $prestamoService = new \App\Services\PrestamoService();
+            $prestamoService->generarCuotas($fechaCb);
+
+            error_log('generarMovimientos.end');
+
+            return redirect()->back()->with('success', 'Movimientos generados correctamente');
+        } catch (Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
         }
-
-        // Generar cuota de préstamos si corresponde
-
-        $prestamoService = new \App\Services\PrestamoService();
-        $prestamoService->generarCuotas($fechaCb);
-
-        error_log('generarMovimientos.end');
-
-        return redirect()->back()->with('success', 'Movimientos generados correctamente');
     }
 
     public function index(Request $request)
@@ -156,21 +161,19 @@ class MovimientoController extends Controller
             });
         }
 
-         if ($request->filled('fecha_desde') || $request->filled('fecha_hasta')) {
+        if ($request->filled('fecha_desde') || $request->filled('fecha_hasta')) {
 
-                if ($request->filled('fecha_desde')) {
-                    $query->whereDate('validez_fecha', '>=', $request->fecha_desde);
-                }
-                if ($request->filled('fecha_hasta')) {
-                    $query->whereDate('validez_fecha', '<=', $request->fecha_hasta);
-                }
-
+            if ($request->filled('fecha_desde')) {
+                $query->whereDate('validez_fecha', '>=', $request->fecha_desde);
+            }
+            if ($request->filled('fecha_hasta')) {
+                $query->whereDate('validez_fecha', '<=', $request->fecha_hasta);
+            }
         }
 
         $movimientos = $query->orderBy('generacion_fecha', 'desc')->paginate(perPage: $request->input('paginate', 10));
 
         return view('movimientos.index', compact('movimientos', 'empleados', 'conceptos', 'conceptos_create'));
-
     }
 
     public function store(Request $request)
@@ -202,33 +205,25 @@ class MovimientoController extends Controller
         } catch (Exception $e) {
             return back()->withErrors(['error' => $e->getMessage()]);
         }
-
     }
 
-    public function destroy(Request $request, Movimiento $movimiento){
+    public function destroy(Request $request, Movimiento $movimiento)
+    {
 
         try {
 
-            if(!$movimiento){
+            if (!$movimiento) {
 
                 throw new Exception('No existe el movimiento');
-
             }
 
             $movimiento->delete();
 
 
             return redirect()->route('movimiento.index')->with('success', 'Movimiento eliminado correctamente');
-
-
-
         } catch (Exception $e) {
 
             return back()->withErrors(['error' => $e->getMessage()]);
-
-
         }
-
     }
-
 }

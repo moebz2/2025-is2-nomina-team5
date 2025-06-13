@@ -231,7 +231,7 @@
 
                                 </td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
-                                    {{ $movimiento->validez_fecha->format('F') }}</td>
+                                    {{ $movimiento->validez_fecha->format('F y') }}</td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
                                     {{ $movimiento->generacion_fecha->format('d-m-Y') }}</td>
                                 <td class="border-b border-gray-100 p-4 text-gray-700">
