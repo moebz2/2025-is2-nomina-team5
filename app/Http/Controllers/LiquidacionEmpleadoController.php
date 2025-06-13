@@ -22,8 +22,16 @@ class LiquidacionEmpleadoController extends Controller
     public function show($liquidacionEmpleadoId)
     {
 
+        $user = auth()->user();
+
         $cabecera = LiquidacionEmpleadoCabecera::with('empleado')
             ->findOrFail($liquidacionEmpleadoId);
+
+        if ($cabecera->empleado_id != $user->id && $user->hasRole('empleado')) {
+            return redirect()->route('liquidacion-empleado.index', ['liquidacionId' => $user->id])
+                ->withErrors('No tiene permiso para ver esta liquidación de empleado.');
+        }
+
         $detalles = LiquidacionEmpleadoDetalle::where('cabecera_id', $liquidacionEmpleadoId)
             ->with(['cabecera', 'movimiento'])
             ->get();

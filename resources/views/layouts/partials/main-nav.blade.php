@@ -5,30 +5,32 @@
     <div class="@container flex flex-1 justify-start pl-8 gap-5">
 
         <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
-            @if (request()->is('admin')) aria-current="true" @endif
-            href="{{ route('admin.index') }}">Panel</a>
+            @if (request()->is('admin')) aria-current="true" @endif href="{{ route('admin.index') }}">Panel</a>
 
         @can('liquidacion ver')
             <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
-            @if (request()->is('admin/liquidacion')) aria-current="true" @endif
-            href="{{ route('liquidacion.index') }}">Liquidaciones</a>
+                @if (request()->is('admin/liquidacion')) aria-current="true" @endif
+                href="{{ route('liquidacion.index') }}">Liquidaciones</a>
         @endcan
 
         @can('movimiento ver')
             <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
-            @if (request()->is('admin/movimientos')) aria-current="true" @endif
-            href="{{ route('movimientos.index') }}">Movimientos</a>
+                @if (request()->is('admin/movimientos')) aria-current="true" @endif
+                href="{{ route('movimientos.index') }}">Movimientos</a>
         @endcan
 
-        <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
-        @if (request()->is('admin/reportes/*')) aria-current="true" @endif
-        href="{{ route('reportes.index') }}">Reportes</a>
+        @can('reporte ver')
+            <a class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
+                @if (request()->is('admin/reportes/*')) aria-current="true" @endif
+                href="{{ route('reportes.index') }}">Reportes</a>
+        @endcan
 
 
     </div>
     <div class="flex items-center gap-5 max-md:hidden lg:gap-6">
 
-        <a @if (request()->is('admin/configuracion/*')) aria-current="true" @endif class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
+        <a @if (request()->is('admin/configuracion/*')) aria-current="true" @endif
+            class="text-sm/6 aria-[current]:font-semibold aria-[current]:text-gray-950 text-gray-950"
             href="{{ route('configuracion.index') }}">Configuración</a>
 
         @can('usuario ver')
