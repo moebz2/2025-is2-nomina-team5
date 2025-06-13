@@ -66,11 +66,8 @@ class LiquidacionEmpleadoController extends Controller
         $nodePath = env('NODE_PATH', null);
         $npmPath = env('NPM_PATH', null);
 
-        if($nodePath == null || $npmPath == null){
-
-            return back()->withErrors('Asegurese de  especificar en su ardchivo .env las rutas de NPM y NODE para general el pdf');
-
-
+        if ($nodePath == null || $npmPath == null) {
+            return back()->withErrors('Asegurese de especificar en su archivo .env las rutas de NPM y NODE para generar el pdf');
         }
 
         $cabecera = LiquidacionEmpleadoCabecera::with('empleado')
@@ -81,39 +78,42 @@ class LiquidacionEmpleadoController extends Controller
             ->with(['cabecera', 'movimiento'])
             ->get();
 
-            $creditos = [];
-            $debitos = [];
-            $totalCredito = 0;
-            $totalDebito = 0;
-    
-            foreach ($detalles as $detalle) {
-                $isDebito = $detalle->movimiento->concepto->es_debito;
-    
-                if ($isDebito) {
-                    array_push($debitos, $detalle);
-                    $totalDebito += $detalle->movimiento->monto;
-                } else {
-                    array_push($creditos, $detalle);
-                    $totalCredito += $detalle->movimiento->monto;
-                }
+        $creditos = [];
+        $debitos = [];
+        $totalCredito = 0;
+        $totalDebito = 0;
+
+        foreach ($detalles as $detalle) {
+            $isDebito = $detalle->movimiento->concepto->es_debito;
+
+            if ($isDebito) {
+                array_push($debitos, $detalle);
+                $totalDebito += $detalle->movimiento->monto;
+            } else {
+                array_push($creditos, $detalle);
+                $totalCredito += $detalle->movimiento->monto;
             }
+        }
 
         $empleadoNombre = $cabecera->empleado->nombre ?? 'N/A';
 
-        return Pdf::view('liquidacion-empleado.detalles-liquidacion', 
-            ['detalles' => $detalles, 
-            'isExport' => true, 
-            'empleadoNombre' => $empleadoNombre, 
-            'periodo' => $cabecera->liquidacionCabecera->periodo,
-            'cabecera' => $cabecera,
-            'creditos' => $creditos,
-            'debitos' => $debitos,
-            'empleado' => $cabecera->empleado,
-            'totalCredito' => $totalCredito,
-            'totalDebito' => $totalDebito,
-            
-            
-            ])
+        return Pdf::view(
+            'liquidacion-empleado.detalles-liquidacion',
+            [
+                'detalles' => $detalles,
+                'isExport' => true,
+                'empleadoNombre' => $empleadoNombre,
+                'periodo' => $cabecera->liquidacionCabecera->periodo,
+                'cabecera' => $cabecera,
+                'creditos' => $creditos,
+                'debitos' => $debitos,
+                'empleado' => $cabecera->empleado,
+                'totalCredito' => $totalCredito,
+                'totalDebito' => $totalDebito,
+
+
+            ]
+        )
             ->format('A4')
             ->name('document.pdf')
             ->withBrowsershot(function (Browsershot $browsershot) use ($nodePath, $npmPath) {

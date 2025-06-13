@@ -1,4 +1,4 @@
-<div x-show="estadoForm == true" class="rounded border-5 border-dashed border-gray-300 mt-4 p-10 w-1/2 mx-auto">
+<div x-show="estadoForm == true" class="rounded border-5 border-dashed border-gray-300 mt-4 p-10 w-1/2 mx-auto" style="display: none">
 
     <h3 class="text-base font-semibold text-gray-900" id="modal-title">Cambia el estado del empleado</h3>
 
@@ -38,7 +38,7 @@
                 class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                 Guardar
             </button>
-            <button x-on:click="salarioForm = false" type="button"
+            <button x-on:click="estadoForm = false" type="button"
                 class="px-2 py-1 flex items-center bg-red-500 rounded text-medium hover:bg-red-700 text-white">
 
                 Cancelar

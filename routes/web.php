@@ -14,6 +14,12 @@ use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ReporteDescuentosController;
+use App\Http\Controllers\ReporteLiqEmpleadoController;
+use App\Http\Controllers\ReporteSumConceptosController;
+
+use Illuminate\Http\Request;
+
+use App\Http\Controllers\ReporteTotalLiquidacionController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -44,6 +50,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::post('/users/{id}/movimientos', [UserController::class, 'registrarMovimiento'])->name('users.registrarMovimiento');
 
+    Route::delete('/users/{user}/movimientos/{movimiento}', [UserController::class, 'eliminarMovimiento'])->name('users.eliminarMovimiento');
+
     Route::delete('/users/{user}/conceptos/{concepto}', [UserController::class, 'eliminarConcepto'])->name('users.eliminarConcepto');
 
     Route::post('/users/{id}/salarios', [UserController::class, 'asignarSalario'])->name('users.asignarSalario');
@@ -60,6 +68,25 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::patch('/users/{id}/inactive', [UserController::class, 'setInactive'])->name('users.setInactive');
 
     Route::get('', [DashboardController::class, 'index'])->name('admin.index');
+
+
+
+    Route::get('api/test', function (Request $request) {
+
+        $user = $request->user();
+
+        return response()->json([
+            'message' => 'Hola '. $user->nombre,
+            '0' => 'Este es un mensaje de prueba',
+            '1' => 'No conteste por favor'
+        ]);
+
+    });
+
+    Route::get('api/dashboard/departamentos',  [DashboardController::class, 'departamentosChartInfo']);
+    Route::get('api/dashboard/liquidaciones',  [DashboardController::class, 'liquidacionesMensualesAno']);
+    Route::get('api/dashboard/conceptos',  [DashboardController::class, 'conceptosDebito']);
+
 
     Route::get('/usuarios', function () {
         echo "Vista de Usuarios";
@@ -81,7 +108,29 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::get('/liquidacion-empleado/{id}/export', [LiquidacionEmpleadoController::class, 'export'])->name('liquidacion-empleado.export');
 
-    // Otros
+    // Recursos de movimientos
+
+    Route::resource('/movimientos', MovimientoController::class);
+
+    Route::prefix('reportes')->group(function () {
+
+        Route::get('', function () {
+            return redirect()->route('reportes.descuentos');
+        })->name('reportes.index');
+
+        Route::get('/descuentos', [ReporteDescuentosController::class, 'index'])->name('reportes.descuentos');
+
+        Route::get('/sum-conceptos', [ReporteSumConceptosController::class, 'index'])->name('reportes.sum-conceptos');
+        Route::get('/sum-conceptos/export', [ReporteSumConceptosController::class, 'export'])->name('reportes.sum-conceptos.export');
+
+        Route::get('/liq-empleado', [ReporteLiqEmpleadoController::class, 'index'])->name('reportes.liq-empleado');
+        Route::get('/liq-empleado/export', [ReporteLiqEmpleadoController::class, 'export'])->name('reportes.liq-empleado.export');
+
+        Route::get('/total-liquidacion', [ReporteTotalLiquidacionController::class, 'index'])->name('reportes.total-liquidacion');
+        Route::get('/total-liquidacion/export', [ReporteTotalLiquidacionController::class, 'export'])->name('reportes.total-liquidacion.export');
+    });
+
+    // CONFIGURACION
 
     Route::prefix('configuracion')->group(function () {
 
@@ -110,8 +159,6 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::post('/movimientos/generar', [MovimientoController::class, 'generarMovimientos'])->name('movimientos.generar');
 
     Route::resource('/prestamos', PrestamoController::class);
-
-    Route::get('/reportes/descuentos', [ReporteDescuentosController::class, 'index'])->name('reportes.descuentos');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');

@@ -7,6 +7,8 @@ use App\Models\Concepto;
 use App\Models\LiquidacionEmpleadoDetalle;
 use Illuminate\Http\Request;
 
+use function Termwind\render;
+
 class ReporteDescuentosController extends Controller
 {
     public function index(Request $request)
@@ -54,6 +56,8 @@ class ReporteDescuentosController extends Controller
         // Ejecutar consulta
         $resultados = $query->get();
 
-        return view('reportes.descuentos', compact('empleados', 'conceptos', 'resultados'));
+        $vista = view('reportes.descuentos', compact('empleados', 'conceptos', 'resultados'));
+
+        return view('reportes.index', ['content' => $vista]);
     }
 }

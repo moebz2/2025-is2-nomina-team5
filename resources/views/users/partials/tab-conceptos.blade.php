@@ -47,8 +47,8 @@
                         </td>
                         <td class="border-b border-gray-100 p-4 pl-8 text-gray-700">
 
-                            Desde {{ $concepto->pivot->fecha_inicio }} @if ($concepto->pivot->fecha_fin)
-                                al {{ $concepto->pivot->fecha_fin }}
+                            Desde {{ \Carbon\Carbon::parse($concepto->pivot->fecha_inicio)->format('d-m-Y') }} @if ($concepto->pivot->fecha_fin)
+                                al {{ \Carbon\Carbon::parse($concepto->pivot->fecha_fin)->format('d-m-Y') }}
                             @endif
 
 
@@ -97,7 +97,7 @@
 
     </div>
 
-    <div x-show="conceptoForm" class="p-4 bg-gray-100 rounded">
+    <div x-show="conceptoForm" class="p-4 bg-gray-100 rounded" style="display: none">
 
         <h3 class="text-xl font-medium">Asignar nuevo concepto</h3>
 

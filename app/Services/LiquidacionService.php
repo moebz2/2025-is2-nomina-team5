@@ -11,7 +11,6 @@ use App\Models\Parametro;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class LiquidacionService
 {
@@ -45,8 +44,6 @@ class LiquidacionService
                 $this->registrarIpsDescuento($empleado, $movimientosAProcesar, $periodo);
 
                 $movimientosAIncluir = $this->obtenerMovimientosEmpleado($empleado, $periodo);
-
-                // $this->registrarMovimientoBonificacion($empleado, $salarioMinimo, $periodo);
 
                 // log('movimientosAProcesar', json_encode($movimientosAProcesar));
                 // log('movimientosAIncluir', json_encode($movimientosAIncluir));
@@ -86,7 +83,7 @@ class LiquidacionService
             'empleado_id' => $empleado->id,
             'liquidacion_cabecera_id' => $liquidacionCabecera->id,
             'estado' => LiquidacionEmpleadoCabecera::ESTADO_PENDIENTE,
-            'periodo' => date_create($periodo . '-31'),
+            'periodo' => date_create($periodo . '-01'),
             'verificacion_fecha' => null,
         ]);
     }
@@ -118,54 +115,10 @@ class LiquidacionService
         Movimiento::create([
             'empleado_id' => $empleado->id,
             'concepto_id' => 3,
-            'monto' => $ipsDescuento,
+            'monto' => intval($ipsDescuento),
             'validez_fecha' => date_create($periodo . '-01'),
             'generacion_fecha' => now(),
         ]);
-    }
-
-    private function registrarMovimientoBonificacion(User $empleado, $salarioMinimo, $periodo)
-    {
-
-        try{
-
-            if($empleado->hijosMenores->count() == 0){
-                return;
-            }
-
-            $salario = $empleado->conceptos()->where('tipo_concepto', Concepto::TIPO_SALARIO)->first();
-
-            if($salario == null){
-                return;
-            }
-
-            $conceptoBonificacion = Concepto::where('tipo_concepto', Concepto::TIPO_BONIFICACION)->first();
-
-            if($conceptoBonificacion == null){
-                return;
-            }
-
-            if($salario / $salarioMinimo < 3){
-
-                Movimiento::create([
-                    'empleado_id' => $empleado->id,
-                    'concepto_id' => $conceptoBonificacion->id,
-                    'validez_fecha' => date_create($periodo . '-01'),
-                    'monto' => $salarioMinimo * 0.05 * $empleado->hijosMenores->count(),
-                    'generacion_fecha' => now(),
-
-                ]);
-
-            }
-
-
-        }catch(Exception $e){
-            error_log('registrarMovimientoBonificacion.error:' . $e->getMessage());
-
-        }
-
-
-
     }
 
     private function registrarMovimientosEnLiquidacion($liquidacionEmpleadoCabecera, $movimientos)

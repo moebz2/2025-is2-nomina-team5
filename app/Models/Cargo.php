@@ -18,9 +18,12 @@ class Cargo extends Model
 
     public $timestamps = false;
 
-    public function empleado(): BelongsTo
+
+     public function usuarios()
     {
-        return $this->belongsTo(User::class, 'empleado_id');
+        return $this->belongsToMany(User::class, 'cargos_empleado', 'cargo_id', 'empleado_id')
+                    ->withPivot('fecha_inicio', 'fecha_fin', 'es_principal'); // Incluir los campos de la tabla pivot
+
     }
 
     public function departamento(): BelongsTo

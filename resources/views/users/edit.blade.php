@@ -12,15 +12,7 @@
 
         <h1 class="text-3xl font-bold uppercase">Editar Usuario</h1>
 
-        @if ($errors->any())
-            <div>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @include('layouts.partials.validation-message')
 
         <div class="h-10"></div>
 
@@ -50,7 +42,11 @@
                             <label for="password" class="input-label">Contraseña:</label>
                             <div class="mt-2">
                                 <input type="password" id="password" class="form-input" name="password">
-                                <small>Dejar en blanco para mantener la contraseña actual</small>
+                                <small class="text-gray-700 mt-1">Dejar en blanco para mantener la contraseña actual</small>
+                                @error('password')
+                                    {{$message}}
+
+                                @enderror
                             </div>
                         </div>
                         <div class="sm:col-span-3">
@@ -64,7 +60,6 @@
 
                         <div class="sm:col-span-3">
                             <label for="role" class="input-label">Rol del empleado</label>
-                            <p class="text-sm text-gray-700">Presione CTL para seleccionar más de una opción</p>
                             <div class="mt-2">
 
 
@@ -151,8 +146,12 @@
                             <label for="cargo_id" class="input-label">Cargo:</label>
                             <div class="mt-2">
                                 <select id="cargo_id" class="form-select" name="cargo_id" required>
+
+                                    <option value="" disabled @if (!$user->currentCargo()) selected
+
+                                    @endif>-- SELECCIONE UN CARGO --</option>
                                     @foreach ($cargos as $cargo)
-                                        <option value="{{ $cargo->id }}">
+                                        <option value="{{ $cargo->id }}" @if ($user->currentCargo() && $user->currentCargo()->id == $cargo->id) selected @endif>
                                             {{ $cargo->nombre }} - DTO: {{ $cargo->departamento->nombre }}
                                         </option>
                                     @endforeach
@@ -170,9 +169,22 @@
                         <div class="sm:col-span-3">
                             <label for="ingreso_fecha" class="input-label">Fecha de Ingreso:</label>
                             <div class="mt-2">
+                                @if ($user->currentCargo())
+                                    <input type="date" id="ingreso_fecha" class="@error('ingreso_fecha')
+                                        input-error
+                                    @else
+                                        form-input
+                                    @enderror" name="ingreso_fecha"
+                                        value="{{ old('ingreso_fecha', $user->currentCargo()->pivot->fecha_inicio) }}">
 
-                                <input type="date" id="ingreso_fecha" class="form-input" name="ingreso_fecha"
-                                    value="{{ optional($user->currentCargo())?->pivot?->fecha_inicio }}">
+                                @else
+
+                                    <input type="date" id="ingreso_fecha" class="form-input" name="ingreso_fecha"
+                                        value="">
+                                    @error('ingreso_fecha')
+                                        <p class="mt-2 text-sm text-red-600">{{$message}}</p>
+                                    @enderror
+                                @endif
                             </div>
 
 

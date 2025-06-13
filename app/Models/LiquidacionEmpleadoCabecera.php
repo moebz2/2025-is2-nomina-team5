@@ -45,19 +45,35 @@ class LiquidacionEmpleadoCabecera extends Model
         'verificacion_fecha' => 'datetime:Y-m-d H:i:s',
     ];
 
-    /**
-     * Get the employee (user) associated with this liquidation.
-     */
     public function empleado()
     {
         return $this->belongsTo(User::class, 'empleado_id');
     }
 
-    /**
-     * Get the liquidation header associated with this employee liquidation.
-     */
     public function liquidacionCabecera()
     {
         return $this->belongsTo(LiquidacionCabecera::class, 'liquidacion_cabecera_id');
+    }
+
+    public function detalles()
+    {
+        return $this->hasMany(LiquidacionEmpleadoDetalle::class, 'cabecera_id');
+    }
+
+    public function monto_credito(){
+
+        $monto = 0;
+
+        foreach ($this->detalles as $detalle) {
+            if($detalle->movimiento->concepto->es_debito){
+                $monto = $monto - $detalle->movimiento->monto;
+            }else{
+                $monto = $monto + $detalle->movimiento->monto;
+            }
+
+        }
+
+        return $monto;
+
     }
 }
