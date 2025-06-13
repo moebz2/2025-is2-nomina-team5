@@ -1,3 +1,7 @@
+@extends('layouts.admin-layout')
+
+@section('content')
+
 <div class="container mx-auto mt-6">
     <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-bold">Reporte de Liquidaciones de Empleados</h2>
@@ -47,7 +51,6 @@
         </div>
     @endif
 
-
     <div class="bg-white rounded shadow p-6">
         @if ($report->count())
             <div class="overflow-x-auto">
@@ -71,12 +74,14 @@
                     </tbody>
                 </table>
             </div>
-            <div class="mt-4">
-                <button type="button" onclick="exportToExcel('reporte', 'reporte_liquidacion')"
-                    class=" bg-green-600 hover:bg-green-500 text-white font-medium py-2 px-4 rounded">
-                    Exportar Excel
-                </button>
-            </div>
+            @if (empty($isExport))
+                <div class="mt-4">
+                    <button type="button" onclick="exportToExcel('reporte', 'reporte_liquidacion')"
+                        class=" bg-green-600 hover:bg-green-500 text-white font-medium py-2 px-4 rounded">
+                        Exportar Excel
+                    </button>
+                </div>
+            @endif
         @else
             <div class="text-gray-600 text-center py-4">
                 No se encontraron resultados para los filtros seleccionados.
@@ -84,3 +89,5 @@
         @endif
     </div>
 </div>
+
+@endsection

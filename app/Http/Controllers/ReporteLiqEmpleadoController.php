@@ -27,7 +27,6 @@ class ReporteLiqEmpleadoController extends Controller
 
         $report = $this->getReport($request);
 
-
         return Pdf::view(
             'reportes.liq-empleado',
             [
